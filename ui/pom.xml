@@ -22,8 +22,9 @@
                 <configuration>
                     <instructions>
                         <Sling-Nodetypes>SLING-INF/nodetypes/nodetypes.cnd</Sling-Nodetypes>
-                        <Sling-Initial-Content>SLING-INF/scripts;overwrite:=true;uninstall:=true;path:=/apps/my/node,
-                            SLING-INF/content;overwrite:=true;uninstall:=true;path:=/content</Sling-Initial-Content>
+                        <!-- <Sling-Initial-Content>SLING-INF/scripts;overwrite:=true;uninstall:=true;path:=/apps/my/node,
+                            SLING-INF/content;overwrite:=true;uninstall:=true;path:=/content</Sling-Initial-Content> -->
+                        <Sling-Initial-Content>initial-content;overwrite:=true;uninstall:=true</Sling-Initial-Content>
                     </instructions>
                 </configuration>
             </plugin>
