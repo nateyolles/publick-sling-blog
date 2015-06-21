@@ -4,7 +4,7 @@
 //    -  http://sling.apache.org/site/content-loading.html
 //    -  http://jackrabbit.apache.org/node-type-notation.html
 
-<publick = 'http://com.nateyolles.sling.publick/publick/1.0'>
+<publick = 'http://www.nateyolles.com/publick/1.0'>
 
 [publick:page] > nt:unstructured
     - title (string)
@@ -18,4 +18,4 @@
 
 [publick:template] > nt:hierarchyNode
 
-[publick:component] > nt:hierarchyNode
+[publick:component] > nt:unstructured
