@@ -25,7 +25,7 @@
 	    -  http://sling.apache.org/site/content-loading.html
 	    -  http://jackrabbit.apache.org/node-type-notation.html
 	 -->
-    <primaryNodeType>my:node</primaryNodeType>
+    <primaryNodeType>nt:unstructured</primaryNodeType>
     
     <property>
         <name>title</name>
