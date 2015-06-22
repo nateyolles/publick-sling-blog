@@ -1,0 +1,44 @@
+
+<form action="/content/blogtest" method="post">
+
+  <label>
+    Title
+    <input type="text" name="./title">
+  </label>
+
+  <label>
+    Date
+    <input type="date" name="./date">
+    <input type="hidden" name="./date@TypeHint" value="Date">
+  </label>
+
+  <label>
+    Show blog
+    <input type="checkbox" name="./visible" value="true">
+    <input type="hidden" name="./visible@TypeHint" value="Boolean">
+    <input type="hidden" name="./visible@Delete" value="reset checkbox">
+  </label>
+
+  <label>
+    Keywords
+    <input type="text" name="./keywords">
+    <input type="text" name="./keywords">
+    <input type="text" name="./keywords">
+    ToDo: Add +/- functionality.
+    <input type="hidden" name="./keywords@TypeHint" value="String[]">
+  </label>
+
+  <label>
+    Image
+    <input type="file" name="*">
+    <input type="hidden" name="*@TypeHint" value="nt:file">
+  </label>
+
+  <label>
+    Content
+    <textarea name="./content"></textarea>
+  </label>
+
+  <input type="submit" value="Save">
+
+</form>

@@ -1,0 +1,38 @@
+{
+    "jcr:primaryType": "sling:Folder",
+    "admin" : {
+        "jcr:primaryType": "sling:Folder",
+        "edit" : {
+            "jcr:primaryType": "publick:page",
+            "sling:resourceType" : "publick/pages/adminPage",
+            "jcr:content" : {
+                "mainContent" : {
+                    "jcr:primaryType": "nt:unstructured",
+                    "sling:resourceType" : "publick/components/foundation/parsys",
+                    "blogEdit" : {
+                        "jcr:primaryType": "nt:unstructured",
+                        "sling:resourceType" : "publick/components/admin/blogEdit"
+                    }
+                }
+            }
+        },
+        "list" : {
+            "jcr:primaryType": "publick:page",
+            "sling:resourceType" : "publick/pages/adminPage",
+            "jcr:content" : {
+                "mainContent" : {
+                    "jcr:primaryType": "nt:unstructured",
+                    "sling:resourceType" : "publick/components/foundation/parsys",
+                    "blogList" : {
+                        "jcr:primaryType": "nt:unstructured",
+                        "sling:resourceType" : "publick/components/admin/blogList"
+                    }
+                }
+            }
+        },
+        "login" : {
+            "jcr:primaryType": "publick:page",
+            "sling:resourceType" : "publick/pages/adminPage"
+        }
+    }
+}
