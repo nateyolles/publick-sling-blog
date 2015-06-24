@@ -15,23 +15,6 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>copy-sightly</id>
-                        <goals>
-                            <goal>copy-dependencies</goal>
-                        </goals>
-                        <configuration>
-                            <artifactItems>
-                                <includeArtifactIds>org.apache.sling.i18n,mail,org.apache.sling.jcr.compiler,org.apache.sling.xss,org.apache.sling.scripting.sightly</includeArtifactIds>
-                            </artifactItems>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-scr-plugin</artifactId>
                 <version>1.16.0</version>
@@ -71,6 +54,109 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>autoInstallBundle</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.sling</groupId>
+                        <artifactId>maven-sling-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>install-bundle</id>
+                                <goals>
+                                    <goal>install</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>autoInstallDependencies</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>copy-sightly</id>
+                                <goals>
+                                    <goal>copy-dependencies</goal>
+                                </goals>
+                                <configuration>
+                                    <artifactItems>
+                                        <includeArtifactIds>org.apache.sling.i18n,mail,org.apache.sling.jcr.compiler,org.apache.sling.xss,org.apache.sling.scripting.sightly</includeArtifactIds>
+                                    </artifactItems>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.sling</groupId>
+                        <artifactId>maven-sling-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>install-i18n</id>
+                                <goals>
+                                    <goal>install-file</goal>
+                                </goals>
+                                <phase>install</phase>
+                                <configuration>
+                                    <bundleFileName>${project.build.directory}/dependency/org.apache.sling.i18n-2.4.2.jar</bundleFileName>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>install-mail</id>
+                                <goals>
+                                    <goal>install-file</goal>
+                                </goals>
+                                <phase>install</phase>
+                                <configuration>
+                                    <bundleFileName>${project.build.directory}/dependency/mail-1.5.0-b01.jar</bundleFileName>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>install-jcr-compiler</id>
+                                <goals>
+                                    <goal>install-file</goal>
+                                </goals>
+                                <phase>install</phase>
+                                <configuration>
+                                    <bundleFileName>${project.build.directory}/dependency/org.apache.sling.jcr.compiler-2.1.0.jar</bundleFileName>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>install-xss</id>
+                                <goals>
+                                    <goal>install-file</goal>
+                                </goals>
+                                <phase>install</phase>
+                                <configuration>
+                                    <bundleFileName>${project.build.directory}/dependency/org.apache.sling.xss-1.0.2.jar</bundleFileName>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>install-sightly</id>
+                                <goals>
+                                    <goal>install-file</goal>
+                                </goals>
+                                <phase>install</phase>
+                                <configuration>
+                                    <bundleFileName>${project.build.directory}/dependency/org.apache.sling.scripting.sightly-1.0.2.jar</bundleFileName>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
     <dependencies>
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -170,77 +256,7 @@
             <scope>provided</scope>
         </dependency>
     </dependencies>
-    <profiles>
-        <profile>
-            <id>autoInstallBundle</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.sling</groupId>
-                        <artifactId>maven-sling-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>install-bundle</id>
-                                <goals>
-                                    <goal>install</goal>
-                                </goals>
-                            </execution>
-                            <execution>
-                                <id>install-i18n</id>
-                                <goals>
-                                    <goal>install-file</goal>
-                                </goals>
-                                <phase>install</phase>
-                                <configuration>
-                                    <bundleFileName>${project.build.directory}/dependency/org.apache.sling.i18n-2.4.2.jar</bundleFileName>
-                                </configuration>
-                            </execution>
-                            <execution>
-                                <id>install-mail</id>
-                                <goals>
-                                    <goal>install-file</goal>
-                                </goals>
-                                <phase>install</phase>
-                                <configuration>
-                                    <bundleFileName>${project.build.directory}/dependency/mail-1.5.0-b01.jar</bundleFileName>
-                                </configuration>
-                            </execution>
-                            <execution>
-                                <id>install-jcr-compiler</id>
-                                <goals>
-                                    <goal>install-file</goal>
-                                </goals>
-                                <phase>install</phase>
-                                <configuration>
-                                    <bundleFileName>${project.build.directory}/dependency/org.apache.sling.jcr.compiler-2.1.0.jar</bundleFileName>
-                                </configuration>
-                            </execution>
-                            <execution>
-                                <id>install-xss</id>
-                                <goals>
-                                    <goal>install-file</goal>
-                                </goals>
-                                <phase>install</phase>
-                                <configuration>
-                                    <bundleFileName>${project.build.directory}/dependency/org.apache.sling.xss-1.0.2.jar</bundleFileName>
-                                </configuration>
-                            </execution>
-                            <execution>
-                                <id>install-sightly</id>
-                                <goals>
-                                    <goal>install-file</goal>
-                                </goals>
-                                <phase>install</phase>
-                                <configuration>
-                                    <bundleFileName>${project.build.directory}/dependency/org.apache.sling.scripting.sightly-1.0.2.jar</bundleFileName>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
