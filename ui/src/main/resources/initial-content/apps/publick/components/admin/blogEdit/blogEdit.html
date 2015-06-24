@@ -1,44 +1,70 @@
 
-<form action="/content/blogtest" method="post">
+<form action="/bin/editblogpost" method="post" enctype="multipart/form-data">
 
-  <label>
-    Title
-    <input type="text" name="./title">
-  </label>
+  <div>
+    <label>
+      Title
+      <input type="text" name="title">
+    </label>
+  </div>
 
-  <label>
-    Date
-    <input type="date" name="./date">
-    <input type="hidden" name="./date@TypeHint" value="Date">
-  </label>
+  <div>
+    <label>
+      Date
+      <select name="month">
+        <option>01</option>
+        <option>02</option>
+        <option>03</option>
+      </select>
 
-  <label>
-    Show blog
-    <input type="checkbox" name="./visible" value="true">
-    <input type="hidden" name="./visible@TypeHint" value="Boolean">
-    <input type="hidden" name="./visible@Delete" value="reset checkbox">
-  </label>
+      <select name="year">
+        <option>2015</option>
+        <option>2016</option>
+        <option>2017</option>
+      </select>
+    </label>
+  </div>
 
-  <label>
-    Keywords
-    <input type="text" name="./keywords">
-    <input type="text" name="./keywords">
-    <input type="text" name="./keywords">
-    ToDo: Add +/- functionality.
-    <input type="hidden" name="./keywords@TypeHint" value="String[]">
-  </label>
+  <div>
+    <label>
+      Friendly URL
+      <input type="text" name="url">
+    </label>
+  </div>
 
-  <label>
-    Image
-    <input type="file" name="*">
-    <input type="hidden" name="*@TypeHint" value="nt:file">
-  </label>
+  <div>
+    <label>
+      Show blog
+      <input type="checkbox" name="visible" value="true">
+    </label>
+  </div>
 
-  <label>
-    Content
-    <textarea name="./content"></textarea>
-  </label>
+  <div>
+    <label>
+      Keywords
+      <input type="text" name="keywords">
+      <input type="text" name="keywords">
+      <input type="text" name="keywords">
+      ToDo: Add +/- functionality.
+    </label>
+  </div>
 
-  <input type="submit" value="Save">
+  <div>
+    <label>
+      Image
+      <input type="file" name="image">
+    </label>
+  </div>
+
+  <div>
+    <label>
+      Content
+      <textarea name="content"></textarea>
+    </label>
+  </div>
+
+  <div>
+    <input type="submit" value="Save">
+  </div>
 
 </form>
