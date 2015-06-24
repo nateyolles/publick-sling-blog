@@ -43,24 +43,28 @@ public class EditBlogPostServlet extends SlingAllMethodsServlet {
     @Reference
     private ResourceResolverFactory factory;
 
+    private String blogPath;
+
     private static final Logger LOGGER = LoggerFactory.getLogger(EditBlogPostServlet.class);
-    private static final String BLOG_PATH = "blog/%s/%s";
+    private static final String BLOG_PATH = "blog/%d/%02d";
 
     @Override
     protected void doPost(SlingHttpServletRequest request, SlingHttpServletResponse response) throws ServletException, IOException {
         ResourceResolver resolver = request.getResourceResolver();
         final String title = request.getParameter("title");
         final String content = request.getParameter("content");
-        final String month = request.getParameter("month");
-        final String year = request.getParameter("year");
         final String url = request.getParameter("url");
         final boolean visible = Boolean.parseBoolean(request.getParameter("visible"));
         final String[] keywords = request.getParameterValues("keywords");
+        final long month = Long.parseLong(request.getParameter("month"));
+        final long year = Long.parseLong(request.getParameter("year"));
 
         final String path = String.format(BLOG_PATH, year, month);
 
         try {
             Node node = JcrResourceUtil.createPath(resolver.getResource(PublickConstants.CONTENT_PATH).adaptTo(Node.class), path, NodeType.NT_UNSTRUCTURED, NodeType.NT_UNSTRUCTURED, true);
+
+            blogPath = node.getPath() + "/" + url;
 
             resolver.create(resolver.getResource(node.getPath()), url, new HashMap<String, Object>(){{
                 put("jcr:primaryType", PublickConstants.NODE_TYPE_PAGE);
@@ -69,6 +73,8 @@ public class EditBlogPostServlet extends SlingAllMethodsServlet {
                 put("visible", visible);
                 put("content", content);
                 put("keywords", keywords);
+                put("month", month);
+                put("year", year);
             }});
 
             resolver.commit();
@@ -78,7 +84,7 @@ public class EditBlogPostServlet extends SlingAllMethodsServlet {
         }
 
         final RequestParameterMap params = request.getRequestParameterMap();
-        
+
         for (final Map.Entry<String, RequestParameter[]> pairs : params.entrySet()) {
             final String key = pairs.getKey();
             final RequestParameter[] pArr = pairs.getValue();
@@ -94,7 +100,7 @@ public class EditBlogPostServlet extends SlingAllMethodsServlet {
                     Resource resource = resolver.getResource(PublickConstants.ADMIN_PATH);
                     
                     JcrUtils.putFile(resource.adaptTo(Node.class), name, mimeType, stream);
-    
+
                     resolver.commit();
                     resolver.close();
                 } catch (javax.jcr.RepositoryException e) {
@@ -108,8 +114,8 @@ public class EditBlogPostServlet extends SlingAllMethodsServlet {
                 }
             }
         }
-        
-        response.getWriter().print("date" + title + ": " + title);
+
+        response.getWriter().print("Success: " + blogPath);
         response.setStatus(200);
     }
 }

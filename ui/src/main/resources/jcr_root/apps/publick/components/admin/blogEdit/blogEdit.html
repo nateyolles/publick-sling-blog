@@ -1,26 +1,24 @@
+<div data-sly-use.blog="com.nateyolles.sling.publick.components.admin.BlogEdit" data-sly-unwrap></div>
 
 <form action="/bin/editblogpost" method="post" enctype="multipart/form-data">
 
   <div>
     <label>
       Title
-      <input type="text" name="title">
+      <input type="text" name="title" data-sly-attribute.value="${blog.title}">
     </label>
   </div>
 
   <div>
     <label>
-      Date
-      <select name="month">
-        <option>01</option>
-        <option>02</option>
-        <option>03</option>
+      Month
+      <select name="month" data-sly-list="${blog.months}">
+        <option data-sly-attribute.selected="${blog.month == item}">${item}</option>
       </select>
 
-      <select name="year">
-        <option>2015</option>
-        <option>2016</option>
-        <option>2017</option>
+      Year
+      <select name="year" data-sly-list="${blog.years}">
+        <option data-sly-attribute.selected="${blog.year == item}">${item}</option>
       </select>
     </label>
   </div>
@@ -28,23 +26,26 @@
   <div>
     <label>
       Friendly URL
-      <input type="text" name="url">
+      <input type="text" name="url" data-sly-attribute.value="${blog.url}">
     </label>
   </div>
 
   <div>
     <label>
       Show blog
-      <input type="checkbox" name="visible" value="true">
+      <input type="checkbox" name="visible" value="true" data-sly-attribute.checked="${blog.visible}">
     </label>
   </div>
 
   <div>
     <label>
       Keywords
-      <input type="text" name="keywords">
-      <input type="text" name="keywords">
-      <input type="text" name="keywords">
+      <div data-sly-test.hasKeywords="${blog.keywords && blog.keywords.length > 0}" data-sly-list="${blog.keywords}" data-sly-unwrap>
+        <input type="text" name="keywords" data-sly-attribute.value="${item}">
+      </div>
+      <div data-sly-test="${!hasKeywords}" data-sly-unwrap>
+        <input type="text" name="keywords">
+      </div>
       ToDo: Add +/- functionality.
     </label>
   </div>
@@ -59,7 +60,7 @@
   <div>
     <label>
       Content
-      <textarea name="content"></textarea>
+      <textarea name="content">${blog.content}</textarea>
     </label>
   </div>
 
