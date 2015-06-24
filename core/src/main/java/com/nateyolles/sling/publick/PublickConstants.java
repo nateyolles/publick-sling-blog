@@ -1,7 +1,7 @@
 package com.nateyolles.sling.publick;
 
 public class PublickConstants {
-    
+
     private PublickConstants() {
     }
 

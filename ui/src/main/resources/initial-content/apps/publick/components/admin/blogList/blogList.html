@@ -1,1 +1,7 @@
-this is a blog list component
+<div data-sly-use.list="com.nateyolles.sling.publick.components.admin.BlogList" data-sly-unwrap></div>
+
+<h3>Blogs</h3>
+
+<ul data-sly-list="${list.blogs}">
+  <li><a href="${item.path}.html">${item.name}</a> <a href="edit.html${item.path}">edit</a></li>
+</ul>
