@@ -54,6 +54,10 @@
     <label>
       Image
       <input type="file" name="image">
+      <div data-sly-test="${blog.image}">
+        <img src="${blog.image}"><br>
+        <span data-sly-text="${blog.image}"></span>
+      </div>
     </label>
   </div>
 
