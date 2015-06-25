@@ -1,0 +1,27 @@
+<div data-sly-use.blog="com.nateyolles.sling.publick.components.foundation.BlogView" data-sly-unwrap></div>
+
+<h3>blog view compontent</h3>
+
+<div>
+    Title: ${blog.title}
+</div>
+
+<div>
+    Date: ${blog.month}/${blog.year}
+</div>
+
+<div>
+    Friendly URL: ${blog.url}
+</div>
+
+<div>
+    Show blog: ${blog.visible}
+</div>
+
+<div>
+    Keywords: <span data-sly-list="${blog.keywords}" data-sly-unwrap>${item}&nbsp;</span>
+</div>
+
+<div>
+    Content: ${blog.content}
+</div>
