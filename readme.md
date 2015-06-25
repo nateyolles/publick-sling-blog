@@ -9,7 +9,9 @@ Publick is named after [Publick Occurrences Both Forreign and Domestick](https:/
 This project requires Apache Sling 7.
 
 1. [Download](http://sling.apache.org/downloads.cgi) the Apache Sling self runnable jar.
-2. Start the Apache Sling instance by running `java -jar org.apache.sling.launchpad-7-standalone.jar` from the command line.
+2. Start the Apache Sling instance by running the following from the command line:
+
+    java -jar org.apache.sling.launchpad-7-standalone.jar
 
 ## Install Sightly
 
@@ -27,7 +29,11 @@ Build and deploy to a running Sling instance with default values of port *8080*,
 
 Attach a debugger to the Apache Sling instance by running the following from the command line:
 
-    java -Xmx2048M -agentlib:jdwp=transport=dt_socket,address=30303,server=y,suspend=n -jar org.apache.sling.launchpad-7-standalone.jar
+```
+    java -Xmx2048M \
+         -agentlib:jdwp=transport=dt_socket,address=30303,server=y,suspend=n \
+         -jar org.apache.sling.launchpad-7-standalone.jar
+```
 
 ## Further information
 
