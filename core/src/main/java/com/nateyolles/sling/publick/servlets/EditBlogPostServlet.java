@@ -2,12 +2,14 @@ package com.nateyolles.sling.publick.servlets;
 
 import com.nateyolles.sling.publick.PublickConstants;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.sling.SlingServlet;
 import org.apache.sling.api.request.RequestParameter;
 import org.apache.sling.api.request.RequestParameterMap;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
+import org.apache.sling.api.resource.ModifiableValueMap;
 import org.apache.sling.api.resource.ResourceResolverFactory;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
@@ -42,12 +44,11 @@ import org.slf4j.LoggerFactory;
 public class EditBlogPostServlet extends SlingAllMethodsServlet {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EditBlogPostServlet.class);
-    private static final String BLOG_PATH = "blog/%d/%02d";
+    private static final String BLOG_PATH = PublickConstants.BLOG_PATH + "/%d/%02d";
 
     @Override
     protected void doPost(SlingHttpServletRequest request, SlingHttpServletResponse response) throws ServletException, IOException {
         ResourceResolver resolver = request.getResourceResolver();
-        String blogPath = null;
 
         final String title = request.getParameter("title");
         final String content = request.getParameter("content");
@@ -58,24 +59,30 @@ public class EditBlogPostServlet extends SlingAllMethodsServlet {
         final long year = Long.parseLong(request.getParameter("year"));
         final String path = String.format(BLOG_PATH, year, month);
         final String image = saveImage(request);
+        final String blogPath = path + "/" + url;
+
+        Map<String, Object> properties = new HashMap<String, Object>();
+        properties.put("jcr:primaryType", PublickConstants.NODE_TYPE_PAGE);
+        properties.put("sling:resourceType", PublickConstants.PAGE_TYPE_BLOG);
+        properties.put("title", title);
+        properties.put("visible", visible);
+        properties.put("content", content);
+        properties.put("keywords", keywords);
+        properties.put("month", month);
+        properties.put("year", year);
+        properties.put("image", image != null ? image : StringUtils.EMPTY);
 
         try {
-            Node node = JcrResourceUtil.createPath(resolver.getResource(PublickConstants.CONTENT_PATH).adaptTo(Node.class), path, NodeType.NT_UNSTRUCTURED, NodeType.NT_UNSTRUCTURED, true);
+            Resource existingNode = resolver.getResource(blogPath);
 
-            blogPath = node.getPath() + "/" + url;
+            if (existingNode != null) {
+                ModifiableValueMap existingProperties = existingNode.adaptTo(ModifiableValueMap.class);
+                existingProperties.putAll(properties);
+            } else {
+                Node node = JcrResourceUtil.createPath(resolver.getResource(PublickConstants.CONTENT_PATH).adaptTo(Node.class), path, NodeType.NT_UNSTRUCTURED, NodeType.NT_UNSTRUCTURED, true);
 
-            Map<String, Object> properties = new HashMap<String, Object>();
-            properties.put("jcr:primaryType", PublickConstants.NODE_TYPE_PAGE);
-            properties.put("sling:resourceType", PublickConstants.PAGE_TYPE_BLOG);
-            properties.put("title", title);
-            properties.put("visible", visible);
-            properties.put("content", content);
-            properties.put("keywords", keywords);
-            properties.put("month", month);
-            properties.put("year", year);
-            properties.put("image", image);
-
-            resolver.create(resolver.getResource(node.getPath()), url, properties);
+                resolver.create(resolver.getResource(node.getPath()), url, properties);
+            }
 
             resolver.commit();
             resolver.close();

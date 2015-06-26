@@ -1,5 +1,26 @@
 {
     "jcr:primaryType": "sling:Folder",
+    "index" : {
+        "jcr:primaryType": "publick:page",
+        "sling:resourceType" : "publick/pages/adminPage",
+        "jcr:content" : {
+            "mainContent" : {
+                "jcr:primaryType": "nt:unstructured",
+                "sling:resourceType" : "publick/components/foundation/parsys",
+                "richtext" : {
+                    "jcr:primaryType": "nt:unstructured",
+                    "sling:resourceType" : "publick/components/foundation/richtext",
+                    "text": "welcome admin dashboard"
+                },
+                "blogsList" : {
+                    "jcr:primaryType": "nt:unstructured",
+                    "sling:resourceType" : "publick/components/foundation/link",
+                    "url": "/content/admin/list.html",
+                    "text": "List all blogs"
+                }
+            }
+        }
+    },
     "edit" : {
         "jcr:primaryType": "publick:page",
         "sling:resourceType" : "publick/pages/adminPage",

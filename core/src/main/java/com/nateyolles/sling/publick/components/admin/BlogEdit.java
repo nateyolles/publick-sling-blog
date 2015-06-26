@@ -54,6 +54,7 @@ public class BlogEdit implements Use {
             keywords = properties.get("keywords", String[].class);
             image = properties.get("image", String.class);
             content = properties.get("content", String.class);
+            url = blog.getName();
         } else {
             /* Populate dropdowns with current date if creating new blog. */
             month = ((long)Calendar.getInstance().get(Calendar.MONTH)) + 1;
