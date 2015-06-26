@@ -24,6 +24,7 @@
                         <Sling-Nodetypes>SLING-INF/nodetypes/nodetypes.cnd</Sling-Nodetypes>
                         <Sling-Initial-Content>
                             jcr_root/apps;overwrite:=true;uninstall:=true;path:=/apps,
+                            jcr_root/etc;overwrite:=true;uninstall:=true;path:=/etc,
                             jcr_root/content;overwrite:=false;uninstall:=false;path:=/content
                         </Sling-Initial-Content>
                     </instructions>
