@@ -3,6 +3,7 @@
     "index" : {
         "jcr:primaryType": "publick:page",
         "sling:resourceType" : "publick/pages/adminPage",
+        "title" : "Welcome",
         "jcr:content" : {
             "mainContent" : {
                 "jcr:primaryType": "nt:unstructured",
@@ -24,6 +25,7 @@
     "edit" : {
         "jcr:primaryType": "publick:page",
         "sling:resourceType" : "publick/pages/adminPage",
+        "title" : "Edit Blog",
         "jcr:content" : {
             "mainContent" : {
                 "jcr:primaryType": "nt:unstructured",
@@ -38,6 +40,7 @@
     "list" : {
         "jcr:primaryType": "publick:page",
         "sling:resourceType" : "publick/pages/adminPage",
+        "title" : "Blog List",
         "jcr:content" : {
             "mainContent" : {
                 "jcr:primaryType": "nt:unstructured",

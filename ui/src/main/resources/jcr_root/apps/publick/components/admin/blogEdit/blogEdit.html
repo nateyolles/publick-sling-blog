@@ -1,75 +1,58 @@
 <div data-sly-use.blog="com.nateyolles.sling.publick.components.admin.BlogEdit" data-sly-unwrap></div>
 
-<form action="/bin/editblogpost" method="post" enctype="multipart/form-data">
 
-  <div>
-    <label>
-      Title
-      <input type="text" name="title" data-sly-attribute.value="${blog.title}">
-    </label>
-  </div>
-
-  <div>
-    <label>
-      Month
-      <select name="month" data-sly-list="${blog.months}">
-        <option data-sly-attribute.selected="${blog.month == item}">${item}</option>
-      </select>
-
-      Year
-      <select name="year" data-sly-list="${blog.years}">
-        <option data-sly-attribute.selected="${blog.year == item}">${item}</option>
-      </select>
-    </label>
-  </div>
-
-  <div>
-    <label>
-      Friendly URL
-      <input type="text" name="url" data-sly-attribute.value="${blog.url}">
-    </label>
-  </div>
-
-  <div>
-    <label>
-      Show blog
-      <input type="checkbox" name="visible" value="true" data-sly-attribute.checked="${blog.visible}">
-    </label>
-  </div>
-
-  <div>
-    <label>
-      Keywords
-      <div data-sly-test.hasKeywords="${blog.keywords && blog.keywords.length > 0}" data-sly-list="${blog.keywords}" data-sly-unwrap>
-        <input type="text" name="keywords" data-sly-attribute.value="${item}">
-      </div>
-      <div data-sly-test="${!hasKeywords}" data-sly-unwrap>
-        <input type="text" name="keywords">
-      </div>
-      ToDo: Add +/- functionality.
-    </label>
-  </div>
-
-  <div>
-    <label>
-      Image
-      <input type="file" name="image">
-      <div data-sly-test="${blog.image}">
-        <img src="${blog.image}"><br>
-        <span data-sly-text="${blog.image}"></span>
-      </div>
-    </label>
-  </div>
-
-  <div>
-    <label>
-      Content
-      <textarea class="blog-edit-content" name="content">${blog.content @ context='unsafe'}</textarea>
-    </label>
-  </div>
-
-  <div>
-    <input type="submit" value="Save">
-  </div>
-
-</form>
+<div class="row">
+    <div class="col-lg-6">
+        <form action="/bin/editblogpost" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label>Title</label>
+                <input type="text" name="title" data-sly-attribute.value="${blog.title}" class="form-control">
+            </div>
+            <div class="form-group">
+                <label>Month</label>
+                <select name="month" data-sly-list="${blog.months}" class="form-control">
+                    <option data-sly-attribute.selected="${blog.month == item}">${item}</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Year</label>
+                <select name="year" data-sly-list="${blog.years}" class="form-control">
+                    <option data-sly-attribute.selected="${blog.year == item}">${item}</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Friendly URL</label>
+                <input type="text" name="url" data-sly-attribute.value="${blog.url}" class="form-control">
+            </div>
+            <div class="form-group">
+                <label>Publish</label><br>
+                <input type="checkbox" name="visible" value="true" data-sly-attribute.checked="${blog.visible}"> Show blog
+            </div>
+            <div class="form-group">
+                <label>Keywords</label>
+                <div data-sly-test.hasKeywords="${blog.keywords && blog.keywords.length > 0}"
+                     data-sly-list="${blog.keywords}"
+                     data-sly-unwrap>
+                    <input type="text" name="keywords" data-sly-attribute.value="${item}" class="form-control">
+                </div>
+                <div data-sly-test="${!hasKeywords}"
+                     data-sly-unwrap>
+                    <input type="text" name="keywords" class="form-control">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Image</label>
+                <input type="file" name="image">
+                <div data-sly-test="${blog.image}">
+                    <img src="${blog.image}"><br>
+                    <span data-sly-text="${blog.image}"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Content</label>
+                <textarea class="blog-edit-content form-control" name="content">${blog.content @ context='unsafe'}</textarea>
+            </div>
+            <button type="submit" class="btn btn-default">Save</button>
+        </form>
+    </div>
+</div>

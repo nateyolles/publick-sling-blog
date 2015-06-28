@@ -1,7 +1,18 @@
 <body>
-  <p>This is an admin page</p>
+  <div id="wrapper">
+    <nav data-sly-include="navigation.html" data-sly-unwrap></nav>
 
-  <div data-sly-resource="jcr:content/mainContent" data-sly-unwrap></div>
+    <div id="page-wrapper">
+      <div class="row">
+        <div class="col-lg-12">
+          <h1 class="page-header" data-sly-text="${properties.title || properties.jcr:title || resource.name}">Publick Admin</h1>
+        </div>
+      </div>
+
+      <div data-sly-resource="jcr:content/mainContent" data-sly-unwrap></div>
+
+    </div>
+  </div>
 
   <script data-sly-include="scripts.html" data-sly-unwrap></script>
 </body>
