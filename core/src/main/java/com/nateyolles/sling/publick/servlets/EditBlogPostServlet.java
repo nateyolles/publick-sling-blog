@@ -44,7 +44,8 @@ import org.slf4j.LoggerFactory;
 public class EditBlogPostServlet extends SlingAllMethodsServlet {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EditBlogPostServlet.class);
-    private static final String BLOG_PATH = PublickConstants.BLOG_PATH + "/%d/%02d";
+    private static final String BLOG_PATH = "/%d/%02d";
+    private static final String BLOG_ROOT = "blog";
 
     @Override
     protected void doPost(SlingHttpServletRequest request, SlingHttpServletResponse response) throws ServletException, IOException {
@@ -57,9 +58,9 @@ public class EditBlogPostServlet extends SlingAllMethodsServlet {
         final String[] keywords = request.getParameterValues("keywords");
         final long month = Long.parseLong(request.getParameter("month"));
         final long year = Long.parseLong(request.getParameter("year"));
-        final String path = String.format(BLOG_PATH, year, month);
+        final String path = String.format(BLOG_PATH, year, month); // wants to be blog/2015/06
+        final String blogPath = PublickConstants.BLOG_PATH + path + "/" + url;
         final String image = saveImage(request);
-        final String blogPath = path + "/" + url;
 
         Map<String, Object> properties = new HashMap<String, Object>();
         properties.put("jcr:primaryType", PublickConstants.NODE_TYPE_PAGE);
@@ -79,7 +80,7 @@ public class EditBlogPostServlet extends SlingAllMethodsServlet {
                 ModifiableValueMap existingProperties = existingNode.adaptTo(ModifiableValueMap.class);
                 existingProperties.putAll(properties);
             } else {
-                Node node = JcrResourceUtil.createPath(resolver.getResource(PublickConstants.CONTENT_PATH).adaptTo(Node.class), path, NodeType.NT_UNSTRUCTURED, NodeType.NT_UNSTRUCTURED, true);
+                Node node = JcrResourceUtil.createPath(resolver.getResource(PublickConstants.CONTENT_PATH).adaptTo(Node.class), BLOG_ROOT + path, NodeType.NT_UNSTRUCTURED, NodeType.NT_UNSTRUCTURED, true);
 
                 resolver.create(resolver.getResource(node.getPath()), url, properties);
             }
