@@ -1,0 +1,15 @@
+{
+    "jcr:primaryType": "sling:Folder",
+    "images": {
+        "jcr:primaryType": "sling:Folder"
+    },
+    "pdf": {
+        "jcr:primaryType": "sling:Folder"
+    },
+    "audio": {
+        "jcr:primaryType": "sling:Folder"
+    },
+    "video": {
+        "jcr:primaryType": "sling:Folder"
+    }
+}

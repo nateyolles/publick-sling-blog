@@ -1,3 +1,44 @@
+/* blogList */
 .table .column-small {
   width: 50px;
+}
+
+/* assetList */
+.asset-thumbnail {
+  text-align: center;
+}
+
+.asset-thumbnail img{
+  height: 90px;
+}
+
+.asset-folder {
+  cursor: pointer;
+}
+
+.asset-folder .fa {
+  margin-top: 40px;
+  font-size: 50px;
+  color: #666;
+}
+
+.asset-upload {
+  border: dashed 1px green;
+}
+
+.asset-upload.hover {
+  background: lightgreen;
+}
+
+.asset-upload.hover-error {
+  background: indianred;
+}
+
+.asset-upload .fa {
+  color: green;
+  margin-top: 27px;
+}
+
+.breadcrumb li {
+  margin-right: 4px;
 }

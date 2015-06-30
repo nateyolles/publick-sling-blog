@@ -9,7 +9,10 @@ public class PublickConstants {
     public static final String BLOG_PATH = CONTENT_PATH + "/blog";
     public static final String ADMIN_PATH = CONTENT_PATH + "/admin";
     public static final String ASSET_PATH = CONTENT_PATH + "/assets";
-    public static final String IMAGE_PATH = CONTENT_PATH + "/images";
+    public static final String IMAGE_PATH = ASSET_PATH + "/images";
+    public static final String PDF_PATH = ASSET_PATH + "/pdf";
+    public static final String AUDIO_PATH = ASSET_PATH + "/audio";
+    public static final String VIDEO_PATH = ASSET_PATH + "/video";
 
     private static final String NODE_TYPE = "publick";
     public static final String NODE_TYPE_PAGE = NODE_TYPE + ":page";
