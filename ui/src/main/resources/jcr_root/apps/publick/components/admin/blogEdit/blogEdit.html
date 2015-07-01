@@ -76,6 +76,14 @@
     <div class="row">
         <div class="col-lg-12 col-md-12">
             <div class="form-group">
+                <label>Description</label>
+                <input type="text" name="description" data-sly-attribute.value="${blog.description}" class="form-control">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12 col-md-12">
+            <div class="form-group">
                 <label>Content</label>
                 <textarea class="blog-edit-content form-control" name="content">${blog.content @ context='unsafe'}</textarea>
             </div>

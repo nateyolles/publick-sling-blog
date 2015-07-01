@@ -52,6 +52,7 @@ public class EditBlogPostServlet extends SlingAllMethodsServlet {
         ResourceResolver resolver = request.getResourceResolver();
 
         final String title = request.getParameter("title");
+        final String description = request.getParameter("description");
         final String content = request.getParameter("content");
         final String url = request.getParameter("url");
         final boolean visible = Boolean.parseBoolean(request.getParameter("visible"));
@@ -68,6 +69,7 @@ public class EditBlogPostServlet extends SlingAllMethodsServlet {
         properties.put("title", title);
         properties.put("visible", visible);
         properties.put("content", content);
+        properties.put("description", description);
         properties.put("keywords", keywords);
         properties.put("month", month);
         properties.put("year", year);

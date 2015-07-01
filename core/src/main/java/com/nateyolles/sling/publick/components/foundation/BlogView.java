@@ -30,6 +30,7 @@ public class BlogView implements Use {
     private String[] keywords;
     private String image;
     private String content;
+    private String description;
 
     @Override
     public void init(Bindings bindings) {
@@ -50,6 +51,7 @@ public class BlogView implements Use {
             keywords = properties.get("keywords", String[].class);
             image = properties.get("image", String.class);
             content = properties.get("content", String.class);
+            description = properties.get("description", String.class);
         }
     }
 
@@ -83,5 +85,9 @@ public class BlogView implements Use {
 
     public String getContent() {
         return content;
+    }
+
+    public String getDescription() {
+        return description;
     }
 }
