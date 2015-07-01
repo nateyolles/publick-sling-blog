@@ -42,3 +42,22 @@
 .breadcrumb li {
   margin-right: 4px;
 }
+
+
+/* bootstrap modal scroll */
+.modal-dialog{
+  overflow-y: initial !important
+}
+
+.modal-body{
+  height: 250px;
+  overflow-y: auto;
+}
+
+.modal-body .thumbnail {
+  cursor: pointer;
+}
+
+.modal-body .thumbnail img {
+  height: 102px;
+}

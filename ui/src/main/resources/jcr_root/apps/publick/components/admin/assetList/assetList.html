@@ -1,4 +1,6 @@
-<div data-ng-controller="AssetController">
+<div data-ng-controller="AssetController" class="asset-controller">
+
+  <input type="hidden" name="selectedAsset" class="selected-asset" data-ng-value="selectedAsset">
 
   <ol class="breadcrumb">
     <li data-ng-repeat="crumb in breadcrumbs track by $index" data-ng-class="{'active' : $last}">
@@ -28,7 +30,7 @@
     </div>
 
     <div class="col-xs-6 col-sm-4 col-md-2" data-ng-repeat="asset in assets | orderBy">
-      <a class="thumbnail asset-thumbnail asset-folder">
+      <a class="thumbnail asset-thumbnail asset-asset" data-ng-click="selectAsset($event)">
         <img data-ng-src="{{getImagePath(asset)}}" alt="{{asset}}">
         <div class="caption">
           <h6>{{asset}}</h6>

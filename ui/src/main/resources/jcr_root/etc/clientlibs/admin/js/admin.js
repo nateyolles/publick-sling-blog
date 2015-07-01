@@ -1,7 +1,18 @@
 $(function() {
-    $('.blog-edit-content').tinymce({
-        theme: 'modern'
-    });
+  $('.blog-edit-content').summernote({
+    height: 300,
+    toolbar : [
+      ['group', ['undo', 'redo']],
+      ['style', ['bold', 'italic', 'underline', 'clear']],
+      ['font', ['strikethrough', 'superscript', 'subscript']],
+      ['fontsize', ['fontsize']],
+      ['color', ['color']],
+      ['para', ['ul', 'ol', 'paragraph']],
+      ['insert', ['slingasset', 'link', 'table', 'hr']],
+      ['misc', ['fullscreen', 'codeview']],
+      ['group', ['help']]
+    ]
+ });
 });
 
 var app = angular.module('publick', ['ngFileUpload']);
@@ -18,6 +29,8 @@ app.controller('AssetController', function($scope, $http, Upload) {
     }
 
     $scope.navigate = function(folder, isRelative) {
+      $scope.selectedAsset = null;
+
       if (isRelative) {
         if (folder === -1) {
           $scope.breadcrumbs.pop();
@@ -32,6 +45,10 @@ app.controller('AssetController', function($scope, $http, Upload) {
 
       $scope.currentPath = '/content/' + $scope.breadcrumbs.join('/');
       update($scope.currentPath);
+    };
+
+    $scope.selectAsset = function(event) {
+      $scope.selectedAsset = $(event.currentTarget).find('img').attr('src');
     };
 
     $scope.$watch('files', function() {
@@ -67,10 +84,8 @@ app.controller('AssetController', function($scope, $http, Upload) {
           angular.forEach(data, function(value, key){
             if (!key.startsWith('jcr:')) {
               if (value['jcr:primaryType'] === 'nt:file') {
-                //assets.push(key);
                 $scope.assets.push(key);
               } else {
-                //folders.push(key);
                 $scope.folders.push(key);
               }
             }
