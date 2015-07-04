@@ -43,6 +43,16 @@
   margin-right: 4px;
 }
 
+/* blogEdit */
+.keywords-add-container {
+  float: right;
+  margin-right: 14px;
+  margin-top: 4px;
+}
+
+.keywords-add-container i {
+  margin-left: 6px;
+}
 
 /* bootstrap modal scroll */
 .modal-dialog{

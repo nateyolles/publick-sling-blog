@@ -17,6 +17,18 @@ $(function() {
 
 var app = angular.module('publick', ['ngFileUpload']);
 
+app.controller('KeywordsController', function($scope){
+  $scope.addKeyword = function(event) {
+    event.preventDefault();
+    $scope.keywords.push(null);
+  };
+
+  $scope.removeKeyword = function(event, index) {
+    event.preventDefault();
+    $scope.keywords.splice(index,1);
+  }
+});
+
 app.controller('AssetController', function($scope, $http, Upload) {
 
     $scope.breadcrumbs = ['assets'];

@@ -46,17 +46,17 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-lg-6 col-md-6">
-            <div class="form-group">
+        <div class="col-lg-3 col-md-3">
+            <div class="form-group" data-ng-controller="KeywordsController" data-ng-init="keywords = ${blog.getKeywordsJSON}">
                 <label>Keywords</label>
-                <div data-sly-test.hasKeywords="${blog.keywords && blog.keywords.length > 0}"
-                     data-sly-list="${blog.keywords}"
-                     data-sly-unwrap>
-                    <input type="text" name="keywords" data-sly-attribute.value="${item}" class="form-control">
+                <div data-ng-repeat="keyword in keywords track by $index" class="input-group">
+                  <input type="text" name="keywords" class="form-control" data-ng-model="keywords[$index]">
+                  <div class="input-group-addon">
+                      <a href="#" data-ng-click="removeKeyword($event, $index)"><i class="fa fa-minus-circle"></i></a>
+                  </div>
                 </div>
-                <div data-sly-test="${!hasKeywords}"
-                     data-sly-unwrap>
-                    <input type="text" name="keywords" class="form-control">
+                <div class="input-group keywords-add-container">
+                    <a href="#" data-ng-click="addKeyword($event)">Add keyword<i class="fa fa-plus-circle"></i></a>
                 </div>
             </div>
         </div>

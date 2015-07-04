@@ -4,10 +4,12 @@ import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.jcr.query.Query;
 import javax.script.Bindings;
 
+import org.apache.sling.commons.json.JSONArray;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
 import org.apache.sling.api.resource.Resource;
@@ -86,6 +88,18 @@ public class BlogEdit implements Use {
 
     public String[] getKeywords() {
         return keywords;
+    }
+
+    public String getKeywordsJSON() {
+        JSONArray jsonArray = null;
+
+        if (keywords != null) {
+            jsonArray = new JSONArray(Arrays.asList(keywords));
+        } else {
+            jsonArray = new JSONArray();
+        }
+
+        return jsonArray.toString();
     }
 
     public String getImage() {
