@@ -1,0 +1,4 @@
+{
+    "jcr:primaryType" : "publick:component",
+    "sling:resourceSuperType" : "publick/pages/adminPage"
+}

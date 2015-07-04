@@ -1,0 +1,31 @@
+<div class="container" data-sly-use.login="com.nateyolles.sling.publick.components.admin.Login">
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+            <div class="login-panel panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Publick Login</h3>
+                </div>
+                <div class="panel-body">
+                    <form role="form" method="POST" action="/j_security_check">
+                        <fieldset>
+                            <div class="alert alert-danger alert-dismissable" data-sly-test="${login.reason}">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                ${login.reason}
+                            </div>
+
+                            <div class="form-group">
+                                <input class="form-control" placeholder="Username" name="j_username" type="text" autofocus>
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" placeholder="Password" name="j_password" type="password">
+                            </div>
+                            <input type="hidden" name="_charset_" value="UTF-8">
+                            <input type="hidden" name="sling.auth.redirect" value="/content/admin/index.html">
+                            <button type="submit" class="btn btn-lg btn-primary btn-block">Login</button>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

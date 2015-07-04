@@ -1,0 +1,15 @@
+{
+    "jcr:primaryType": "publick:page",
+    "sling:resourceType" : "publick/pages/adminSecurePage",
+    "title" : "Assets",
+    "jcr:content" : {
+        "mainContent" : {
+            "jcr:primaryType": "nt:unstructured",
+            "sling:resourceType" : "publick/components/foundation/parsys",
+            "assetList" : {
+                "jcr:primaryType": "nt:unstructured",
+                "sling:resourceType" : "publick/components/admin/assetList"
+            }
+        }
+    }
+}

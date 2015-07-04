@@ -1,0 +1,15 @@
+{
+    "jcr:primaryType": "publick:page",
+    "sling:resourceType" : "publick/pages/adminPage",
+    "title" : "Login",
+    "jcr:content" : {
+        "mainContent" : {
+            "jcr:primaryType": "nt:unstructured",
+            "sling:resourceType" : "publick/components/foundation/parsys",
+            "login" : {
+                "jcr:primaryType": "nt:unstructured",
+                "sling:resourceType" : "publick/components/admin/login"
+            }
+        }
+    }
+}
