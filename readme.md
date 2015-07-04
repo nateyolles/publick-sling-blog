@@ -27,6 +27,10 @@ Build and deploy to a running Sling instance with default values of port *8080*,
 
     mvn clean install -PautoInstallBundle
 
+## Login
+
+Navigate to [http://localhost:8080/content/admin/login.html](http://localhost:8080/content/admin/login.html). The default credentials are *admin*/*admin*.
+
 ## Debugging
 
 Attach a debugger to the Apache Sling instance by running the following from the command line:
