@@ -2,35 +2,32 @@ package com.nateyolles.sling.publick.components.admin;
 
 import javax.script.Bindings;
 
-import org.apache.sling.api.SlingHttpServletRequest;
-import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ResourceResolver;
-import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.scripting.SlingBindings;
+import org.apache.sling.api.scripting.SlingScriptHelper;
 import org.apache.sling.scripting.sightly.pojo.Use;
 
 import com.nateyolles.sling.publick.PublickConstants;
+import com.nateyolles.sling.publick.services.RecaptchaService;
 
 public class RecaptchaConfig implements Use {
 
-    private SlingHttpServletRequest request;
+    private RecaptchaService recaptchaService;
+
+    private SlingScriptHelper scriptHelper;
     private String siteKey;
     private String secretKey;
     private boolean enabled;
 
     @Override
     public void init(Bindings bindings) {
-        request = (SlingHttpServletRequest)bindings.get(SlingBindings.REQUEST);
-        ResourceResolver resolver = request.getResourceResolver();
+        scriptHelper = (SlingScriptHelper)bindings.get(SlingBindings.SLING);
 
-        Resource recaptcha = resolver.getResource(PublickConstants.CONFIG_RECAPTCHA_PATH);
+        recaptchaService = scriptHelper.getService(RecaptchaService.class);
 
-        if (recaptcha != null) {
-            ValueMap properties = recaptcha.adaptTo(ValueMap.class);
-
-            siteKey = properties.get("siteKey", String.class);
-            secretKey = properties.get("secretKey", String.class);
-            enabled = properties.get("enabled", Boolean.class);
+        if (recaptchaService != null) {
+            siteKey = recaptchaService.getSiteKey();
+            secretKey = recaptchaService.getSecretKey();
+            enabled = recaptchaService.getEnabled();
         }
     }
 
