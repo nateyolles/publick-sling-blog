@@ -5,6 +5,8 @@ public class PublickConstants {
     private PublickConstants() {
     }
 
+    public static final String ROOT_PATH = "/";
+
     public static final String CONTENT_PATH = "/content";
     public static final String BLOG_PATH = CONTENT_PATH + "/blog";
     public static final String ADMIN_PATH = CONTENT_PATH + "/admin";
@@ -13,6 +15,12 @@ public class PublickConstants {
     public static final String PDF_PATH = ASSET_PATH + "/pdf";
     public static final String AUDIO_PATH = ASSET_PATH + "/audio";
     public static final String VIDEO_PATH = ASSET_PATH + "/video";
+
+    public static final String ADMIN_LANDING_PATH = ADMIN_PATH + "/index";
+    public static final String ADMIN_LIST_PATH = ADMIN_PATH + "/list";
+    public static final String ADMIN_EDIT_PATH = ADMIN_PATH + "/edit";
+    public static final String ADMIN_ASSETS_PATH = ADMIN_PATH + "/assets";
+    public static final String ADMIN_CONFIG_PATH = ADMIN_PATH + "/config";
 
     private static final String NODE_TYPE = "publick";
     public static final String NODE_TYPE_PAGE = NODE_TYPE + ":page";
@@ -23,4 +31,7 @@ public class PublickConstants {
     public static final String PAGE_TYPE_ADMIN = PAGE_TYPE + "/adminPage";
     public static final String PAGE_TYPE_BASIC = PAGE_TYPE + "/basicPage";
     public static final String PAGE_TYPE_BLOG = PAGE_TYPE + "/blogPage";
+
+    public static final String CONFIG_PATH = "/etc/config";
+    public static final String CONFIG_RECAPTCHA_PATH =  CONFIG_PATH + "/recaptcha";
 }
