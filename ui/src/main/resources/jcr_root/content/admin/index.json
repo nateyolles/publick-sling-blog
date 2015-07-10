@@ -6,16 +6,34 @@
         "mainContent" : {
             "jcr:primaryType": "nt:unstructured",
             "sling:resourceType" : "publick/components/foundation/parsys",
-            "richtext" : {
+            "newBlog" : {
+                "jcr:primaryType": "nt:unstructured",
+                "sling:resourceType" : "publick/components/foundation/button",
+                "value": "Create new blog post!",
+                "link": "/content/admin/edit.html",
+                "style": "primary",
+                "size": "large",
+                "block": false
+            },
+            "welcomeText" : {
                 "jcr:primaryType": "nt:unstructured",
                 "sling:resourceType" : "publick/components/foundation/richtext",
-                "text": "welcome admin dashboard"
+                "text": "<h3>Publick, a blog engine built on Apache Sling, Sightly, AngularJS and Bootstrap.</h3>"
             },
-            "blogsList" : {
+            "instructionsText" : {
                 "jcr:primaryType": "nt:unstructured",
-                "sling:resourceType" : "publick/components/foundation/link",
-                "url": "/content/admin/list.html",
-                "text": "List all blogs"
+                "sling:resourceType" : "publick/components/foundation/richtext",
+                "text": "<p>Your initial steps will be security related: <ol><li>Change the admin password.</li><li>Create at least one author account to blog under.</li><li>Signup for Google's reCAPTCHA.</li><li>Insert the site key and secret key that Google assigns you into the config section of this dashboard.</li></ol></p>"
+            },
+            "historyText" : {
+                "jcr:primaryType": "nt:unstructured",
+                "sling:resourceType" : "publick/components/foundation/richtext",
+                "text": "<p>A little history courtesy of Wikipedia: <strong>Publick Occurrences Both Forreign and Domestick</strong> was the title of the first multi-page newspaper published in the Americas. Before then, single-page newspapers, called broadsides, were published in the English colonies and printed in Cambridge in 1689. The first edition was published September 25, 1690, in Boston, Massachusetts, and was intended to be published monthly, &quot;or, if any Glut of Occurrences happen, oftener.&quot; It was printed by American Richard Pierce of Boston, and it was edited by Benjamin Harris, who had previously published a newspaper in London. The paper contained four six by ten inch pages, and filled only three of them. No second edition was printed, as the paper was shut down by the British colonial authorities on Sept. 29th, 1690.</p>"
+            },
+            "enjoyText" : {
+                "jcr:primaryType": "nt:unstructured",
+                "sling:resourceType" : "publick/components/foundation/richtext",
+                "text": "<p><strong>Enjoy!</strong></p>"
             }
         }
     }
