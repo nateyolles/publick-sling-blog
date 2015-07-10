@@ -21,7 +21,7 @@ Install external dependencies to a running Sling instance with default values of
 
     mvn clean install -PautoInstallDependencies
 
-## How to build
+## Build
 
 Build and deploy to a running Sling instance with default values of port *8080*, user *admin* and password *admin*:
 
@@ -30,6 +30,20 @@ Build and deploy to a running Sling instance with default values of port *8080*,
 ## Login
 
 Navigate to [http://localhost:8080/content/admin/login.html](http://localhost:8080/content/admin/login.html). The default credentials are *admin*/*admin*.
+
+## Setup
+
+Create user
+
+1. Navigate to [http://localhost:8080/content/admin/users.html](http://localhost:8080/content/admin/users.html)
+2. Change admin password
+3. Create an Author account
+
+Setup reCAPTCHA
+
+1. Sign up at [https://www.google.com/recaptcha](https://www.google.com/recaptcha)
+2. Navigate to [http://localhost:8080/content/admin/config.html](http://localhost:8080/content/admin/config.html)
+3. Insert site key and secret key
 
 ## Debugging
 
