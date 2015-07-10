@@ -1,0 +1,95 @@
+<div data-ng-controller="UserController">
+
+    <script type="text/ng-template" id="user.html">
+        <div class="modal-header">
+            <h3 class="modal-title" data-ng-show="isNew">Add new user</h3>
+            <h3 class="modal-title" data-ng-show="!isNew">Edit user: {{user}}</h3>
+        </div>
+        <div class="modal-body">
+            <div class="container-fluid">
+                <div class="row" data-ng-show="isNew">
+                    <div class="col-lg-6 col-md-6">
+                        <div class="form-group">
+                            <label>Username</label>
+                            <input type="text" name="title" class="form-control" data-ng-model="user">
+                        </div>
+                    </div>
+                </div>
+                <div class="row" data-ng-show="!isPass">
+                    <div class="col-lg-6 col-md-6">
+                        <div class="form-group">
+                            <label>Display Name</label>
+                            <input type="text" name="title" class="form-control" data-ng-model="displayName">
+                        </div>
+                    </div>
+                </div>
+                <div class="row" data-ng-show="isPass">
+                    <div class="col-lg-6 col-md-6">
+                        <div class="form-group">
+                            <label>Old Password</label>
+                            <input type="password" name="title" class="form-control" data-ng-model="oldPassword">
+                        </div>
+                    </div>
+                </div>
+                <div class="row" data-ng-show="isPass || isNew">
+                    <div class="col-lg-6 col-md-6">
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" name="title" class="form-control" data-ng-model="password">
+                        </div>
+                    </div>
+                </div>
+                <div class="row" data-ng-show="isPass || isNew">
+                    <div class="col-lg-6 col-md-6">
+                        <div class="form-group">
+                            <label>Confirm Password</label>
+                            <input type="password" name="title" class="form-control" data-ng-model="passwordConfirm">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" ng-click="ok()">OK</button>
+            <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+        </div>
+    </script>
+
+    <div class="row" data-ng-repeat="group in userList.groups">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <button type="button" class="btn btn-xs btn-primary pull-right" data-ng-click="edit('add', $index)" data-ng-show="group.canUpdate">Add</button>
+                    <h3 class="panel-title" data-ng-bind="group.displayName"></h3>
+                </div>
+                <!-- /.panel-heading -->
+                <div class="panel-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th class="column-small">#</th>
+                                    <th>Username</th>
+                                    <th>Display name</th>
+                                    <th class="column-small">Edit</th>
+                                    <th class="column-small">Pass</th>
+                                    <th class="column-small" data-ng-show="group.canUpdate">Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr data-ng-repeat="user in group.users">
+                                    <td data-ng-bind="$index + 1"></td>
+                                    <td data-ng-bind="user.user"></td>
+                                    <td data-ng-bind="user.displayName"></td>
+                                    <td><a href="" data-ng-click="edit('edit', $parent.$index, $index)"><i class="glyphicon glyphicon-pencil"></i></a></td>
+                                    <td><a href="" data-ng-click="edit('pass', $parent.$index, $index)"><i class="glyphicon glyphicon-asterisk"></i></a></td>
+                                    <td data-ng-show="group.canUpdate"><a href="" data-ng-click="delete($parent.$index, $index)"><i class="glyphicon glyphicon-trash"></i></a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

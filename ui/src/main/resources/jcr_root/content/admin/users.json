@@ -1,0 +1,15 @@
+{
+    "jcr:primaryType": "publick:page",
+    "sling:resourceType" : "publick/pages/adminSecurePage",
+    "title" : "Users",
+    "jcr:content" : {
+        "mainContent" : {
+            "jcr:primaryType": "nt:unstructured",
+            "sling:resourceType" : "publick/components/foundation/parsys",
+            "userList" : {
+                "jcr:primaryType": "nt:unstructured",
+                "sling:resourceType" : "publick/components/admin/userList"
+            }
+        }
+    }
+}

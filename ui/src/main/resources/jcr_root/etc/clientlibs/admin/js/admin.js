@@ -28,7 +28,7 @@ $(function() {
   });
 });
 
-var app = angular.module('publick', ['ngFileUpload']);
+var app = angular.module('publick', ['ngFileUpload', 'ui.bootstrap']);
 
 app.controller('KeywordsController', function($scope){
   $scope.addKeyword = function(event) {
@@ -122,4 +122,221 @@ app.controller('AssetController', function($scope, $http, Upload) {
     }
 
     update('/content/assets');
+});
+
+app.controller('UserController', function($scope, $http, $modal, UserService) {
+
+  $scope.userList = {
+    groups:[
+      {displayName: "Admin", name: null, canUpdate : false, users: []},
+      {displayName: "Authors", name: 'authors', canUpdate : true, users: []},
+      {displayName: "Testers", name: 'testers', canUpdate : true, users: []}
+    ]
+  };
+
+  $scope.delete = function(groupIndex, userIndex) {
+    //TODO: create a confirmation modal
+    UserService.deleteUser($scope.userList.groups[groupIndex].users[userIndex].user)
+      .success(function(data){
+        $scope.userList.groups[groupIndex].users.splice(userIndex ,1);
+      });
+  };
+
+  $scope.edit = function(action, groupIndex, userIndex) {
+
+    var modalInstance = $modal.open({
+      templateUrl: 'user.html',
+      controller: 'UserModalController',
+      resolve: {
+        action: function() {
+          return action;
+        },
+        user: function() {
+          return $scope.userList.groups[groupIndex].users[userIndex];
+        },
+        group: function() {
+          return $scope.userList.groups[groupIndex].name;
+        }
+      }
+    });
+
+    modalInstance.result.then(function(changes) {
+      if (!changes.data) {
+        alert('error');
+      } else {
+        if (changes.action === 'updateUser') {
+          $scope.userList.groups[groupIndex].users[userIndex].displayName = changes.data;
+        } else if (changes.action === 'updatePass') {
+          alert('password changed');
+        } else {
+          $scope.userList.groups[groupIndex].users.push({user: changes.data.user, displayName: changes.data.displayName});
+        }
+      }
+    });
+  };
+
+  UserService.getAllUsers().success(function(data){
+    angular.forEach(data, function(value, key){
+      if (typeof value['memberOf'] !== 'undefined') {
+        if (value['memberOf'][0] === '/system/userManager/group/authors') {
+          $scope.userList.groups[1].users.push({user: key, displayName: value['displayName']});
+        } else if (value['memberOf'][0] === '/system/userManager/group/testers') {
+          $scope.userList.groups[2].users.push({user: key, displayName: value['displayName']});
+        } else {
+          $scope.userList.groups[0].users.push({user: key, displayName: value['displayName']});
+        }
+      }
+    });
+  });
+
+});
+
+app.controller('UserModalController', function ($scope, $modalInstance, UserService, group, user, action) {
+
+  $scope.group = group;
+  $scope.isNew = action === 'add';
+  $scope.isPass = action === 'pass';
+
+  if (typeof user !== 'undefined') {
+    $scope.user = user.user;
+    $scope.displayName = user.displayName;
+  }
+
+  $scope.ok = function () {
+    if ($scope.isNew) {
+      UserService.createUser($scope.user, $scope.displayName, $scope.password, $scope.passwordConfirm).success(function(data){
+        UserService.updateGroup($scope.group, $scope.user).success(function(data){
+          $modalInstance.close({action: 'createUser', data: {user: $scope.user, displayName: $scope.displayName}});
+        }).error(function(data){
+          $modalInstance.close({action: 'createUser', data: false});
+        });
+      });
+    } else if ($scope.isPass) {
+      UserService.changePassword($scope.user, $scope.oldPassword, $scope.password, $scope.passwordConfirm).success(function(data){
+        $modalInstance.close({action: 'updatePass', data: true});
+      }).error(function(data){
+        $modalInstance.close({action: 'updatePass', data: false});
+      });
+    } else {
+      UserService.updateUser($scope.user, $scope.displayName).success(function(data){
+        $modalInstance.close({action: 'updateUser', data: $scope.displayName});
+      }).error(function(data){
+        $modalInstance.close({action: 'updateUser', data: false});
+      });
+    }
+  };
+
+  $scope.cancel = function () {
+    $modalInstance.dismiss('cancel');
+  };
+});
+
+app.factory('formDataObject', function() {
+  return function(data, headersGetter) {
+    var formData = new FormData();
+
+    angular.forEach(data, function (value, key) {
+      formData.append(key, value);
+    });
+
+    var headers = headersGetter();
+    delete headers['Content-Type'];
+
+    return formData;
+  };
+});
+
+app.factory('UserService', function($http, formDataObject) {
+  var userFactory          = {},
+      PLACEHOLDER          = '{}',
+      PATH_BASE            = '/system/userManager',
+      PATH_USER_HOME       = PATH_BASE + '/user/{}',
+      PATH_GET_ALL_USERS   = PATH_BASE + '/user.tidy.1.json',
+      PATH_GET_USER        = PATH_BASE + '/user/{}.tidy.1.json',
+      PATH_CREATE_USER     = PATH_BASE + '/user.create.json',
+      PATH_UPDATE_USER     = PATH_BASE + '/user/{}.update.json',
+      PATH_CHANGE_PASSWORD = PATH_BASE + '/user/{}.changePassword.json',
+      PATH_DELETE_USER     = PATH_BASE + '/user/{}.delete.json',
+      PATH_GET_ALL_GROUPS  = PATH_BASE + '/group.tidy.1.json',
+      PATH_GET_GROUP       = PATH_BASE + '/group/{}.tidy.1.json',
+      PATH_CREATE_GROUP    = PATH_BASE + '/group.create.json',
+      PATH_UPDATE_GROUP    = PATH_BASE + '/group/{}.update.html', // Bug in Sling won't work with JSON
+      PATH_DELETE_GROUP    = PATH_BASE + '/group/{}.delete.json';
+
+  /**
+   * @private
+   */
+  function post(path, data) {
+    return $http({
+      method: 'POST',
+      url: path,
+      data: data,
+      transformRequest: formDataObject
+    });
+  }
+
+  userFactory.getAllUsers = function() {
+    return $http.get(PATH_GET_ALL_USERS);
+  };
+
+  userFactory.getUser = function(username) {
+    return $http.get(PATH_GET_USER.replace(PLACEHOLDER, username));
+  };
+
+  userFactory.createUser = function(username, displayName, password, passwordConfirm) {
+    return post(PATH_CREATE_USER, {
+      ':name': username,
+      pwd: password,
+      pwdConfirm : passwordConfirm,
+      displayName : displayName
+    });
+  };
+
+  userFactory.updateUser = function(username, displayName) {
+    return post(PATH_UPDATE_USER.replace(PLACEHOLDER, username), {
+      displayName : displayName
+    });
+  };
+
+  userFactory.changePassword = function(username, oldPassword, newPassword, newPasswordConfirm) {
+    return post(PATH_CHANGE_PASSWORD.replace(PLACEHOLDER, username), {
+      oldPwd : oldPassword,
+      newPwd : newPassword,
+      newPwdConfirm : newPasswordConfirm
+    });
+  };
+
+  userFactory.deleteUser = function(username) {
+    return post(PATH_DELETE_USER.replace(PLACEHOLDER, username), {
+      go: 1
+    });
+  };
+
+  userFactory.getAllGroups = function() {
+    return $http.get(PATH_GET_ALL_GROUPS);
+  };
+
+  userFactory.getGroup = function(group) {
+    return $http.get(PATH_GET_GROUP.replace(PLACEHOLDER, group));
+  };
+
+  userFactory.createGroup = function(group) {
+    return post(PATH_CREATE_GROUP, {
+      ':name': group
+    });
+  };
+
+  userFactory.updateGroup = function(group, user) {
+    return post(PATH_UPDATE_GROUP.replace(PLACEHOLDER, group), {
+      ':member' : PATH_USER_HOME.replace(PLACEHOLDER, user)
+    });
+  }
+
+  userFactory.deleteGroup = function(group) {
+    return post(PATH_DELETE_GROUP.replace(PLACEHOLDER, group), {
+      go: 1
+    });
+  }
+
+  return userFactory;
 });
