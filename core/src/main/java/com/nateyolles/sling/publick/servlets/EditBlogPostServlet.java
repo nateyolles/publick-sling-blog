@@ -13,10 +13,12 @@ import org.apache.sling.api.resource.ModifiableValueMap;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
 import org.apache.sling.api.servlets.SlingAllMethodsServlet;
+import org.apache.jackrabbit.JcrConstants;
 import org.apache.jackrabbit.api.JackrabbitSession;
 import org.apache.jackrabbit.api.security.user.Authorizable;
 import org.apache.jackrabbit.api.security.user.UserManager;
 import org.apache.jackrabbit.commons.JcrUtils;
+import org.apache.sling.jcr.resource.JcrResourceConstants;
 import org.apache.sling.jcr.resource.JcrResourceUtil;
 
 import javax.jcr.Node;
@@ -58,8 +60,8 @@ public class EditBlogPostServlet extends SlingAllMethodsServlet {
         final String image = saveImage(request);
 
         Map<String, Object> properties = new HashMap<String, Object>();
-        properties.put("jcr:primaryType", PublickConstants.NODE_TYPE_PAGE);
-        properties.put("sling:resourceType", PublickConstants.PAGE_TYPE_BLOG);
+        properties.put(JcrConstants.JCR_PRIMARYTYPE, PublickConstants.NODE_TYPE_PAGE);
+        properties.put(JcrResourceConstants.SLING_RESOURCE_TYPE_PROPERTY, PublickConstants.PAGE_TYPE_BLOG);
         properties.put("title", title);
         properties.put("visible", visible);
         properties.put("content", content);

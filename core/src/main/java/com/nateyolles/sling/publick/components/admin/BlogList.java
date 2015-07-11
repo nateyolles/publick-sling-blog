@@ -9,13 +9,14 @@ import org.apache.sling.api.SlingHttpServletResponse;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.scripting.SlingBindings;
+import org.apache.sling.jcr.resource.JcrResourceConstants;
 import org.apache.sling.scripting.sightly.pojo.Use;
 
 import com.nateyolles.sling.publick.PublickConstants;
 
 public class BlogList implements Use {
 
-    private static final String BLOG_QUERY = "/jcr:root" + PublickConstants.BLOG_PATH + "//*[@sling:resourceType='" + PublickConstants.PAGE_TYPE_BLOG + "']";
+    private static final String BLOG_QUERY = "/jcr:root" + PublickConstants.BLOG_PATH + "//*[@" + JcrResourceConstants.SLING_RESOURCE_TYPE_PROPERTY + "='" + PublickConstants.PAGE_TYPE_BLOG + "']";
 
     private Resource resource;
 
