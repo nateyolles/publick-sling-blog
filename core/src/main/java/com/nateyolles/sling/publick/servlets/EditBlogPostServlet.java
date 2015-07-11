@@ -13,11 +13,15 @@ import org.apache.sling.api.resource.ModifiableValueMap;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
 import org.apache.sling.api.servlets.SlingAllMethodsServlet;
+import org.apache.jackrabbit.api.JackrabbitSession;
+import org.apache.jackrabbit.api.security.user.Authorizable;
+import org.apache.jackrabbit.api.security.user.UserManager;
 import org.apache.jackrabbit.commons.JcrUtils;
 import org.apache.sling.jcr.resource.JcrResourceUtil;
 
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
+import javax.jcr.Session;
 import javax.jcr.nodetype.*;
 import javax.servlet.ServletException;
 
@@ -39,6 +43,7 @@ public class EditBlogPostServlet extends SlingAllMethodsServlet {
     @Override
     protected void doPost(SlingHttpServletRequest request, SlingHttpServletResponse response) throws ServletException, IOException {
         ResourceResolver resolver = request.getResourceResolver();
+        Session session = resolver.adaptTo(Session.class);
 
         final String title = request.getParameter("title");
         final String description = request.getParameter("description");
@@ -59,10 +64,21 @@ public class EditBlogPostServlet extends SlingAllMethodsServlet {
         properties.put("visible", visible);
         properties.put("content", content);
         properties.put("description", description);
-        properties.put("keywords", keywords);
         properties.put("month", month);
         properties.put("year", year);
         properties.put("image", image != null ? image : StringUtils.EMPTY);
+
+        if (keywords != null) {
+            properties.put("keywords", keywords);
+        }
+
+        try {
+            UserManager userManager = ((JackrabbitSession)session).getUserManager();
+            Authorizable auth = userManager.getAuthorizable(session.getUserID());
+            properties.put("author", auth.getID());
+        } catch (RepositoryException e) {
+            LOGGER.error("Could not get user.", e);
+        }
 
         try {
             Resource existingNode = resolver.getResource(blogPath);
