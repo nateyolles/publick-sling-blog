@@ -140,7 +140,7 @@
       slingasset: function (lang) {
         var body = $.ajax({
                       type: "GET",
-                      url: '/apps/publick/components/admin/assetList/assetList.html',
+                      url: '/libs/publick/components/admin/assetList/assetList.html',
                       cache: false,
                       async: false
                     }).responseText;
