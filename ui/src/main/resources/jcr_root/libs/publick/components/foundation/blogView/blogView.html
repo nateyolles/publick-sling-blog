@@ -1,36 +1,29 @@
 <div data-sly-use.blog="com.nateyolles.sling.publick.components.foundation.BlogView" data-sly-unwrap></div>
 
-<h3>blog view compontent</h3>
-
-<div>
-    Title: ${blog.title}
-</div>
-
-<div>
-    Date: ${blog.month}/${blog.year}
-</div>
-
-<div>
-    Friendly URL: ${blog.url}
-</div>
-
-<div>
-    Show blog: ${blog.visible}
-</div>
-
-<div>
-    Keywords: <span data-sly-list="${blog.keywords}" data-sly-unwrap>${item}&nbsp;</span>
-</div>
-
-<div>
-    Description: ${blog.description}
-</div>
-
-<div>
-    Image: ${blog.image}
-    <img src="${blog.image}" data-sly-test="${blog.image}">
-</div>
-
-<div>
-    Content: ${blog.content @ context='unsafe'}
+<div class="container">
+  <div class="row" data-sly-test="${blog.image}">
+    <div class="col-md-12">
+      <img src="${blog.image}" class="img-responsive center-block" alt="${blog.description}">
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="page-header">
+        <h1>${blog.title} <small>${blog.month}/${blog.year}</small></h1>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      ${blog.content @ context='html'}
+    </div>
+  </div>
+  <div class="row" data-sly-test="${blog.keywords}">
+    <div class="col-md-12">
+      <span class="glyphicon glyphicon-tags" aria-hidden="true"></span>&nbsp;
+      <span data-sly-list="${blog.keywords}" data-sly-unwrap>
+        <span class="label label-default" data-sly-text="${item}"></span>
+      </span>
+    </div>
+  </div>
 </div>
