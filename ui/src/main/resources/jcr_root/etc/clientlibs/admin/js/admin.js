@@ -107,7 +107,7 @@ app.controller('AssetController', function($scope, $http, Upload) {
           $scope.assets = [];
 
           angular.forEach(data, function(value, key){
-            if (!key.startsWith('jcr:')) {
+            if (!(new RegExp(/^(sling|jcr|rep):/).test(key))) {
               if (value['jcr:primaryType'] === 'nt:file') {
                 $scope.assets.push(key);
               } else {
