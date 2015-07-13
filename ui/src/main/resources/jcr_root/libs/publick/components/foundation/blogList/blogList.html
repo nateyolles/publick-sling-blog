@@ -1,0 +1,5 @@
+<div data-sly-use.list="com.nateyolles.sling.publick.components.foundation.BlogList" data-sly-unwrap></div>
+
+<div data-sly-list="${list.blogs}">
+  <div data-sly-resource="${item.path @ addSelectors='list'}" data-sly-unwrap></div>
+</div>

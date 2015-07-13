@@ -1,24 +1,18 @@
 package com.nateyolles.sling.publick.components.foundation;
 
-import java.util.Calendar;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ArrayList;
+import java.util.Arrays;
 
-import javax.jcr.query.Query;
 import javax.script.Bindings;
 
 import org.apache.sling.api.SlingHttpServletRequest;
-import org.apache.sling.api.SlingHttpServletResponse;
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.scripting.sightly.pojo.Use;
 
-import com.nateyolles.sling.publick.PublickConstants;
-
 public class BlogView implements Use {
+
+    private static final String LIST_VIEW_SELECTOR = "list";
 
     private Resource resource;
     private SlingHttpServletRequest request;
@@ -31,11 +25,14 @@ public class BlogView implements Use {
     private String image;
     private String content;
     private String description;
+    private boolean listView;
 
     @Override
     public void init(Bindings bindings) {
         resource = (Resource)bindings.get(SlingBindings.RESOURCE);
         request = (SlingHttpServletRequest)bindings.get(SlingBindings.REQUEST);
+
+        listView = Arrays.asList(request.getRequestPathInfo().getSelectors()).contains(LIST_VIEW_SELECTOR);
 
         getBlog(resource);
     }
@@ -89,5 +86,9 @@ public class BlogView implements Use {
 
     public String getDescription() {
         return description;
+    }
+
+    public boolean getListView() {
+        return listView;
     }
 }

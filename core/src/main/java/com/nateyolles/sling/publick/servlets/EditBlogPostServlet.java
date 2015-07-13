@@ -100,7 +100,9 @@ public class EditBlogPostServlet extends SlingAllMethodsServlet {
             } else {
                 Node node = JcrResourceUtil.createPath(resolver.getResource(PublickConstants.CONTENT_PATH).adaptTo(Node.class), BLOG_ROOT + path, NodeType.NT_UNSTRUCTURED, NodeType.NT_UNSTRUCTURED, true);
 
-                resolver.create(resolver.getResource(node.getPath()), url, properties);
+                Resource blog = resolver.create(resolver.getResource(node.getPath()), url, properties);
+                Node blogNode = blog.adaptTo(Node.class);
+                blogNode.addMixin(NodeType.MIX_CREATED);
             }
 
             resolver.commit();

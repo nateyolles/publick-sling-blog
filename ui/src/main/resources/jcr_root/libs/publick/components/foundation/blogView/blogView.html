@@ -1,16 +1,18 @@
 <div data-sly-use.blog="com.nateyolles.sling.publick.components.foundation.BlogView" data-sly-unwrap></div>
 
 <div class="container">
-  <div class="row" data-sly-test="${blog.image}">
-    <div class="col-md-12">
-      <img src="${blog.image}" class="img-responsive center-block" alt="${blog.description}">
-    </div>
-  </div>
   <div class="row">
     <div class="col-md-12">
       <div class="page-header">
-        <h1>${blog.title} <small>${blog.month}/${blog.year}</small></h1>
+        <a href="${resource.path}.html" data-sly-unwrap="${!blog.listView}">
+          <h1>${blog.title} <small>${blog.month}/${blog.year}</small></h1>
+        </a>
       </div>
+    </div>
+  </div>
+  <div class="row" data-sly-test="${blog.image}">
+    <div class="col-md-12">
+      <img src="${blog.image}" class="img-responsive center-block" alt="${blog.description}">
     </div>
   </div>
   <div class="row">
