@@ -25,9 +25,26 @@ import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ResourceResolverFactory;
 import org.apache.sling.jcr.api.SlingRepository;
 
+/**
+ * Setup application by creating user groups and setting privileges.
+ * This class runs on activation of the core bundle.
+ */
 public class Activator implements BundleActivator {
 
+    /**
+     * Logger instance to log and debug errors.
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(Activator.class);
+
+    /**
+     * rep:write mixin.
+     */
+    private static final String REP_WRITE = "rep:write";
+
+    /**
+     * Display Name property for user groups.
+     */
+    private static final String GROUP_DISPLAY_NAME = "displayName";
 
     @Override
     public void start(BundleContext bundleContext) throws Exception {
@@ -42,11 +59,22 @@ public class Activator implements BundleActivator {
         LOGGER.info(bundleContext.getBundle().getSymbolicName() + " stopped");
     }
 
+    /**
+     * Set blog and asset paths as writable for the author user groups.
+     *
+     * @param bundleContext The bundle context provided by the component.
+     */
     private void setPermissions(BundleContext bundleContext) {
        setWritable(bundleContext, PublickConstants.BLOG_PATH);
        setWritable(bundleContext, PublickConstants.ASSET_PATH);
     }
 
+    /**
+     * Set resource as writable for the author user group.
+     *
+     * @param bundleContext The bundle context provided by the component.
+     * @param path The resource path to update permissions.
+     */
     private void setWritable(BundleContext bundleContext, String path) {
         ServiceReference ResourceResolverFactoryReference = bundleContext.getServiceReference(ResourceResolverFactory.class.getName());
         ResourceResolverFactory resolverFactory = (ResourceResolverFactory)bundleContext.getService(ResourceResolverFactoryReference);
@@ -63,12 +91,12 @@ public class Activator implements BundleActivator {
                     JackrabbitSession session = (JackrabbitSession)resolver.adaptTo(Session.class);
                     JackrabbitAccessControlManager accessControlManager = (JackrabbitAccessControlManager)session.getAccessControlManager();
 
-                    Group user = (Group)session.getUserManager().getAuthorizable("authors");
+                    Group user = (Group)session.getUserManager().getAuthorizable(PublickConstants.GROUP_ID_AUTHORS);
                     Principal principal = user.getPrincipal();
 
                     Privilege[] privileges = new Privilege[] {
                         accessControlManager.privilegeFromName(Privilege.JCR_WRITE),
-                        accessControlManager.privilegeFromName("rep:write")
+                        accessControlManager.privilegeFromName(REP_WRITE)
                     };
                     JackrabbitAccessControlList acl;
 
@@ -96,6 +124,11 @@ public class Activator implements BundleActivator {
         }
     }
 
+    /**
+     * Create user groups for authors and testers.
+     *
+     * @param bundleContext The bundle context provided by the component.
+     */
     private void createGroups(BundleContext bundleContext){
         ServiceReference SlingRepositoryFactoryReference = bundleContext.getServiceReference(SlingRepository.class.getName());
         SlingRepository repository = (SlingRepository)bundleContext.getService(SlingRepositoryFactoryReference);
@@ -110,18 +143,18 @@ public class Activator implements BundleActivator {
                     UserManager userManager = ((JackrabbitSession)session).getUserManager();
                     ValueFactory valueFactory = session.getValueFactory();
 
-                    Authorizable authors = userManager.getAuthorizable("authors");
+                    Authorizable authors = userManager.getAuthorizable(PublickConstants.GROUP_ID_AUTHORS);
 
                     if (authors == null) {
-                        authors = userManager.createGroup("authors");
-                        authors.setProperty("displayName", valueFactory.createValue("Authors"));
+                        authors = userManager.createGroup(PublickConstants.GROUP_ID_AUTHORS);
+                        authors.setProperty(GROUP_DISPLAY_NAME, valueFactory.createValue(PublickConstants.GROUP_DISPLAY_AUTHORS));
                     }
 
-                    Authorizable testers = userManager.getAuthorizable("testers");
+                    Authorizable testers = userManager.getAuthorizable(PublickConstants.GROUP_ID_TESTERS);
 
                     if (testers == null) {
-                        testers = userManager.createGroup("testers");
-                        testers.setProperty("displayName", valueFactory.createValue("Testers"));
+                        testers = userManager.createGroup(PublickConstants.GROUP_ID_TESTERS);
+                        testers.setProperty(GROUP_DISPLAY_NAME, valueFactory.createValue(PublickConstants.GROUP_DISPLAY_TESTERS));
                     }
                 }
             } catch (RepositoryException e) {

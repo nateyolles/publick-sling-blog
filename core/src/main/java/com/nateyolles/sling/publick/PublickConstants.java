@@ -34,4 +34,9 @@ public class PublickConstants {
 
     public static final String CONFIG_PATH = "/etc/config";
     public static final String CONFIG_RECAPTCHA_PATH =  CONFIG_PATH + "/recaptcha";
+
+    public static final String GROUP_ID_AUTHORS = "authors";
+    public static final String GROUP_ID_TESTERS = "testers";
+    public static final String GROUP_DISPLAY_AUTHORS = "Authors";
+    public static final String GROUP_DISPLAY_TESTERS = "Testers";
 }
