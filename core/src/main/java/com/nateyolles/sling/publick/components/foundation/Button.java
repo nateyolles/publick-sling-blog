@@ -2,22 +2,58 @@ package com.nateyolles.sling.publick.components.foundation;
 
 import javax.script.Bindings;
 
-import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.scripting.sightly.pojo.Use;
 
+/**
+ * Button backed class for Sightly component.
+ *
+ * The Button component is based on Bootstrap and styled as such.
+ */
 public class Button implements Use {
 
+    /**
+     * The current component as a resource.
+     */
     private Resource resource;
-    private SlingHttpServletRequest request;
+
+    /**
+     * The Bootstrap matched CSS class for the button.
+     */
     private String cssClass;
 
+    /**
+     * Initialization of the component.
+     * 
+     * Reads the resource, gets the properties and creates the CSS
+     * for the component.
+     *
+     * Options for "size" are:
+     * <ul>
+     * <li>large
+     * <li>default
+     * <li>small
+     * <li>extraSmall
+     * </ul>
+     *
+     * Options for "style" are:
+     * <ul>
+     * <li>default
+     * <li>primary
+     * <li>success
+     * <li>info
+     * <li>warning
+     * <li>danger
+     * <li>link
+     * </ul>
+     *
+     * Options for "block" are true/false.
+     */
     @Override
     public void init(Bindings bindings) {
         resource = (Resource)bindings.get(SlingBindings.RESOURCE);
-        request = (SlingHttpServletRequest)bindings.get(SlingBindings.REQUEST);
 
         ValueMap properties = resource.adaptTo(ValueMap.class);
         String size = properties.get("size", String.class); //large, default, small, extraSmall
@@ -59,6 +95,11 @@ public class Button implements Use {
         cssClass = css.toString();
     }
 
+    /**
+     * Return the button's CSS class.
+     *
+     * @return the button's CSS class.
+     */
     public String getCssClass() {
         return cssClass;
     }
