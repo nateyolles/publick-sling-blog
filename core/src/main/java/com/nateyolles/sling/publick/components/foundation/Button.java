@@ -26,7 +26,7 @@ public class Button implements Use {
 
     /**
      * Initialization of the component.
-     * 
+     *
      * Reads the resource, gets the properties and creates the CSS
      * for the component.
      *
@@ -56,8 +56,8 @@ public class Button implements Use {
         resource = (Resource)bindings.get(SlingBindings.RESOURCE);
 
         ValueMap properties = resource.adaptTo(ValueMap.class);
-        String size = properties.get("size", String.class); //large, default, small, extraSmall
-        String style = properties.get("style", String.class); //default, primary, success, info, warning, danger, link
+        String size = properties.get("size", String.class);
+        String style = properties.get("style", String.class);
         boolean block = properties.get("block", Boolean.class);
         
         StringBuilder css = new StringBuilder("btn");
