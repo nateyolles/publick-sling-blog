@@ -10,8 +10,15 @@ import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.scripting.sightly.pojo.Use;
 
+/**
+ * Sightly component to display a single blog post.
+ */
 public class BlogView implements Use {
 
+    /**
+     * Selector to request view for displaying blog post in
+     * list/digest view.
+     */
     private static final String LIST_VIEW_SELECTOR = "list";
 
     private Resource resource;
@@ -37,6 +44,11 @@ public class BlogView implements Use {
         getBlog(resource);
     }
 
+    /**
+     * Get the blog post properties from the resource.
+     *
+     * @param blog The blog post resource.
+     */
     private void getBlog(Resource blog) {
         if (blog != null) {
             ValueMap properties = blog.adaptTo(ValueMap.class);
@@ -52,42 +64,94 @@ public class BlogView implements Use {
         }
     }
 
+    /**
+     * Get the blog post title.
+     *
+     * @return The blog post title.
+     */
     public String getTitle() {
         return title;
     }
 
+    /**
+     * Get the blog post month selected by the author.
+     *
+     * @return The blog post month.
+     */
     public Long getMonth() {
         return month;
     }
 
+    /**
+     * Get the blog post year selected by the author.
+     *
+     * @return The blog post year.
+     */
     public Long getYear() {
         return year;
     }
 
+    /**
+     * Get the friendly URL set by the author.
+     *
+     * This is the node name.
+     *
+     * @return return the blog post node name.
+     */
     public String getUrl() {
         return url;
     }
 
+    /**
+     * Get the blog post visibility set by the author.
+     *
+     * @return The blog post visibility.
+     */
     public boolean getVisible() {
         return visible;
     }
 
+    /**
+     * Get the blog post keywords/tags set by the author.
+     *
+     * @return The blog post keywords/tags.
+     */
     public String[] getKeywords() {
         return keywords;
     }
 
+    /**
+     * Get the blog post image path uploaded by the author.
+     *
+     * @return The blog post image path.
+     */
     public String getImage() {
         return image;
     }
 
+    /**
+     * Get the blog post main content written by the author.
+     *
+     * @return The blog post main content.
+     */
     public String getContent() {
         return content;
     }
 
+    /**
+     * Get the blog post description written by the author.
+     *
+     * @return The blog post description.
+     */
     public String getDescription() {
         return description;
     }
 
+    /**
+     * Get whether the blog post is being requested in list view.
+     *
+     * @return Whether the blog post is being requested in list view.
+     */
     public boolean getListView() {
         return listView;
     }
