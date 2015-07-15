@@ -1,35 +1,52 @@
 package com.nateyolles.sling.publick.components.admin;
 
-import java.util.Iterator;
-
-import javax.jcr.query.Query;
+import javax.jcr.NodeIterator;
 import javax.script.Bindings;
 
-import org.apache.sling.api.SlingHttpServletResponse;
-import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.scripting.SlingBindings;
-import org.apache.sling.jcr.resource.JcrResourceConstants;
+import org.apache.sling.api.scripting.SlingScriptHelper;
 import org.apache.sling.scripting.sightly.pojo.Use;
 
-import com.nateyolles.sling.publick.PublickConstants;
+import com.nateyolles.sling.publick.services.BlogService;
 
+/**
+ * Sightly component to list blog posts in the admin section.
+ */
 public class BlogList implements Use {
 
-    private static final String BLOG_QUERY = "/jcr:root" + PublickConstants.BLOG_PATH + "//*[@" + JcrResourceConstants.SLING_RESOURCE_TYPE_PROPERTY + "='" + PublickConstants.PAGE_TYPE_BLOG + "']";
+    /**
+     * Sling Script Helper to get services.
+     */
+    private SlingScriptHelper scriptHelper;
 
-    private Resource resource;
+    /**
+     * Blog Service to get plog posts.
+     */
+    private BlogService blogService;
 
+    /**
+     * Initialize Sightly component.
+     *
+     * @param bindings The current execution context.
+     */
     @Override
     public void init(Bindings bindings) {
-        resource = (Resource)bindings.get(SlingBindings.RESOURCE);
+        scriptHelper = (SlingScriptHelper)bindings.get(SlingBindings.SLING);
+        blogService = scriptHelper.getService(BlogService.class);
     }
 
-    public Iterator<Resource> getBlogs() {
-        ResourceResolver resolver = resource.getResourceResolver();
+    /**
+     * Get all blog posts without pagination.
+     *
+     * @return The blog posts ordered from newest to oldest.
+     */
+    public NodeIterator getBlogs() {
+        NodeIterator nodes = null;
 
-        Iterator<Resource> blogs = resolver.findResources(BLOG_QUERY, Query.XPATH);
+        if (blogService != null) {
+            nodes = blogService.getPosts();
+        }
 
-        return blogs;
+        return nodes;
     }
 }
