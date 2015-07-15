@@ -33,16 +33,40 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Servlet to save blog posts.
+ */
 @SlingServlet(paths = "/bin/editblogpost")
 public class EditBlogPostServlet extends SlingAllMethodsServlet {
 
+    /**
+     * The logger.
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(EditBlogPostServlet.class);
+
+    /**
+     * Blog path in the format of /yyyy/MM.
+     */
     private static final String BLOG_PATH = "/%d/%02d";
+
+    /**
+     * Root resource of all blog posts.
+     */
     private static final String BLOG_ROOT = "blog";
 
+    /**
+     * File upload service.
+     */
     @Reference
     private FileUploadService fileUploadService;
 
+    /**
+     * Create and save blog resource.
+     *
+     * Creates blog path and saves properties. If blog resource already
+     * exists, the resource is updated with new properties. Saves file
+     * to the assets folder using the FileUploadService.
+     */
     @Override
     protected void doPost(SlingHttpServletRequest request, SlingHttpServletResponse response) throws ServletException, IOException {
         ResourceResolver resolver = request.getResourceResolver();
@@ -93,7 +117,6 @@ public class EditBlogPostServlet extends SlingAllMethodsServlet {
         }
 
         try {
-
             if (existingNode != null) {
                 ModifiableValueMap existingProperties = existingNode.adaptTo(ModifiableValueMap.class);
                 existingProperties.putAll(properties);
