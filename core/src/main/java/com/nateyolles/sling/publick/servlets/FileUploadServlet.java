@@ -1,58 +1,52 @@
 package com.nateyolles.sling.publick.servlets;
 
-import com.nateyolles.sling.publick.PublickConstants;
 import com.nateyolles.sling.publick.services.FileUploadService;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.sling.SlingServlet;
-import org.apache.sling.api.request.RequestParameter;
-import org.apache.sling.api.request.RequestParameterMap;
-import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ResourceResolver;
-import org.apache.sling.api.resource.ModifiableValueMap;
-import org.apache.sling.api.resource.ResourceResolverFactory;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
 import org.apache.sling.api.servlets.SlingAllMethodsServlet;
-import org.apache.sling.api.servlets.SlingSafeMethodsServlet;
-import org.apache.jackrabbit.commons.JcrUtils;
-import org.apache.sling.jcr.resource.JcrResourceUtil;
 
-import javax.jcr.Node;
-import javax.jcr.RepositoryException;
-import javax.jcr.nodetype.*;
-import javax.jcr.Session;
-import javax.print.attribute.standard.DateTimeAtCompleted;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.security.PublicKey;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
-import org.osgi.framework.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Servlet to upload files. Uses the File Upload Service and sends
+ * back either a 200 or 404 response.
+ */
 @SlingServlet(paths = "/bin/uploadfile")
 public class FileUploadServlet extends SlingAllMethodsServlet {
 
+    /**
+     * File Upload service to handle the upload.
+     */
     @Reference
     private FileUploadService fileUploadService;
 
+    /**
+     * The logger.
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(FileUploadServlet.class);
 
+    /**
+     * The request parameter for the path to the parent resource of where
+     * to save the file.
+     */
+    private static final String PATH_REQUEST_PARAM = "path";
+
+    /**
+     * Handle POST request and send appropriate response after file
+     * is uploaded.
+     */
     @Override
-    protected void doPost(SlingHttpServletRequest request, SlingHttpServletResponse response) throws ServletException, IOException {
-        final String path = request.getParameter("path");
+    protected void doPost(SlingHttpServletRequest request, SlingHttpServletResponse response)
+            throws ServletException, IOException {
+        final String path = request.getParameter(PATH_REQUEST_PARAM);
         String file = fileUploadService.uploadFile(request, path);
 
         if (file != null) {
