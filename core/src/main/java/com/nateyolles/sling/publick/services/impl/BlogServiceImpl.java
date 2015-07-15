@@ -29,30 +29,49 @@ import com.nateyolles.sling.publick.services.BlogService;
 @Component( metatype = true, immediate = true )
 public class BlogServiceImpl implements BlogService {
 
+    /**
+     * The logger.
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(BlogServiceImpl.class);
 
-    private static final String BLOG_QUERY = String.format("SELECT * FROM [%s] AS s WHERE ISDESCENDANTNODE([%s]) AND s.[%s] = '%s' ORDER BY [%s] desc",
+    /**
+     * JCR_SQL2 query to get all blog posts in order of newest first.
+     */
+    private static final String BLOG_QUERY = String.format("SELECT * FROM [%s] AS s WHERE "
+            + "ISDESCENDANTNODE([%s]) AND s.[%s] = '%s' ORDER BY [%s] desc",
             PublickConstants.NODE_TYPE_PAGE,
             PublickConstants.BLOG_PATH,
             JcrResourceConstants.SLING_RESOURCE_TYPE_PROPERTY,
             PublickConstants.PAGE_TYPE_BLOG,
             JcrConstants.JCR_CREATED);
 
-    private static final String BLOG_COUNT_QUERY = String.format("SELECT * FROM [%s] AS s WHERE ISDESCENDANTNODE([%s]) AND s.[%s] = '%s'",
-            PublickConstants.NODE_TYPE_PAGE,
-            PublickConstants.BLOG_PATH,
-            JcrResourceConstants.SLING_RESOURCE_TYPE_PROPERTY,
-            PublickConstants.PAGE_TYPE_BLOG);
-
+    /**
+     * The JCR session.
+     */
     private Session session;
 
+    /**
+     * The JCR Repository.
+     */
     @Reference
     private SlingRepository repository;
 
+    /**
+     * Get all blog posts without pagination.
+     *
+     * @return The blog posts.
+     */
     public NodeIterator getPosts() {
         return getPosts(null, null);
     }
 
+    /**
+     * Get blog posts with pagination
+     *
+     * @param offset The starting point of blog posts to return.
+     * @param limit The number of blog posts to return.
+     * @return The blog posts.
+     */
     public NodeIterator getPosts(Long offset, Long limit) {
         NodeIterator nodes = null;
 
@@ -79,34 +98,35 @@ public class BlogServiceImpl implements BlogService {
         return nodes;
     }
 
+    /**
+     * Get the number of pagination pages based on number of blog
+     * posts found and specified number of blog posts per page.
+     *
+     * @param pageSize The number of blog posts per pagination page.
+     * @return The number of pagination pages.
+     */
     public long getNumberOfPages(int pageSize) {
         long posts = getNumberOfPosts();
 
         return (long)Math.ceil((double)posts / pageSize);
     }
 
+    /**
+     * Get number of blog posts.
+     *
+     * @return The number of blog posts.
+     */
     public long getNumberOfPosts() {
-        long size = 0L;
-
-        if (session != null) {
-            try {
-                QueryManager queryManager = session.getWorkspace().getQueryManager();
-                Query query = queryManager.createQuery(BLOG_QUERY, Query.JCR_SQL2);
-
-                QueryResult result = query.execute();
-                NodeIterator nodes = result.getNodes();
-                size = nodes.getSize();
-            } catch (RepositoryException e) {
-                LOGGER.error("Could not search repository", e);
-            }
-        }
-
-        return size;
+        return getPosts().getSize();
     }
 
+    /**
+     * Activate Service.
+     *
+     * @param properties
+     */
     @Activate
     protected void activate(Map<String, Object> properties) {
-
         try {
             session = repository.loginAdministrative(null);
         } catch (LoginException e) {
@@ -116,6 +136,11 @@ public class BlogServiceImpl implements BlogService {
         }
     }
 
+    /**
+     * Deactivate Service.
+     *
+     * @param ctx
+     */
     @Deactivate
     protected void deactivate(ComponentContext ctx) {
         if (session != null && session.isLive()) {
