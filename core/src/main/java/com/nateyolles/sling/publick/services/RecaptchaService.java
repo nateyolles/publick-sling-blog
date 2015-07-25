@@ -1,5 +1,7 @@
 package com.nateyolles.sling.publick.services;
 
+import org.apache.sling.api.SlingHttpServletRequest;
+
 /**
  * The APIs provided in order to create the reCAPTCHA service to
  * provide the reCAPTCHA keys and communicate with the Google
@@ -27,4 +29,23 @@ public interface RecaptchaService {
      * @return True if the reCAPTCHA service is enabled.
      */
     boolean getEnabled();
+
+    /**
+     * Validate reCAPTCHA with the secret key and Google's service.
+     *
+     * @param request The SlingHttpServletRequest with the reCAPTCHA parameter
+     *                  from the client-side validation.
+     * @param remoteIP The remote user's IP address.
+     * @return true if not a robot
+     */
+    public boolean validate(SlingHttpServletRequest request, String remoteIP);
+
+    /**
+     * Validate reCAPTCHA with the secret key and Google's service.
+     *
+     * @param recaptchaResponse
+     * @param remoteIP
+     * @return true if not a robot
+     */
+    boolean validate(String recaptchaResponse, String remoteIP);
 }
