@@ -98,7 +98,7 @@ body {
     border-bottom: 1px solid #e7e7e7;
 }
 
-.sidebar ul li a.active {
+.sidebar ul li.sidebar-link a.active {
     background-color: #eee;
 }
 

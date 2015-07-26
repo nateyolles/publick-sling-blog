@@ -82,6 +82,11 @@ public class PublickConstants {
     public static final String ADMIN_CONFIG_PATH = ADMIN_PATH + "/config";
 
     /**
+     * Admin config path.
+     */
+    public static final String RECAPTCHA_CONFIG_PATH = ADMIN_CONFIG_PATH + "/recaptcha";
+
+    /**
      * Node type base.
      */
     private static final String NODE_TYPE = "publick";

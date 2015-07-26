@@ -6,15 +6,6 @@
         "mainContent" : {
             "jcr:primaryType": "nt:unstructured",
             "sling:resourceType" : "publick/components/foundation/parsys",
-            "newBlog" : {
-                "jcr:primaryType": "nt:unstructured",
-                "sling:resourceType" : "publick/components/foundation/button",
-                "value": "Create new blog post!",
-                "link": "/content/admin/edit.html",
-                "style": "primary",
-                "size": "large",
-                "block": false
-            },
             "welcomeText" : {
                 "jcr:primaryType": "nt:unstructured",
                 "sling:resourceType" : "publick/components/foundation/richtext",

@@ -1,14 +1,18 @@
 {
     "jcr:primaryType": "publick:page",
     "sling:resourceType" : "publick/pages/adminSecurePage",
-    "title" : "Config",
-    "jcr:content" : {
-        "mainContent" : {
-            "jcr:primaryType": "nt:unstructured",
-            "sling:resourceType" : "publick/components/foundation/parsys",
-            "recaptchaConfig" : {
+    "recaptcha" : {
+        "jcr:primaryType": "publick:page",
+        "sling:resourceType" : "publick/pages/adminSecurePage",
+        "title" : "reCAPTCHA configuration",
+        "jcr:content" : {
+            "mainContent" : {
                 "jcr:primaryType": "nt:unstructured",
-                "sling:resourceType" : "publick/components/admin/recaptchaConfig"
+                "sling:resourceType" : "publick/components/foundation/parsys",
+                "recaptchaConfig" : {
+                    "jcr:primaryType": "nt:unstructured",
+                    "sling:resourceType" : "publick/components/admin/recaptchaConfig"
+                }
             }
         }
     }

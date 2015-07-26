@@ -78,6 +78,6 @@ public class RecaptchaConfigServlet extends SlingAllMethodsServlet {
             LOGGER.error("Could not save config settings.", e);
         }
 
-        response.sendRedirect(PublickConstants.ADMIN_CONFIG_PATH + ".html");
+        response.sendRedirect(PublickConstants.RECAPTCHA_CONFIG_PATH + ".html");
     }
 }

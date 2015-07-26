@@ -3,35 +3,32 @@
         <ul class="nav" id="side-menu">
             <li class="sidebar-search">
                 <div class="input-group custom-search-form">
-                    <input type="text" class="form-control" placeholder="Search...">
-                    <span class="input-group-btn">
-                    <button class="btn btn-default" type="button">
-                        <i class="fa fa-search"></i>
-                    </button>
-                </span>
+                    <a class="btn btn-primary" href="/content/admin/edit.html" role="button">Create new blog post!</a>
                 </div>
-                <!-- /input-group -->
             </li>
-            <li>
+            <li class="sidebar-link">
                 <a href="/content/admin/index.html"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
             </li>
-            <li>
+            <li class="sidebar-link">
                 <a href="/content/admin/list.html"><i class="fa fa-list-alt fa-fw"></i> Blog List</a>
             </li>
-            <li>
+            <li class="sidebar-link">
                 <a href="/content/admin/edit.html"><i class="fa fa-pencil fa-fw"></i> New Blog</a>
             </li>
-            <li>
+            <li class="sidebar-link">
                 <a href="/content/admin/assets.html"><i class="fa fa-image fa-fw"></i> Assets</a>
             </li>
-            <li>
-                <a href="/content/admin/config.html"><i class="fa fa-wrench fa-fw"></i> Config</a>
-            </li>
-            <li>
+            <li class="sidebar-link">
                 <a href="/content/admin/users.html"><i class="fa fa-user fa-fw"></i> Users</a>
+            </li>
+            <li class="sidebar-link">
+                <a href="#"><i class="fa fa-wrench fa-fw"></i> Configuration<span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li>
+                        <a href="/content/admin/config/recaptcha.html"> reCAPTCHA</a>
+                    </li>
+                </ul>
             </li>
         </ul>
     </div>
-    <!-- /.sidebar-collapse -->
 </div>
-<!-- /.navbar-static-side -->
