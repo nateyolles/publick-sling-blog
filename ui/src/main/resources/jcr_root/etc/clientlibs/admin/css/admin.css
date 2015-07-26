@@ -71,3 +71,7 @@
 .modal-body .thumbnail img {
   height: 102px;
 }
+
+.full-width {
+  width: 100%;
+}

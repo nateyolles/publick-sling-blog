@@ -82,9 +82,14 @@ public class PublickConstants {
     public static final String ADMIN_CONFIG_PATH = ADMIN_PATH + "/config";
 
     /**
-     * Admin config path.
+     * Admin reCAPTCHA config path.
      */
     public static final String RECAPTCHA_CONFIG_PATH = ADMIN_CONFIG_PATH + "/recaptcha";
+
+    /**
+     * Admin email config path.
+     */
+    public static final String EMAIL_CONFIG_PATH = ADMIN_CONFIG_PATH + "/email";
 
     /**
      * Node type base.
@@ -135,6 +140,11 @@ public class PublickConstants {
      * reCAPTCHA config settings path.
      */
     public static final String CONFIG_RECAPTCHA_PATH =  CONFIG_PATH + "/recaptcha";
+
+    /**
+     * Email config settings path.
+     */
+    public static final String CONFIG_EMAIL_PATH =  CONFIG_PATH + "/email";
 
     /**
      * Authors group name.

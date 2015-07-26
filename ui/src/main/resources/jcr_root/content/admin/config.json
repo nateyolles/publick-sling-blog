@@ -15,5 +15,20 @@
                 }
             }
         }
+    },
+    "email" : {
+        "jcr:primaryType": "publick:page",
+        "sling:resourceType" : "publick/pages/adminSecurePage",
+        "title" : "Email configuration",
+        "jcr:content" : {
+            "mainContent" : {
+                "jcr:primaryType": "nt:unstructured",
+                "sling:resourceType" : "publick/components/foundation/parsys",
+                "emailConfig" : {
+                    "jcr:primaryType": "nt:unstructured",
+                    "sling:resourceType" : "publick/components/admin/emailConfig"
+                }
+            }
+        }
     }
 }

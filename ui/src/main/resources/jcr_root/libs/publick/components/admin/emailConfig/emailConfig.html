@@ -1,0 +1,74 @@
+<div data-sly-use.email="com.nateyolles.sling.publick.components.admin.EmailConfig" data-sly-unwrap></div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Email</h3>
+            </div>
+            <div class="panel-body">
+                <form action="/bin/emailconfig" method="post">
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12">
+                            <div class="form-group">
+                                <label>SMTP Username</label>
+                                <input type="text" name="smtpUsername" data-sly-attribute.value="${email.smtpUsername}" class="form-control">
+                                <span class="help-block">The username to access your SMTP server.</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12">
+                            <div class="form-group">
+                                <label>SMTP Password</label>
+                                <input type="password" name="smtpPassword" class="form-control">
+                                <span class="help-block">The password to access your SMTP server.</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12">
+                            <div class="form-group">
+                                <label>Sender Email</label>
+                                <input type="email" name="sender" data-sly-attribute.value="${email.sender}" class="form-control">
+                                <span class="help-block">The email address to send from. (e.g. sender@mailserver.com)</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12">
+                            <div class="form-group">
+                                <label>Recipient Email</label>
+                                <input type="email" name="recipient" data-sly-attribute.value="${email.recipient}" class="form-control">
+                                <span class="help-block">The email address to send to. (e.g. recipient@mailserver.com)</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12">
+                            <div class="form-group">
+                                <label>Host</label>
+                                <input type="text" name="host" data-sly-attribute.value="${email.host}" class="form-control">
+                                <span class="help-block">The SMTP host server (e.g. email-smtp.us-west-2.amazonaws.com)</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12">
+                            <div class="form-group">
+                                <label>Port</label>
+                                <input type="number" name="port" data-sly-attribute.value="${email.port}" class="form-control">
+                                <span class="help-block">The SMTP host server port (e.g. 25)</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12">
+                            <button type="submit" class="btn btn-primary">Save</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
