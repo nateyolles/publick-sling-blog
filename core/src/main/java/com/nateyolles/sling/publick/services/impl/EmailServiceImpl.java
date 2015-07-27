@@ -92,6 +92,15 @@ public class EmailServiceImpl implements EmailService {
     }
 
     /**
+     * Get the SMTP password.
+     *
+     * @return The SMTP password.
+     */
+    public String getSmtpPassword() {
+        return getStringProperty("smtpPassword", null);
+    }
+
+    /**
      * Get the sender's email address.
      *
      * @return The sender's email address.

@@ -13,6 +13,13 @@ public interface EmailService {
     String getSmtpUsername();
 
     /**
+     * Get the SMTP password.
+     *
+     * @return The SMTP password.
+     */
+    String getSmtpPassword();
+
+    /**
      * Get the sender's email address.
      *
      * @return The sender's email address.
