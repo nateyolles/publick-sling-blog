@@ -1,4 +1,4 @@
 {
     "jcr:primaryType": "sling:OsgiConfig",
-    "form.login.form": "/content/admin/login.html"
+    "form.login.form": "/admin/login.html"
 }

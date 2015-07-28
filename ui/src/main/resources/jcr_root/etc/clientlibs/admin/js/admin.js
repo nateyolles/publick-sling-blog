@@ -22,7 +22,7 @@ $(function() {
       j_validate : true
     }).always(function(data){
       if (data.status === 403) {
-        window.location = '/content/admin/login.html'
+        window.location = '/admin/login.html'
       }
     });
   });

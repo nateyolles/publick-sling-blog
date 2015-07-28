@@ -3,6 +3,7 @@ package com.nateyolles.sling.publick;
 import java.security.Principal;
 import java.util.NoSuchElementException;
 
+import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.ValueFactory;
@@ -13,6 +14,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.apache.jackrabbit.JcrConstants;
 import org.apache.jackrabbit.api.JackrabbitSession;
 import org.apache.jackrabbit.api.security.JackrabbitAccessControlList;
 import org.apache.jackrabbit.api.security.JackrabbitAccessControlManager;
@@ -20,10 +22,13 @@ import org.apache.jackrabbit.api.security.user.Authorizable;
 import org.apache.jackrabbit.api.security.user.Group;
 import org.apache.jackrabbit.api.security.user.UserManager;
 import org.apache.sling.api.resource.LoginException;
+import org.apache.sling.api.resource.PersistenceException;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ResourceResolverFactory;
 import org.apache.sling.jcr.api.SlingRepository;
+import org.apache.sling.jcr.resource.JcrResourceConstants;
+import org.apache.sling.jcr.resource.JcrResourceUtil;
 
 /**
  * Setup application by creating user groups and setting privileges.
@@ -50,6 +55,8 @@ public class Activator implements BundleActivator {
     public void start(BundleContext bundleContext) throws Exception {
         LOGGER.info(bundleContext.getBundle().getSymbolicName() + " started");
 
+        removeSlingContent(bundleContext);
+
         createGroups(bundleContext);
         setPermissions(bundleContext);
     }
@@ -67,6 +74,42 @@ public class Activator implements BundleActivator {
     private void setPermissions(BundleContext bundleContext) {
        setWritable(bundleContext, PublickConstants.BLOG_PATH);
        setWritable(bundleContext, PublickConstants.ASSET_PATH);
+    }
+
+    /**
+     * Remove default Sling content such as /index.html.
+     *
+     * @param bundleContext The bundle context provided by the component.
+     */
+    private void removeSlingContent(BundleContext bundleContext) {
+        ServiceReference ResourceResolverFactoryReference = bundleContext.getServiceReference(ResourceResolverFactory.class.getName());
+        ResourceResolverFactory resolverFactory = (ResourceResolverFactory)bundleContext.getService(ResourceResolverFactoryReference);
+
+        if (resolverFactory != null) {
+            ResourceResolver resolver = null;
+
+            try {
+                resolver = resolverFactory.getAdministrativeResourceResolver(null);
+
+                Resource resource = resolver.getResource("/index.html");
+
+                if (resource != null) {
+                    try {
+                        resolver.delete(resource);
+                        resolver.commit();
+                    } catch (PersistenceException e) {
+                        LOGGER.error("Could not delete resource", e);
+                    }
+                }
+            } catch (LoginException e) {
+                LOGGER.error("Could not login to repository", e);
+            } finally {
+                if (resolver != null && resolver.isLive()) {
+                    resolver.close();
+                    resolver = null;
+                }
+            }
+        }
     }
 
     /**

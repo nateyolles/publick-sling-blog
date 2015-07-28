@@ -5,6 +5,8 @@
       "-/bin/sendmail",
       "/etc/clientlibs/admin",
       "/content/admin",
-      "-/content/admin/login.html"
+      "-/content/admin/login.html",
+      "/admin",
+      "-/admin/login.html"
     ]
 }
