@@ -29,20 +29,20 @@ Build and deploy to a running Sling instance with default values of port *8080*,
 
 ## Login
 
-Navigate to [http://localhost:8080/content/admin/login.html](http://localhost:8080/content/admin/login.html). The default credentials are *admin*/*admin*.
+Navigate to [http://localhost:8080/admin/login.html](http://localhost:8080/admin/login.html). The default credentials are *admin*/*admin*.
 
 ## Setup
 
 Create user
 
-1. Navigate to [http://localhost:8080/content/admin/users.html](http://localhost:8080/content/admin/users.html)
+1. Navigate to [http://localhost:8080/admin/users.html](http://localhost:8080/admin/users.html)
 2. Change admin password
 3. Create an Author account
 
 Setup reCAPTCHA
 
 1. Sign up at [https://www.google.com/recaptcha](https://www.google.com/recaptcha)
-2. Navigate to [http://localhost:8080/content/admin/config.html](http://localhost:8080/content/admin/config.html)
+2. Navigate to [http://localhost:8080/admin/config.html](http://localhost:8080/admin/config.html)
 3. Insert site key and secret key
 
 ## Debugging
@@ -57,11 +57,17 @@ java -Xmx2048M \
 
 ## Further information
 
-The following information is not required to run the project.
+### Fix a Sling bug
+
+If you start getting errors in the log about `/var/discovery` or the `org.apache.sling.discovey.impl` framework, it's because of a bug in Sling. You can fix the problem by changing the `jcr:primaryType` of the `/var` node from `nt:unstructured` to `sling:Folder`. Run the following cURL command:
+
+```
+curl -u admin:admin -F"jcr:primaryType=sling:Folder" http://localhost:8080/var
+```
 
 ### Maven Archetypes
 
-Two Maven Archetypes where used to begin the project, one for the core Java bundle and one for the UI bundle.
+Two Maven Archetypes where used to begin the project, one for the core Java bundle and one for the UI bundle. This is purely informational; you do not need to run the following commands.
 
 1. Create parent pom
 2. Create sub projects using the following archetypes:
