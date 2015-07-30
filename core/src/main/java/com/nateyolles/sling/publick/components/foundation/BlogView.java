@@ -1,11 +1,16 @@
 package com.nateyolles.sling.publick.components.foundation;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 
 import javax.script.Bindings;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.jackrabbit.JcrConstants;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.scripting.sightly.pojo.Use;
@@ -21,6 +26,14 @@ public class BlogView implements Use {
      */
     private static final String LIST_VIEW_SELECTOR = "list";
 
+    private static final String PUBLISHED_DATE_FORMAT = "yyyy-MM-dd";
+    private static final String DISPLAY_DATE_FORMAT = "MMMM dd, yyyy";
+
+    /**
+     * The resource resolver to map paths.
+     */
+    private ResourceResolver resolver;
+
     private Resource resource;
     private SlingHttpServletRequest request;
     private String title;
@@ -34,11 +47,32 @@ public class BlogView implements Use {
     private String description;
     private boolean listView;
 
+    /**
+     * Blog post date in ISO-8601 format (e.g. 2015-07-29 or yyyy-MM-dd)
+     * per Open Graph specifications.
+     */
+    private String publishedDate;
+
+    /**
+     * Display date in MMMM dd, yyyy format.
+     */
+    private String displayDate;
+
+    /**
+     * The bog post URL.
+     */
+    private String displayPath;
+
+    /**
+     * The full image URL.
+     */
+    private String displayImage;
+
     @Override
     public void init(Bindings bindings) {
         resource = (Resource)bindings.get(SlingBindings.RESOURCE);
         request = (SlingHttpServletRequest)bindings.get(SlingBindings.REQUEST);
-
+        resolver = resource.getResourceResolver();
         listView = Arrays.asList(request.getRequestPathInfo().getSelectors()).contains(LIST_VIEW_SELECTOR);
 
         getBlog(resource);
@@ -58,9 +92,24 @@ public class BlogView implements Use {
             url = properties.get("url", String.class);
             visible = Boolean.valueOf(properties.get("visible", false));
             keywords = properties.get("keywords", String[].class);
-            image = properties.get("image", String.class);
             content = properties.get("content", String.class);
             description = properties.get("description", String.class);
+            image = properties.get("image", String.class);
+
+            if (image != null) {
+                image = resolver.map(image);
+            }
+
+            Date date = properties.get(JcrConstants.JCR_CREATED, Date.class);
+            SimpleDateFormat formatPublished = new SimpleDateFormat(PUBLISHED_DATE_FORMAT);
+            publishedDate = formatPublished.format(date);
+
+            SimpleDateFormat formatDisplay = new SimpleDateFormat(DISPLAY_DATE_FORMAT);
+            displayDate = formatDisplay.format(date);
+
+            displayPath = request.getRequestURL().toString();
+
+            displayImage = displayPath.replace(request.getRequestURI(), StringUtils.EMPTY) + image;
         }
     }
 
@@ -154,5 +203,41 @@ public class BlogView implements Use {
      */
     public boolean getListView() {
         return listView;
+    }
+
+    /**
+     * Get the blog post published date in format "yyyy-MM-dd".
+     *
+     * @return The blog post published date.
+     */
+    public String getPublishedDate() {
+        return publishedDate;
+    }
+
+    /**
+     * Get the blog post display date in formation "MMMM dd, yyyy".
+     *
+     * @return The blog post display date.
+     */
+    public String getDisplayDate() {
+        return displayDate;
+    }
+
+    /**
+     * Get the blog post full URL.
+     *
+     * @return The blog post URL.
+     */
+    public String getDisplayPath() {
+        return displayPath;
+    }
+
+    /**
+     * Get the full image URL.
+     *
+     * @return The image URL.
+     */
+    public String getDisplayImage() {
+        return displayImage;
     }
 }
