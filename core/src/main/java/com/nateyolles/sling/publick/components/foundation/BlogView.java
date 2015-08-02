@@ -1,5 +1,7 @@
 package com.nateyolles.sling.publick.components.foundation;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
@@ -15,10 +17,18 @@ import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.scripting.sightly.pojo.Use;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Sightly component to display a single blog post.
  */
 public class BlogView implements Use {
+
+    /**
+     * Logger instance to log and debug errors.
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(BlogView.class);
 
     /**
      * Selector to request view for displaying blog post in
@@ -105,10 +115,30 @@ public class BlogView implements Use {
             publishedDate = getDate(date, PUBLISHED_DATE_FORMAT);
             displayDate = getDate(date, DISPLAY_DATE_FORMAT);
 
-            displayPath = request.getRequestURL().toString();
+            displayPath = createDisplayPath();
 
             displayImage = displayPath.replace(request.getRequestURI(), StringUtils.EMPTY) + image;
         }
+    }
+
+    /**
+     * Generate the blog post display path and remove "/content".
+     *
+     * @return The absolute blog post display path.
+     */
+    private String createDisplayPath() {
+        final String path = resolver.map(resource.getPath());
+        String displayPath = null;
+
+        try {
+            URL url = new URL(request.getRequestURL().toString());
+
+            displayPath = new URL(url.getProtocol(), url.getHost(), url.getPort(), path).toString().concat(".html");
+        } catch (MalformedURLException e) {
+            LOGGER.error("Could not get DisplayPath from Request URL", e);
+        }
+
+        return displayPath;
     }
 
     /**
