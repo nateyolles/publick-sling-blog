@@ -101,16 +101,32 @@ public class BlogView implements Use {
             }
 
             Date date = properties.get(JcrConstants.JCR_CREATED, Date.class);
-            SimpleDateFormat formatPublished = new SimpleDateFormat(PUBLISHED_DATE_FORMAT);
-            publishedDate = formatPublished.format(date);
 
-            SimpleDateFormat formatDisplay = new SimpleDateFormat(DISPLAY_DATE_FORMAT);
-            displayDate = formatDisplay.format(date);
+            publishedDate = getDate(date, PUBLISHED_DATE_FORMAT);
+            displayDate = getDate(date, DISPLAY_DATE_FORMAT);
 
             displayPath = request.getRequestURL().toString();
 
             displayImage = displayPath.replace(request.getRequestURI(), StringUtils.EMPTY) + image;
         }
+    }
+
+    /**
+     * Format date in selected format.
+     *
+     * @param date The date.
+     * @param format The format.
+     * @return The formatted date.
+     */
+    private String getDate(final Date date, final String format) {
+        String formattedDate = null;
+
+        if (date != null) {
+            SimpleDateFormat dateFormatter = new SimpleDateFormat(format);
+            formattedDate = dateFormatter.format(date);
+        }
+
+        return formattedDate;
     }
 
     /**
