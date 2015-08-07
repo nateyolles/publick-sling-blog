@@ -19,3 +19,7 @@
 [publick:template] > nt:hierarchyNode
 
 [publick:component] > nt:unstructured
+
+[publick:comment] > nt:unstructured
+    - author (string)
+    - comment (string)

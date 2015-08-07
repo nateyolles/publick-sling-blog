@@ -29,7 +29,8 @@
                             jcr_root/etc/config;overwrite:=false;uninstall:=false;path:=/etc/config,
                             jcr_root/content/admin;overwrite:=true;uninstall:=true;path:=/content/admin,
                             jcr_root/content/assets;overwrite:=false;uninstall:=false;path:=/content/assets,
-                            jcr_root/content/blog;overwrite:=false;uninstall:=false;path:=/content/blog
+                            jcr_root/content/blog;overwrite:=false;uninstall:=false;path:=/content/blog,
+                            jcr_root/content/comments;overwrite:=false;uninstall:=false;path:=/content/comments
                         </Sling-Initial-Content>
                     </instructions>
                 </configuration>

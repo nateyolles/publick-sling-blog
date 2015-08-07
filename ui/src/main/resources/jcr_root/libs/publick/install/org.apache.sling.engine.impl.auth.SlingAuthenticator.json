@@ -3,6 +3,7 @@
     "sling.auth.requirements": [
       "/bin",
       "-/bin/sendmail",
+      "-/bin/addcomment",
       "/etc/clientlibs/admin",
       "/content/admin",
       "-/content/admin/login.html",

@@ -27,6 +27,11 @@ public class PublickConstants {
     public static final String BLOG_PATH = CONTENT_PATH + "/blog";
 
     /**
+     * Comments path.
+     */
+    public static final String COMMENTS_PATH = CONTENT_PATH + "/comments";
+
+    /**
      * Admin path.
      */
     public static final String ADMIN_PATH = CONTENT_PATH + "/admin";
@@ -110,6 +115,11 @@ public class PublickConstants {
      * Component node type.
      */
     public static final String NODE_TYPE_COMPONENT = NODE_TYPE + ":component";
+
+    /**
+     * Comment node type.
+     */
+    public static final String NODE_TYPE_COMMENT = NODE_TYPE + ":comment";
 
     /**
      * Page base resource type.

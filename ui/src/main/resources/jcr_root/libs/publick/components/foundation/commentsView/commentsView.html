@@ -1,0 +1,69 @@
+<div data-sly-use.comments="com.nateyolles.sling.publick.components.foundation.CommentsView" class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <h3>Comments</h3>
+    </div>
+  </div>
+  <ul class="media-list" id="commentListContainer" data-sly-list.comment="${comments.comments}">
+    <li class="media" data-sly-attribute.data-comment-path="${comment.path}">
+      <div class="media-left">
+        <span class="glyphicon glyphicon-user comment-user" aria-hidden="true"></span>
+      </div>
+      <div class="media-body">
+        <h4 class="media-heading">${comment.author} <small>${comment.date} <a href="#" class="comment-reply">Reply</a></small></h4>
+        <p data-sly-text="${comment.comment}"></p>
+        <div data-sly-list.reply="${comment.replies}" data-sly-unwrap>
+          <div class="media">
+            <div class="media-left">
+              <span class="glyphicon glyphicon-user comment-user" aria-hidden="true"></span>
+            </div>
+            <div class="media-body">
+              <h4 class="media-heading">${reply.author} <small>${reply.date} <a href="#" class="comment-reply">Reply</a></small></h4>
+              <p data-sly-text="${reply.comment}"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </li>
+  </ul>
+
+  <div class="row" id="addCommentContainer">
+    <div class="col-md-6">
+      <a href="#">Add Comment</a>
+    </div>
+  </div>
+  <div id="newCommentContainer">
+    <div class="row" id="commentForm">
+      <form method="POST" action="/bin/addcomment">
+        <div class="col-md-6">
+          <div class="well">
+            <div class="row">
+              <div class="col-xs-12">
+                <h3>Post Comment</h3>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-12">
+                  <div class="form-group">
+                      <label>Name</label>
+                      <input type="text" name="author" class="form-control">
+                  </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-12">
+                <div class="form-group">
+                  <label>Comment</label>
+                  <textarea class="form-control" name="comment"></textarea>
+                </div>
+                <input type="hidden" name="blogPath" data-sly-attribute.value="${resource.path}">
+                <input type="hidden" name="commentPath" id="commentPath">
+                <button type="submit" class="btn btn-primary">Post</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
