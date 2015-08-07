@@ -4,6 +4,8 @@ This project is intended to host my personal site and blog.
 
 Publick is named after [Publick Occurrences Both Forreign and Domestick](https://en.wikipedia.org/wiki/Publick_Occurrences_Both_Forreign_and_Domestick), the first newspaper in the American colonies.
 
+View a custom implementation of Publick with custom styling and components at [https://github.com/nateyolles/publick-nateyolles](https://github.com/nateyolles/publick-nateyolles).
+
 ## Download and start Apache Sling
 
 This project requires Apache Sling 7.
@@ -44,6 +46,12 @@ Setup reCAPTCHA
 1. Sign up at [https://www.google.com/recaptcha](https://www.google.com/recaptcha)
 2. Navigate to [http://localhost:8080/admin/config.html](http://localhost:8080/admin/config.html)
 3. Insert site key and secret key
+
+Setup your SMTP server
+
+1. Setup your email server using something like [Amazon Simple Email Service (SES)](https://aws.amazon.com/ses/), [Postfix](http://www.postfix.org/) or [Gmail](https://mail.google.com)
+2. Navigation to [http://localhost:8080/admin/config/email.html](http://localhost:8080/admin/config/email.html)
+3. Insert your server information
 
 ## Debugging
 
