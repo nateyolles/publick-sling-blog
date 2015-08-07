@@ -49,6 +49,12 @@ public class CommentServlet extends SlingAllMethodsServlet {
     private ResourceResolverFactory resourceResolverFactory;
 
     /**
+     * reCAPTCHA service to verify user isn't a robot.
+     */
+    @Reference
+    private RecaptchaService recaptchaService;
+
+    /**
      * The logger.
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(CommentServlet.class);
@@ -88,8 +94,8 @@ public class CommentServlet extends SlingAllMethodsServlet {
      *
      * Get or create the comment node structure to mirror the blog post node structure.
      * Create the comment node under the structure and save the author, comment, and date.
-     * Currently redirects back to the same page. The next version will be an asynchronous
-     * post.
+     * Currently redirects back to the same page. Verifies against the reCAPTCHA service.
+     * The next version will be an asynchronous post.
      *
      * @param request The Sling HTTP servlet request.
      * @param response The Sling HTTP servlet response.
@@ -98,36 +104,40 @@ public class CommentServlet extends SlingAllMethodsServlet {
     protected void doPost(SlingHttpServletRequest request, SlingHttpServletResponse response)
             throws ServletException, IOException {
 
-        final String author = request.getParameter(AUTHOR_PARAMETER);
-        final String comment = request.getParameter(COMMENT_PARAMETER);
         final String blogPath = request.getParameter(BLOG_PATH_PARAMETER);
-        final String commentPath = request.getParameter(COMMENT_PATH_PARAMETER);
+        final boolean notRobot = recaptchaService.validate(request);
 
-        try {
-            resolver = resourceResolverFactory.getAdministrativeResourceResolver(null);
+        if (notRobot) {
+            final String author = request.getParameter(AUTHOR_PARAMETER);
+            final String comment = request.getParameter(COMMENT_PARAMETER);
+            final String commentPath = request.getParameter(COMMENT_PATH_PARAMETER);
 
-            String parentPath = StringUtils.isNotBlank(commentPath)
-                                ? commentPath
-                                : blogPath.replace(PublickConstants.BLOG_PATH, PublickConstants.COMMENTS_PATH);
+            try {
+                resolver = resourceResolverFactory.getAdministrativeResourceResolver(null);
 
-            JcrResourceUtil.createPath(parentPath, JcrResourceConstants.NT_SLING_ORDERED_FOLDER,
-                    JcrResourceConstants.NT_SLING_ORDERED_FOLDER, resolver.adaptTo(Session.class), true);
+                String parentPath = StringUtils.isNotBlank(commentPath)
+                                    ? commentPath
+                                    : blogPath.replace(PublickConstants.BLOG_PATH, PublickConstants.COMMENTS_PATH);
 
-            String nodeName = getCommentName(parentPath);
+                JcrResourceUtil.createPath(parentPath, JcrResourceConstants.NT_SLING_ORDERED_FOLDER,
+                        JcrResourceConstants.NT_SLING_ORDERED_FOLDER, resolver.adaptTo(Session.class), true);
 
-            Map<String, Object> properties = new HashMap<String, Object>();
-            properties.put(AUTHOR_PARAMETER, author);
-            properties.put(COMMENT_PARAMETER, comment);
-            properties.put(JcrConstants.JCR_PRIMARYTYPE, PublickConstants.NODE_TYPE_COMMENT);
+                String nodeName = getCommentName(parentPath);
 
-            resolver.create(resolver.getResource(parentPath), nodeName, properties);
-            resolver.commit();
-        } catch (LoginException e) {
-            LOGGER.error("Could not login", e);
-        } catch (RepositoryException e) {
-            LOGGER.error("Could not create comment node", e);
-        } catch (Exception e){
-            LOGGER.error("Could not create comment node", e);
+                Map<String, Object> properties = new HashMap<String, Object>();
+                properties.put(AUTHOR_PARAMETER, author);
+                properties.put(COMMENT_PARAMETER, comment);
+                properties.put(JcrConstants.JCR_PRIMARYTYPE, PublickConstants.NODE_TYPE_COMMENT);
+
+                resolver.create(resolver.getResource(parentPath), nodeName, properties);
+                resolver.commit();
+            } catch (LoginException e) {
+                LOGGER.error("Could not login", e);
+            } catch (RepositoryException e) {
+                LOGGER.error("Could not create comment node", e);
+            } catch (Exception e){
+                LOGGER.error("Could not create comment node", e);
+            }
         }
 
         response.sendRedirect(blogPath + ".html");

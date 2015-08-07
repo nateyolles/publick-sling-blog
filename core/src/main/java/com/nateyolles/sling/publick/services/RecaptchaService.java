@@ -35,10 +35,9 @@ public interface RecaptchaService {
      *
      * @param request The SlingHttpServletRequest with the reCAPTCHA parameter
      *                  from the client-side validation.
-     * @param remoteIP The remote user's IP address.
      * @return true if not a robot
      */
-    public boolean validate(SlingHttpServletRequest request, String remoteIP);
+    public boolean validate(SlingHttpServletRequest request);
 
     /**
      * Validate reCAPTCHA with the secret key and Google's service.

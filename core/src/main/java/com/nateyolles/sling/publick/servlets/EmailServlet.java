@@ -72,7 +72,7 @@ public class EmailServlet extends SlingAllMethodsServlet {
         response.setContentType("application/json");
 
         PrintWriter writer = response.getWriter();
-        boolean notRobot = recaptchaService.validate(request, getIPAddress(request));
+        boolean notRobot = recaptchaService.validate(request);
 
         if (notRobot) {
             final String submitterName = request.getParameter("name");
@@ -172,21 +172,5 @@ public class EmailServlet extends SlingAllMethodsServlet {
         } catch (JSONException e) {
             LOGGER.error("Could not write JSON", e);
         }
-    }
-
-    /**
-     * Get the submitter's IP address.
-     *
-     * @param request The SlingHttpServlet request.
-     * @return The submitter's IP address.
-     */
-    private String getIPAddress(SlingHttpServletRequest request) {
-        String ipAddress = request.getHeader("X-FORWARDED-FOR");
-
-        if (ipAddress == null) {
-            ipAddress = request.getRemoteAddr();
-        }
-
-        return ipAddress;
     }
 }

@@ -105,8 +105,8 @@ public class RecaptchaServiceImpl implements RecaptchaService {
      * @param remoteIP The remote user's IP address.
      * @return true if not a robot
      */
-    public boolean validate(SlingHttpServletRequest request, String remoteIP) {
-        return validate(request.getParameter(RECAPTCHA_REQUEST_PARAMETER), remoteIP);
+    public boolean validate(SlingHttpServletRequest request) {
+        return validate(request.getParameter(RECAPTCHA_REQUEST_PARAMETER), getIPAddress(request));
     }
 
     /**
@@ -209,5 +209,21 @@ public class RecaptchaServiceImpl implements RecaptchaService {
         }
 
         return property;
+    }
+
+    /**
+     * Get the submitter's IP address.
+     *
+     * @param request The SlingHttpServlet request.
+     * @return The submitter's IP address.
+     */
+    private String getIPAddress(SlingHttpServletRequest request) {
+        String ipAddress = request.getHeader("X-FORWARDED-FOR");
+
+        if (ipAddress == null) {
+            ipAddress = request.getRemoteAddr();
+        }
+
+        return ipAddress;
     }
 }

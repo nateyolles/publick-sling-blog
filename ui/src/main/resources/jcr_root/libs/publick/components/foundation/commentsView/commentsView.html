@@ -56,6 +56,17 @@
                   <label>Comment</label>
                   <textarea class="form-control" name="comment"></textarea>
                 </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-12">
+                <div class="form-group">
+                  <div data-sly-resource="${@ resourceType='publick/components/foundation/recaptcha'}" data-sly-unwrap></div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-12">
                 <input type="hidden" name="blogPath" data-sly-attribute.value="${resource.path}">
                 <input type="hidden" name="commentPath" id="commentPath">
                 <button type="submit" class="btn btn-primary">Post</button>
