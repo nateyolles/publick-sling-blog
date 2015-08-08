@@ -6,7 +6,9 @@ Publick is named after [Publick Occurrences Both Forreign and Domestick](https:/
 
 View a custom implementation of Publick with custom styling and components at [https://github.com/nateyolles/publick-nateyolles](https://github.com/nateyolles/publick-nateyolles).
 
-View [Trello Board](https://trello.com/b/2zcNr5qV/publick-sling-sightly-blog-engine).
+View Publick live at [nateyolles.com](http://www.nateyolles.com).
+
+View the [Trello Board](https://trello.com/b/2zcNr5qV/publick-sling-sightly-blog-engine).
 
 ## Download and start Apache Sling
 
