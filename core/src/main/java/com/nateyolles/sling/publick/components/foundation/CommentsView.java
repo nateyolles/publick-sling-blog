@@ -53,6 +53,11 @@ public class CommentsView implements Use {
     private List<HashMap<String, Object>> comments;
 
     /**
+     * The number of comments
+     */
+    private int count = 0;
+
+    /**
      * Initialize the Sightly component.
      *
      * Get the resource and resolver. The entry point to the component.
@@ -84,6 +89,8 @@ public class CommentsView implements Use {
             Iterator<Resource> iterator = resource.listChildren();
 
             while (iterator.hasNext()) {
+                count++;
+
                 Resource commentResource = iterator.next();
                 ValueMap properties = commentResource.adaptTo(ValueMap.class);
                 HashMap<String, Object> commentProperties = new HashMap<String, Object>();
@@ -133,5 +140,14 @@ public class CommentsView implements Use {
      */
     public List<HashMap<String, Object>> getComments() {
         return comments;
+    }
+
+    /**
+     * Get the number of comments.
+     *
+     * @return The number of comments.
+     */
+    public int getCount() {
+        return count;
     }
 }
