@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Servlet to save blog posts.
  */
-@SlingServlet(paths = "/bin/editblogpost")
+@SlingServlet(paths = PublickConstants.SERVLET_PATH_ADMIN + "/editblogpost")
 public class EditBlogPostServlet extends SlingAllMethodsServlet {
 
     /**

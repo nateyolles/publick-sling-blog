@@ -175,4 +175,14 @@ public class PublickConstants {
      * Testers group display name.
      */
     public static final String GROUP_DISPLAY_TESTERS = "Testers";
+
+    /**
+     * Servlet admin path
+     */
+    public static final String SERVLET_PATH_ADMIN = "/bin/admin";
+
+    /**
+     * Servlet public path
+     */
+    public static final String SERVLET_PATH_PUBLIC = "/bin/publick";
 }

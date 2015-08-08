@@ -85,7 +85,7 @@ app.controller('AssetController', function($scope, $http, Upload) {
         for (var i = 0; i < files.length; i++) {
           var file = files[i];
           Upload.upload({
-            url: '/bin/uploadfile',
+            url: '/bin/admin/uploadfile',
             file: file,
             fields: {'path' : $scope.currentPath},
             sendFieldsAs: 'form'

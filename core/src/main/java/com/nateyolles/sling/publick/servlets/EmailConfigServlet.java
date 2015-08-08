@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Post servlet to save email config updates.
  */
-@SlingServlet(paths = "/bin/emailconfig")
+@SlingServlet(paths = PublickConstants.SERVLET_PATH_ADMIN + "/emailconfig")
 public class EmailConfigServlet extends SlingAllMethodsServlet {
 
     @Reference

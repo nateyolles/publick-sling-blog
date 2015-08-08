@@ -1,5 +1,6 @@
 package com.nateyolles.sling.publick.servlets;
 
+import com.nateyolles.sling.publick.PublickConstants;
 import com.nateyolles.sling.publick.services.EmailService;
 import com.nateyolles.sling.publick.services.RecaptchaService;
 
@@ -16,7 +17,6 @@ import javax.servlet.ServletException;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-
 import java.util.Properties;
 
 import javax.mail.*;
@@ -26,7 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-@SlingServlet(paths = "/bin/sendmail")
+@SlingServlet(paths = PublickConstants.SERVLET_PATH_PUBLIC + "/sendmail")
 public class EmailServlet extends SlingAllMethodsServlet {
 
     /**

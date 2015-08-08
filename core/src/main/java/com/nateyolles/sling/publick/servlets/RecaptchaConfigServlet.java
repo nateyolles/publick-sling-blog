@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Post servlet to save reCAPTCHA config updates.
  */
-@SlingServlet(paths = "/bin/recaptchaconfig")
+@SlingServlet(paths = PublickConstants.SERVLET_PATH_ADMIN + "/recaptchaconfig")
 public class RecaptchaConfigServlet extends SlingAllMethodsServlet {
 
     /**

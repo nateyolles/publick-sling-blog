@@ -1,5 +1,6 @@
 package com.nateyolles.sling.publick.servlets;
 
+import com.nateyolles.sling.publick.PublickConstants;
 import com.nateyolles.sling.publick.services.FileUploadService;
 
 import org.apache.felix.scr.annotations.Reference;
@@ -19,7 +20,7 @@ import org.slf4j.LoggerFactory;
  * Servlet to upload files. Uses the File Upload Service and sends
  * back either a 200 or 404 response.
  */
-@SlingServlet(paths = "/bin/uploadfile")
+@SlingServlet(paths = PublickConstants.SERVLET_PATH_ADMIN + "/uploadfile")
 public class FileUploadServlet extends SlingAllMethodsServlet {
 
     /**

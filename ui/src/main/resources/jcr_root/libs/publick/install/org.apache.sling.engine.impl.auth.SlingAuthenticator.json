@@ -2,8 +2,8 @@
     "jcr:primaryType": "sling:OsgiConfig",
     "sling.auth.requirements": [
       "/bin",
-      "-/bin/sendmail",
-      "-/bin/addcomment",
+      "-/bin/publick/sendmail",
+      "-/bin/publick/addcomment",
       "/etc/clientlibs/admin",
       "/content/admin",
       "-/content/admin/login.html",

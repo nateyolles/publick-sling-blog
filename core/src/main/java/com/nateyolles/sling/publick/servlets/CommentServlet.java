@@ -38,7 +38,7 @@ import org.slf4j.LoggerFactory;
  *
  * Comments can be nested two levels deep.
  */
-@SlingServlet(paths = "/bin/addcomment")
+@SlingServlet(paths = PublickConstants.SERVLET_PATH_PUBLIC + "/addcomment")
 public class CommentServlet extends SlingAllMethodsServlet {
 
     /**
