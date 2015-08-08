@@ -47,9 +47,9 @@
                 <artifactId>maven-sling-plugin</artifactId>
                 <version>2.1.0</version>
                 <configuration>
-                    <slingUrl>http://localhost:8080/system/console</slingUrl>
-                    <user>admin</user>
-                    <password>admin</password>
+                    <slingUrl>http://${sling.host}:${sling.port}/system/console</slingUrl>
+                    <user>${sling.username}</user>
+                    <password>${sling.password}</password>
                 </configuration>
             </plugin>
         </plugins>
