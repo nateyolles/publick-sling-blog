@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html data-sly-use.error="com.nateyolles.sling.publick.components.foundation.ErrorHandler">
+<head>
+  <title data-sly-text="${error.code}"></title>
+  <link rel="stylesheet" href="/etc/clientlibs/foundation/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/etc/clientlibs/foundation/publick/css/publick.css">
+</head>
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12">
+        <h1 class="text-center">${error.code}: ${error.message}</h1>
+
+        <pre class="margin-top-80" data-sly-test="${!error.isAnonymous}" data-sly-text="${error.stackTrace}"></pre> 
+
+        <div data-sly-test="${error.isAnonymous}" data-sly-unwrap>
+          <h2 class="text-center margin-top-80">Sorry, something went wrong.</h2>
+
+          <p class="text-center margin-top-80">Try the <a href="/index.html">Home Page</a> or find a <a href="/blog/index.html">blog post</a>.</p>
+        </div> 
+      </div>
+    </div>
+  </div>
+  <script src="/etc/clientlibs/foundation/jquery/dist/jquery.min.js"></script>
+  <script src="/etc/clientlibs/foundation/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script src="/etc/clientlibs/foundation/publick/js/publick.js"></script>
+</body> 
+</html>
