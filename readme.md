@@ -1,12 +1,8 @@
 # Publick Apache Sling + Sightly Blog
 
-This project is intended to host my personal site and blog.
-
 Publick is named after [Publick Occurrences Both Forreign and Domestick](https://en.wikipedia.org/wiki/Publick_Occurrences_Both_Forreign_and_Domestick), the first newspaper in the American colonies.
 
-View a custom implementation of Publick with custom styling and components at [https://github.com/nateyolles/publick-nateyolles](https://github.com/nateyolles/publick-nateyolles).
-
-View Publick live at [nateyolles.com](http://www.nateyolles.com).
+View a custom implementation of Publick with custom styling and components at [https://github.com/nateyolles/publick-nateyolles](https://github.com/nateyolles/publick-nateyolles) and the live implementation at [nateyolles.com](http://www.nateyolles.com).
 
 View the [Trello Board](https://trello.com/b/2zcNr5qV/publick-sling-sightly-blog-engine).
 
