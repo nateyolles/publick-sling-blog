@@ -1,5 +1,6 @@
 package com.nateyolles.sling.publick.components.admin;
 
+import javax.jcr.Property;
 import javax.script.Bindings;
 
 import org.apache.commons.lang.StringUtils;
@@ -30,6 +31,16 @@ public class SystemConfig implements Use {
      * The name of the blog.
      */
     private String blogName;
+
+    /**
+     * The separator between blog name and page title.
+     */
+    private static final String TITLE_SEPARATOR = " - ";
+
+    /**
+     * The title property of the resource.
+     */
+    private static final String TITLE_PROPERTY = "title";
 
     /**
      * Initialize the Sightly component.
@@ -69,8 +80,8 @@ public class SystemConfig implements Use {
         StringBuilder title = new StringBuilder();
 
         ValueMap properties = resource.adaptTo(ValueMap.class);
-        String jcrTitle = properties.get("jcr:title", String.class);
-        String titleProperty = properties.get("title", String.class);
+        String jcrTitle = properties.get(Property.JCR_TITLE, String.class);
+        String titleProperty = properties.get(TITLE_PROPERTY, String.class);
         String resourceName = resource.getName();
 
         if (StringUtils.isNotBlank(jcrTitle)) {
@@ -82,7 +93,7 @@ public class SystemConfig implements Use {
         }
 
         if (title.length() > 0 && StringUtils.isNotBlank(blogName)) {
-            title.append(" - ");
+            title.append(TITLE_SEPARATOR);
         }
 
         if (StringUtils.isNotBlank(blogName)) {

@@ -39,8 +39,8 @@ public class ErrorHandler implements Use {
 
         isAnonymous = "anonymous".equals(resolver.adaptTo(Session.class).getUserID());
 
-        message = (String) request.getAttribute("javax.servlet.error.message");
-        Integer scObject = (Integer) request.getAttribute("javax.servlet.error.status_code");
+        message = (String) request.getAttribute(SlingConstants.ERROR_MESSAGE);
+        Integer scObject = (Integer) request.getAttribute(SlingConstants.ERROR_STATUS);
 
         code = (scObject != null) ? scObject.intValue() : response.SC_INTERNAL_SERVER_ERROR;
 
