@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 public class SystemConfigServlet extends SlingAllMethodsServlet {
 
     @Reference
+    SystemSettingsService systemSettingsService;
 
     /**
      * The logger.
