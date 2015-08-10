@@ -50,8 +50,13 @@ Setup reCAPTCHA
 Setup your SMTP server
 
 1. Setup your email server using something like [Amazon Simple Email Service (SES)](https://aws.amazon.com/ses/), [Postfix](http://www.postfix.org/) or [Gmail](https://mail.google.com)
-2. Navigation to [http://localhost:8080/admin/config/email.html](http://localhost:8080/admin/config/email.html)
+2. Navigate to [http://localhost:8080/admin/config/email.html](http://localhost:8080/admin/config/email.html)
 3. Insert your server information
+
+Setup your System Settings
+
+1. Navigate to [http://localhost:8080/admin/config/system.html](http://localhost:8080/admin/config/system.html)
+2. Insert your blog name.
 
 ## Debugging
 
