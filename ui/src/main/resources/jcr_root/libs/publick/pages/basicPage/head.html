@@ -1,4 +1,4 @@
-<head>
-  <title data-sly-text="${properties.jcr:title || properties.title || resource.name}"></title>
+<head data-sly-use.system="com.nateyolles.sling.publick.components.admin.SystemConfig">
+  <title data-sly-text="${system.title}"></title>
   <link data-sly-include="links.html" data-sly-unwrap></link>
 </head>

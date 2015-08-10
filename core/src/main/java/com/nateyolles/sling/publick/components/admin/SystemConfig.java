@@ -2,6 +2,9 @@ package com.nateyolles.sling.publick.components.admin;
 
 import javax.script.Bindings;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.api.scripting.SlingScriptHelper;
 import org.apache.sling.scripting.sightly.pojo.Use;
@@ -19,6 +22,11 @@ public class SystemConfig implements Use {
     private SlingScriptHelper scriptHelper;
 
     /**
+     * The current resource.
+     */
+    private Resource resource;
+
+    /**
      * The name of the blog.
      */
     private String blogName;
@@ -31,6 +39,7 @@ public class SystemConfig implements Use {
     @Override
     public void init(Bindings bindings) {
         scriptHelper = (SlingScriptHelper)bindings.get(SlingBindings.SLING);
+        resource = (Resource)bindings.get(SlingBindings.RESOURCE);
 
         SystemSettingsService systemSettingsService = scriptHelper.getService(SystemSettingsService.class);
 
@@ -46,5 +55,40 @@ public class SystemConfig implements Use {
      */
     public String getBlogName() {
         return blogName;
+    }
+
+    /**
+     * Get the title of the blog.
+     *
+     * The title of the blog is the blog post title, a separator (" - "),
+     * and the name of the blog as configured.
+     *
+     * @return The title of the blog.
+     */
+    public String getTitle() {
+        StringBuilder title = new StringBuilder();
+
+        ValueMap properties = resource.adaptTo(ValueMap.class);
+        String jcrTitle = properties.get("jcr:title", String.class);
+        String titleProperty = properties.get("title", String.class);
+        String resourceName = resource.getName();
+
+        if (StringUtils.isNotBlank(jcrTitle)) {
+            title.append(jcrTitle);
+        } else if (StringUtils.isNotBlank(titleProperty)) {
+            title.append(titleProperty);
+        } else if (StringUtils.isNotBlank(resourceName)) {
+            title.append(resourceName);
+        }
+
+        if (title.length() > 0 && StringUtils.isNotBlank(blogName)) {
+            title.append(" - ");
+        }
+
+        if (StringUtils.isNotBlank(blogName)) {
+            title.append(blogName);
+        }
+
+        return title.toString();
     }
 }
