@@ -91,7 +91,7 @@ public class SystemSettingsServiceImpl implements SystemSettingsService {
     public String getBlogName() {
         try {
             return JcrUtils.getStringProperty(systemConfigNode, "blogName", null);
-        } catch (RepositoryException e) {
+        } catch (RepositoryException | NullPointerException e) {
             return null;
         }
     }
