@@ -32,6 +32,11 @@ public class SystemConfig implements Use {
     private String blogName;
 
     /**
+     * Setting for extensionless URLs.
+     */
+    private boolean extensionlessUrls;
+
+    /**
      * The separator between blog name and page title.
      */
     private static final String TITLE_SEPARATOR = " - ";
@@ -55,6 +60,7 @@ public class SystemConfig implements Use {
 
         if (systemSettingsService != null) {
             blogName = systemSettingsService.getBlogName();
+            extensionlessUrls = systemSettingsService.getExtensionlessUrls();
         }
     }
 
@@ -65,6 +71,15 @@ public class SystemConfig implements Use {
      */
     public String getBlogName() {
         return blogName;
+    }
+
+    /**
+     * Get the setting for extensionless URLs.
+     *
+     * @return The setting for extensionless URLs.
+     */
+    public boolean getExtensionlessUrls() {
+        return extensionlessUrls;
     }
 
     /**

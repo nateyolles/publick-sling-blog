@@ -75,3 +75,8 @@
 .full-width {
   width: 100%;
 }
+
+/* system config */
+#apacheSample .modal-body {
+  height: 60vh;
+}

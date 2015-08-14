@@ -57,6 +57,7 @@ Setup your System Settings
 
 1. Navigate to [http://localhost:8080/admin/config/system.html](http://localhost:8080/admin/config/system.html)
 2. Insert your blog name.
+3. Turn extensionless URLs on/off and setup your web server rewrites accordingly.
 
 ## Debugging
 

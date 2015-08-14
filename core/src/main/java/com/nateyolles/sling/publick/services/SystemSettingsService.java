@@ -20,4 +20,19 @@ public interface SystemSettingsService {
      * @return true if the save was successful.
      */
     boolean setBlogName(String name);
+
+    /**
+     * Get the setting for extensionless URLs.
+     *
+     * @return The setting for extensionless URLS.
+     */
+    boolean getExtensionlessUrls();
+
+    /**
+     * Set the value for extensionless URLs.
+     *
+     * @param value The setting for extensionless URLs.
+     * @return true if the save was successful.
+     */
+    boolean setExtensionlessUrls(boolean value);
 }

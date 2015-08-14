@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.script.Bindings;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
@@ -45,8 +46,11 @@ public class BlogEdit implements Use {
         resource = (Resource)bindings.get(SlingBindings.RESOURCE);
         request = (SlingHttpServletRequest)bindings.get(SlingBindings.REQUEST);
 
-        String path = request.getRequestPathInfo().getSuffix();
-        getBlog(path);
+        String path = request.getParameter("post");
+
+        if (StringUtils.isNotBlank(path)) {
+            getBlog(path);
+        }
     }
 
     /**

@@ -42,6 +42,11 @@ public class SystemConfigServlet extends SlingAllMethodsServlet {
     private static final String BLOG_NAME_PROPERTY = "blogName";
 
     /**
+     * The extensionless URLs property of the system config node.
+     */
+    private static final String EXTENSIONLESS_URLS_PROPERTY = "extensionlessUrls";
+
+    /**
      * Save system properties on POST.
      *
      * @param request The Sling HTTP servlet request.
@@ -52,8 +57,10 @@ public class SystemConfigServlet extends SlingAllMethodsServlet {
             throws ServletException, IOException {
 
         final String blogName = request.getParameter(BLOG_NAME_PROPERTY);
+        final boolean extensionlessUrls = Boolean.parseBoolean(request.getParameter(EXTENSIONLESS_URLS_PROPERTY));
 
         systemSettingsService.setBlogName(blogName);
+        systemSettingsService.setExtensionlessUrls(extensionlessUrls);
 
         response.sendRedirect(PublickConstants.SYSTEM_CONFIG_PATH + ".html");
     }

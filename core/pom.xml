@@ -191,6 +191,16 @@
                                     <bundleFileName>${project.build.directory}/dependency/org.apache.sling.rewriter-1.0.4.jar</bundleFileName>
                                 </configuration>
                             </execution>
+                            <execution>
+                                <id>install-jsoup</id>
+                                <goals>
+                                    <goal>install-file</goal>
+                                </goals>
+                                <phase>install</phase>
+                                <configuration>
+                                    <bundleFileName>${project.build.directory}/dependency/org.jsoup-1.8.3.jar</bundleFileName>
+                                </configuration>
+                            </execution>
                         </executions>
                     </plugin>
                 </plugins>
@@ -355,8 +365,12 @@
             <version>1.0.2</version>
             <scope>provided</scope>
         </dependency>
-
-
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.8.3</version>
+            <scope>provided</scope>
+        </dependency>
         <!-- <dependency>
             <groupId>xml-apis</groupId>
             <artifactId>xml-apis</artifactId>

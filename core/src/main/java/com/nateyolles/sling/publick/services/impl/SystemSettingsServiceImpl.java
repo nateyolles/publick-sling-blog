@@ -27,7 +27,7 @@ import com.nateyolles.sling.publick.services.SystemSettingsService;
 
 /**
  * System settings configuration to save blog engine settings
- * such as blog name.
+ * such as blog name and extensionless URLs.
  */
 @Service( value = SystemSettingsService.class )
 @Component( metatype = true, immediate = true )
@@ -105,6 +105,36 @@ public class SystemSettingsServiceImpl implements SystemSettingsService {
     public boolean setBlogName(String name) {
         try {
             JcrResourceUtil.setProperty(systemConfigNode, "blogName", name);
+            systemConfigNode.save();
+        } catch (RepositoryException e) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Get the setting for extensionless URLs.
+     *
+     * @return The setting for extensionless URLS.
+     */
+    public boolean getExtensionlessUrls() {
+        try {
+            return JcrUtils.getBooleanProperty(systemConfigNode, "extensionlessUrls", false);
+        } catch (RepositoryException e) {
+            return false;
+        }
+    }
+
+    /**
+     * Set the value for extensionless URLs.
+     *
+     * @param value The setting for extensionless URLs.
+     * @return true if the save was successful.
+     */
+    public boolean setExtensionlessUrls(boolean value) {
+        try {
+            JcrResourceUtil.setProperty(systemConfigNode, "extensionlessUrls", value);
             systemConfigNode.save();
         } catch (RepositoryException e) {
             return false;
