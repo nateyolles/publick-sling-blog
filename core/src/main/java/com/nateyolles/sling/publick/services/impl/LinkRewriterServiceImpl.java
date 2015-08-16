@@ -2,13 +2,8 @@ package com.nateyolles.sling.publick.services.impl;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.Map;
 
-import javax.jcr.Node;
-import javax.jcr.RepositoryException;
-import javax.jcr.Session;
-import javax.jcr.nodetype.NodeType;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.felix.scr.annotations.Activate;
@@ -16,20 +11,17 @@ import org.apache.felix.scr.annotations.Component;
 import org.apache.felix.scr.annotations.Deactivate;
 import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.Service;
-import org.apache.jackrabbit.commons.JcrUtils;
-import org.apache.sling.api.resource.LoginException;
-import org.apache.sling.api.resource.ResourceResolver;
-import org.apache.sling.api.resource.ResourceResolverFactory;
-import org.apache.sling.jcr.resource.JcrResourceUtil;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+
 import org.osgi.service.component.ComponentContext;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.nateyolles.sling.publick.PublickConstants;
 import com.nateyolles.sling.publick.services.LinkRewriterService;
 import com.nateyolles.sling.publick.services.SystemSettingsService;
 
@@ -71,15 +63,17 @@ public class LinkRewriterServiceImpl implements LinkRewriterService {
      * Rewrite links based on the extensionless URLs settings.
      *
      * @param value The link URL.
+     * @param requestHost The host name from the request.
      * @return The rewritten link URL.
      */
-    public String rewriteLink(final String link) {
+    public String rewriteLink(final String link, final String requestHost) {
         String newLink = link;
 
         try {
             URI uri = new URI(link);
+            String linkHost = uri.getHost();
 
-            if (uri.getHost() == null) {
+            if (linkHost == null || linkHost.equals(requestHost)) {
                 String path = uri.getPath();
 
                 path = StringUtils.removeStart(path, "/content");
@@ -103,12 +97,20 @@ public class LinkRewriterServiceImpl implements LinkRewriterService {
         return newLink;
     }
 
-    public String rewriteAllLinks(final String html) {
+    /**
+     * Rewrite all links in an HTML string based on the extensionless URLs settings.
+     *
+     * @param value The HTML string.
+     * @param requestHost The host name from the request.
+     * @return The HTML string with rewritten URLs.
+     */
+    public String rewriteAllLinks(final String html, final String requestHost) {
         Document document = Jsoup.parse(html);
         Elements links = document.select("a[href]");
 
         for (Element link : links)  {
-            link.attr("href", rewriteLink(link.attr("href")));
+            String newLink = rewriteLink(link.attr("href"), requestHost);
+            link.attr("href", newLink);
         }
 
         return document.toString();

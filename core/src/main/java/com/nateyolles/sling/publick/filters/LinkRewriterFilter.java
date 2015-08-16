@@ -76,6 +76,7 @@ public class LinkRewriterFilter implements Filter {
         // to be of types SlingHttpServletRequest and SlingHttpServletResponse.
         final SlingHttpServletRequest slingRequest = (SlingHttpServletRequest)request;
         final String path = slingRequest.getPathInfo().toLowerCase();
+        final String host = slingRequest.getServerName();
         final String method = slingRequest.getMethod();
 
         response.setCharacterEncoding(CharEncoding.UTF_8);
@@ -93,7 +94,7 @@ public class LinkRewriterFilter implements Filter {
 
             String servletResponse = new String(responseWrapper.toString());
 
-            out.write(linkRewriter.rewriteAllLinks(servletResponse));
+            out.write(linkRewriter.rewriteAllLinks(servletResponse, host));
         } else {
           chain.doFilter(request, response);
         }
