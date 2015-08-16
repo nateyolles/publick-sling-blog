@@ -107,9 +107,8 @@ public class CommentServlet extends SlingAllMethodsServlet {
             throws ServletException, IOException {
 
         final String blogPath = request.getParameter(BLOG_PATH_PARAMETER);
-        final boolean notRobot = recaptchaService.validate(request);
 
-        if (notRobot) {
+        if (!recaptchaService.getEnabled() || recaptchaService.validate(request)) {
             final String author = request.getParameter(AUTHOR_PARAMETER);
             final String comment = request.getParameter(COMMENT_PARAMETER);
             final String commentPath = request.getParameter(COMMENT_PATH_PARAMETER);

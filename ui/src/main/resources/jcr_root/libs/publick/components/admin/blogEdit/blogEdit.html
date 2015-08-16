@@ -66,9 +66,9 @@
             <div class="form-group">
                 <label>Image</label>
                 <input type="file" name="image">
-                <div data-sly-test="${blog.image}">
-                    <img src="${blog.image}"><br>
-                    <span data-sly-text="${blog.image}"></span>
+                <div data-sly-test="${blog.imageRelativePath}">
+                    <img src="${blog.imageRelativePath}"><br>
+                    <span data-sly-text="${blog.imageRelativePath}"></span>
                 </div>
             </div>
         </div>

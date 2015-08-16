@@ -1,6 +1,8 @@
 package com.nateyolles.sling.publick.components.foundation;
 
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -9,16 +11,19 @@ import java.util.Date;
 import javax.script.Bindings;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.felix.scr.annotations.Reference;
 import org.apache.jackrabbit.JcrConstants;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.scripting.SlingBindings;
+import org.apache.sling.api.scripting.SlingScriptHelper;
 import org.apache.sling.scripting.sightly.pojo.Use;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.nateyolles.sling.publick.services.LinkRewriterService;
 
 /**
  * Sightly component to display a single blog post.
@@ -29,6 +34,12 @@ public class BlogView implements Use {
      * Logger instance to log and debug errors.
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(BlogView.class);
+
+    /**
+     * Link Rewriter to create proper display paths for meta
+     * tags and social shares.
+     */
+    private LinkRewriterService linkRewriter;
 
     /**
      * Selector to request view for displaying blog post in
@@ -69,14 +80,26 @@ public class BlogView implements Use {
     private String displayDate;
 
     /**
-     * The bog post URL.
+     * The blog post's relative path.
      */
-    private String displayPath;
+    private String postRelativePath;
 
     /**
-     * The full image URL.
+     * The blog post's absolute path taking extensionless
+     * URLs into account.
      */
-    private String displayImage;
+    private String postAbsolutePath;
+
+    /**
+     * The blog post image's relative path
+     */
+    private String imageRelativePath;
+
+    /**
+     * The blog post image's absolute path taking extensionless
+     * URLs into account.
+     */
+    private String imageAbsolutePath;
 
     @Override
     public void init(Bindings bindings) {
@@ -84,6 +107,9 @@ public class BlogView implements Use {
         request = (SlingHttpServletRequest)bindings.get(SlingBindings.REQUEST);
         resolver = resource.getResourceResolver();
         listView = Arrays.asList(request.getRequestPathInfo().getSelectors()).contains(LIST_VIEW_SELECTOR);
+
+        SlingScriptHelper scriptHelper = (SlingScriptHelper)bindings.get(SlingBindings.SLING);
+        linkRewriter = scriptHelper.getService(LinkRewriterService.class);
 
         getBlog(resource);
     }
@@ -115,11 +141,10 @@ public class BlogView implements Use {
             publishedDate = getDate(date, PUBLISHED_DATE_FORMAT);
             displayDate = getDate(date, DISPLAY_DATE_FORMAT);
 
-            displayPath = createDisplayPath();
-
-            if (StringUtils.isNotBlank(image)) {
-                displayImage = displayPath.replace(request.getRequestURI(), StringUtils.EMPTY) + image;
-            }
+            postRelativePath = linkRewriter.rewriteLink(resource.getPath(), request.getServerName());
+            postAbsolutePath = createAbsolutePath(postRelativePath);
+            imageRelativePath = image;
+            imageAbsolutePath = createAbsolutePath(image);
         }
     }
 
@@ -128,16 +153,18 @@ public class BlogView implements Use {
      *
      * @return The absolute blog post display path.
      */
-    private String createDisplayPath() {
-        final String path = resolver.map(resource.getPath());
+    private String createAbsolutePath(String relativePath) {
         String displayPath = null;
 
-        try {
-            URL url = new URL(request.getRequestURL().toString());
+        if (StringUtils.isNotBlank(relativePath)) {
+            try {
+                URI uri = new URI(request.getRequestURL().toString());
 
-            displayPath = new URL(url.getProtocol(), url.getHost(), url.getPort(), path).toString().concat(".html");
-        } catch (MalformedURLException e) {
-            LOGGER.error("Could not get DisplayPath from Request URL", e);
+                displayPath = new URI(uri.getScheme(), uri.getUserInfo(), uri.getHost(),
+                        uri.getPort(), relativePath, uri.getQuery(), uri.getFragment()).toString();
+            } catch (URISyntaxException e) {
+                LOGGER.error("Could not get create absolute path from Request URL", e);
+            }
         }
 
         return displayPath;
@@ -218,15 +245,6 @@ public class BlogView implements Use {
     }
 
     /**
-     * Get the blog post image path uploaded by the author.
-     *
-     * @return The blog post image path.
-     */
-    public String getImage() {
-        return image;
-    }
-
-    /**
      * Get the blog post main content written by the author.
      *
      * @return The blog post main content.
@@ -272,20 +290,39 @@ public class BlogView implements Use {
     }
 
     /**
-     * Get the blog post full URL.
+     * Get the blog relative path with "/content" removed.
      *
-     * @return The blog post URL.
+     * @return The blog post relative path.
      */
-    public String getDisplayPath() {
-        return displayPath;
+    public String getPostRelativePath() {
+        return postRelativePath;
     }
 
     /**
-     * Get the full image URL.
+     * Get the blog post absolute path with "/content" removed
+     * and prepared for extensionless URLs.
      *
-     * @return The image URL.
+     * @return The blog post absolute path.
      */
-    public String getDisplayImage() {
-        return displayImage;
+    public String getPostAbsolutePath() {
+        return postAbsolutePath;
+    }
+
+    /**
+     * Get the blog post image's relative path with "/content" removed.
+     *
+     * @return The blog post image's relative path.
+     */
+    public String getImageRelativePath() {
+        return imageRelativePath;
+    }
+
+    /**
+     * Get the blog post image's absolute path with "/content" removed.
+     *
+     * @return The blog post image's absolute path.
+     */
+    public String getImageAbsolutePath() {
+        return imageAbsolutePath;
     }
 }

@@ -126,7 +126,10 @@ public class RecaptchaServiceImpl implements RecaptchaService {
 
         boolean validated = false;
 
-        if (StringUtils.isNotEmpty(secretKey) && StringUtils.isNotEmpty(recaptchaResponse) && StringUtils.isNotEmpty(remoteIP)) {
+        if (getEnabled() && StringUtils.isNotEmpty(secretKey)
+                && StringUtils.isNotEmpty(recaptchaResponse)
+                && StringUtils.isNotEmpty(remoteIP)) {
+
             try {
                 String query = String.format(RECAPTCHA_SERVICE_QUERYSTRING,
                     URLEncoder.encode(secretKey, charset),

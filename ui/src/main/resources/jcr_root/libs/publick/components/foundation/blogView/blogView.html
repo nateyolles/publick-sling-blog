@@ -9,9 +9,11 @@
       </div>
     </div>
   </div>
-  <div class="row" data-sly-test="${blog.image}">
+  <div class="row" data-sly-test="${blog.imageRelativePath}">
     <div class="col-md-12">
-      <img src="${blog.image}" class="img-responsive center-block" alt="${blog.description}">
+      <a href="${resource.path}.html" data-sly-unwrap="${!blog.listView}">
+        <img src="${blog.imageRelativePath}" class="img-responsive center-block" alt="${blog.description}">
+      </a>
     </div>
   </div>
   <div class="row">
