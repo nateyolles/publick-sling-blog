@@ -10,18 +10,20 @@ import org.apache.jackrabbit.JcrConstants;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
 import org.apache.sling.api.resource.LoginException;
+import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ResourceResolverFactory;
 import org.apache.sling.api.servlets.SlingAllMethodsServlet;
 import org.apache.sling.jcr.resource.JcrResourceConstants;
 import org.apache.sling.jcr.resource.JcrResourceUtil;
 
+import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
+import javax.jcr.nodetype.NodeType;
 import javax.servlet.ServletException;
 
 import java.io.IOException;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -129,7 +131,10 @@ public class CommentServlet extends SlingAllMethodsServlet {
                 properties.put(COMMENT_PARAMETER, comment);
                 properties.put(JcrConstants.JCR_PRIMARYTYPE, PublickConstants.NODE_TYPE_COMMENT);
 
-                resolver.create(resolver.getResource(parentPath), nodeName, properties);
+                Resource commentResource = resolver.create(resolver.getResource(parentPath), nodeName, properties);
+                Node commentNode = commentResource.adaptTo(Node.class);
+                commentNode.addMixin(NodeType.MIX_CREATED);
+
                 resolver.commit();
             } catch (LoginException e) {
                 LOGGER.error("Could not login", e);
