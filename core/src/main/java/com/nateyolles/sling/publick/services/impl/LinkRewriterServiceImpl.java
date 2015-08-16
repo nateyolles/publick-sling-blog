@@ -83,7 +83,10 @@ public class LinkRewriterServiceImpl implements LinkRewriterService {
 
                     path = StringUtils.removeEnd(path, ".html");
                     path = StringUtils.removeEnd(path, "index");
-                    path = StringUtils.removeEnd(path, "/");
+
+                    if (!"/".equals(path)) {
+                        path = StringUtils.removeEnd(path, "/");
+                    }
                 } else if (StringUtils.isNotBlank(path) && !path.endsWith("/") && !path.endsWith(".html")) {
                     path = path.concat(".html");
                 }
