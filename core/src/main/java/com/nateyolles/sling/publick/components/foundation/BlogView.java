@@ -117,7 +117,9 @@ public class BlogView implements Use {
 
             displayPath = createDisplayPath();
 
-            displayImage = displayPath.replace(request.getRequestURI(), StringUtils.EMPTY) + image;
+            if (StringUtils.isNotBlank(image)) {
+                displayImage = displayPath.replace(request.getRequestURI(), StringUtils.EMPTY) + image;
+            }
         }
     }
 

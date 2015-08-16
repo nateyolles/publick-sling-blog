@@ -91,7 +91,7 @@ public class LinkRewriterServiceImpl implements LinkRewriterService {
                     path = path.concat(".html");
                 }
 
-                newLink = new URI(null, null, path, uri.getQuery(), uri.getFragment()).toString();
+                newLink = new URI(uri.getScheme(), uri.getUserInfo(), uri.getHost(), uri.getPort(), path, uri.getQuery(), uri.getFragment()).toString();
             }
         } catch (URISyntaxException e) {
             LOGGER.error("Could not rewrite link do to link syntax.", e);
@@ -110,12 +110,25 @@ public class LinkRewriterServiceImpl implements LinkRewriterService {
     public String rewriteAllLinks(final String html, final String requestHost) {
         Document document = Jsoup.parse(html);
         Elements links = document.select("a[href]");
+        Elements metas = document.select("meta[content]");
 
-        for (Element link : links)  {
-            String newLink = rewriteLink(link.attr("href"), requestHost);
-            link.attr("href", newLink);
-        }
+        updateAttribute(links, "href", requestHost);
+        updateAttribute(metas, "content", requestHost);
 
         return document.toString();
+    }
+
+    /**
+     * Loop through jsoup collections and rewrite the links.
+     *
+     * @param elements The collection of jsoup elements
+     * @param attribute The attribute of the elements to rewrite.
+     * @param requestHost The hostname from the request.
+     */
+    private void updateAttribute(final Elements elements, final String attribute, final String requestHost) {
+        for (Element element : elements)  {
+            String newLink = rewriteLink(element.attr(attribute), requestHost);
+            element.attr(attribute, newLink);
+        }
     }
 }
