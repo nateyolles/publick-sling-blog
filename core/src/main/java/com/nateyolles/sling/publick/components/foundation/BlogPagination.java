@@ -11,16 +11,17 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.api.scripting.SlingScriptHelper;
-import org.apache.sling.scripting.sightly.pojo.Use;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.nateyolles.sling.publick.services.BlogService;
+import com.nateyolles.sling.publick.sightly.WCMUse;
 
 /**
  * Sightly component for blog list/digest view pagination.
  */
-public class BlogPagination implements Use {
+public class BlogPagination extends WCMUse {
 
     /**
      * The component property name which sets the page size.
@@ -81,14 +82,12 @@ public class BlogPagination implements Use {
      * Initialize the Sightly component.
      *
      * Get services and properties. The entry point to the component.
-     *
-     * @param bindings The current execution context.
      */
     @Override
-    public void init(Bindings bindings) {
-        resource = (Resource)bindings.get(SlingBindings.RESOURCE);
-        request = (SlingHttpServletRequest)bindings.get(SlingBindings.REQUEST);
-        scriptHelper = (SlingScriptHelper)bindings.get(SlingBindings.SLING);
+    public void activate() {
+        resource = getResource();
+        request = getRequest();
+        scriptHelper = getSlingScriptHelper();
         blogService = scriptHelper.getService(BlogService.class);
 
         ValueMap properties = resource.adaptTo(ValueMap.class);

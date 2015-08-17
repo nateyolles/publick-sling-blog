@@ -7,25 +7,23 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.script.Bindings;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.jackrabbit.JcrConstants;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ValueMap;
-import org.apache.sling.api.scripting.SlingBindings;
-import org.apache.sling.scripting.sightly.pojo.Use;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.nateyolles.sling.publick.PublickConstants;
+import com.nateyolles.sling.publick.sightly.WCMUse;
 
 /**
  * Backing for Sightly CommentsView component. Returns collection of comments
  * two levels deep. Each comment has an author, comment, and display date.
  */
-public class CommentsView implements Use {
+public class CommentsView extends WCMUse {
 
     /**
      * Logger to log errors.
@@ -61,13 +59,11 @@ public class CommentsView implements Use {
      * Initialize the Sightly component.
      *
      * Get the resource and resolver. The entry point to the component.
-     *
-     * @param bindings The current execution context.
      */
     @Override
-    public void init(Bindings bindings) {
-        blogResource = (Resource)bindings.get(SlingBindings.RESOURCE);
-        resolver = blogResource.getResourceResolver();
+    public void activate() {
+        blogResource = getResource();
+        resolver = getResourceResolver();
 
         Resource commentsResource = resolver.getResource(blogResource.getPath().replace(PublickConstants.BLOG_PATH, PublickConstants.COMMENTS_PATH));
         comments = getCommentList(commentsResource, true);

@@ -1,20 +1,18 @@
 package com.nateyolles.sling.publick.components.admin;
 
-import javax.script.Bindings;
-
 import org.apache.commons.lang.StringUtils;
+
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
-import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.api.scripting.SlingScriptHelper;
-import org.apache.sling.scripting.sightly.pojo.Use;
 
 import com.nateyolles.sling.publick.services.SystemSettingsService;
+import com.nateyolles.sling.publick.sightly.WCMUse;
 
 /**
  * Sightly component to get System Settings such as blog name.
  */
-public class SystemConfig implements Use {
+public class SystemConfig extends WCMUse {
 
     /**
      * The Sling Script Helper to get services.
@@ -48,13 +46,11 @@ public class SystemConfig implements Use {
 
     /**
      * Initialize the Sightly component.
-     *
-     * @param bindings The current execution context.
      */
     @Override
-    public void init(Bindings bindings) {
-        scriptHelper = (SlingScriptHelper)bindings.get(SlingBindings.SLING);
-        resource = (Resource)bindings.get(SlingBindings.RESOURCE);
+    public void activate() {
+        scriptHelper = getSlingScriptHelper();
+        resource = getResource();
 
         SystemSettingsService systemSettingsService = scriptHelper.getService(SystemSettingsService.class);
 

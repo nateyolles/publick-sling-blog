@@ -1,24 +1,24 @@
 package com.nateyolles.sling.publick.components.foundation;
 
 import org.apache.sling.api.SlingConstants;
+
 import javax.jcr.Session;
-import javax.script.Bindings;
 import javax.servlet.ServletException;
 
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
-import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
-import org.apache.sling.api.scripting.SlingBindings;
-import org.apache.sling.scripting.sightly.pojo.Use;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.nateyolles.sling.publick.sightly.WCMUse;
 
 /**
  * Sightly component to display the error code, message, and stack trace.
  * Display the stack trace only if the user isn't authenticated.
  */
-public class ErrorHandler implements Use {
+public class ErrorHandler extends WCMUse {
 
     /**
      * Logger instance to log and debug errors.
@@ -31,11 +31,10 @@ public class ErrorHandler implements Use {
     private String stackTrace;
 
     @Override
-    public void init(Bindings bindings) {
-        Resource resource = (Resource)bindings.get(SlingBindings.RESOURCE);
-        SlingHttpServletRequest request = (SlingHttpServletRequest)bindings.get(SlingBindings.REQUEST);
-        SlingHttpServletResponse response = (SlingHttpServletResponse)bindings.get(SlingBindings.RESPONSE);
-        ResourceResolver resolver = resource.getResourceResolver();
+    public void activate() {
+        SlingHttpServletRequest request = getRequest();
+        SlingHttpServletResponse response = getResponse();
+        ResourceResolver resolver = getResourceResolver();
 
         isAnonymous = "anonymous".equals(resolver.adaptTo(Session.class).getUserID());
 

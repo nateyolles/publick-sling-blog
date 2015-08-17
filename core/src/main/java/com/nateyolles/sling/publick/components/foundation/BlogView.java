@@ -1,34 +1,30 @@
 package com.nateyolles.sling.publick.components.foundation;
 
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
+
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 
-import javax.script.Bindings;
-
 import org.apache.commons.lang.StringUtils;
-import org.apache.felix.scr.annotations.Reference;
 import org.apache.jackrabbit.JcrConstants;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ValueMap;
-import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.api.scripting.SlingScriptHelper;
-import org.apache.sling.scripting.sightly.pojo.Use;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.nateyolles.sling.publick.services.LinkRewriterService;
+import com.nateyolles.sling.publick.sightly.WCMUse;
 
 /**
  * Sightly component to display a single blog post.
  */
-public class BlogView implements Use {
+public class BlogView extends WCMUse {
 
     /**
      * Logger instance to log and debug errors.
@@ -101,14 +97,17 @@ public class BlogView implements Use {
      */
     private String imageAbsolutePath;
 
+    /**
+     * Sightly component initialization.
+     */
     @Override
-    public void init(Bindings bindings) {
-        resource = (Resource)bindings.get(SlingBindings.RESOURCE);
-        request = (SlingHttpServletRequest)bindings.get(SlingBindings.REQUEST);
-        resolver = resource.getResourceResolver();
+    public void activate() {
+        resource = getResource();
+        request = getRequest();
+        resolver = getResourceResolver();
         listView = Arrays.asList(request.getRequestPathInfo().getSelectors()).contains(LIST_VIEW_SELECTOR);
 
-        SlingScriptHelper scriptHelper = (SlingScriptHelper)bindings.get(SlingBindings.SLING);
+        SlingScriptHelper scriptHelper = getSlingScriptHelper();
         linkRewriter = scriptHelper.getService(LinkRewriterService.class);
 
         getBlog(resource);

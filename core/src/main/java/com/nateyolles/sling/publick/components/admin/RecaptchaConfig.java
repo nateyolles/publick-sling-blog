@@ -1,12 +1,9 @@
 package com.nateyolles.sling.publick.components.admin;
 
-import javax.script.Bindings;
-
-import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.api.scripting.SlingScriptHelper;
-import org.apache.sling.scripting.sightly.pojo.Use;
 
 import com.nateyolles.sling.publick.services.RecaptchaService;
+import com.nateyolles.sling.publick.sightly.WCMUse;
 
 /**
  * Sightly component to update and save reCAPTCHA configurations. Two
@@ -16,7 +13,7 @@ import com.nateyolles.sling.publick.services.RecaptchaService;
  * Google to verify the form submission wasn't hacked. It's not
  * critical to keep the "secret" key as secure as password for example.
  */
-public class RecaptchaConfig implements Use {
+public class RecaptchaConfig extends WCMUse {
 
     /**
      * The reCAPTCHA service to save the config properties.
@@ -50,8 +47,8 @@ public class RecaptchaConfig implements Use {
      * @param bindings The current execution context.
      */
     @Override
-    public void init(Bindings bindings) {
-        scriptHelper = (SlingScriptHelper)bindings.get(SlingBindings.SLING);
+    public void activate() {
+        scriptHelper = getSlingScriptHelper();
 
         recaptchaService = scriptHelper.getService(RecaptchaService.class);
 

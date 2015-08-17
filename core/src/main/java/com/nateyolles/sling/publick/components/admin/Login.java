@@ -1,11 +1,9 @@
 package com.nateyolles.sling.publick.components.admin;
 
-import javax.script.Bindings;
-
 import org.apache.sling.api.SlingHttpServletRequest;
-import org.apache.sling.api.scripting.SlingBindings;
-import org.apache.sling.scripting.sightly.pojo.Use;
 import org.apache.sling.auth.core.spi.AuthenticationHandler;
+
+import com.nateyolles.sling.publick.sightly.WCMUse;
 
 /**
  * Sightly login component to control what displays when the user
@@ -13,7 +11,7 @@ import org.apache.sling.auth.core.spi.AuthenticationHandler;
  * JAAS provided error message, but eventually will control the
  * display of the reCAPTCHA by calling the reCAPTCHA service.
  */
-public class Login implements Use {
+public class Login extends WCMUse {
 
     /**
      * The request.
@@ -27,12 +25,10 @@ public class Login implements Use {
 
     /**
      * Initialize this Sightly component.
-     *
-     * @param bindings The current execution context.
      */
     @Override
-    public void init(Bindings bindings) {
-        request = (SlingHttpServletRequest)bindings.get(SlingBindings.REQUEST);
+    public void activate() {
+        request = getRequest();
         reason = request.getParameter(AuthenticationHandler.FAILURE_REASON);
     }
 

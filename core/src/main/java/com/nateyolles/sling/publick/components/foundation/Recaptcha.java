@@ -1,15 +1,12 @@
 package com.nateyolles.sling.publick.components.foundation;
 
-import javax.script.Bindings;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
-import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.api.scripting.SlingScriptHelper;
-import org.apache.sling.scripting.sightly.pojo.Use;
 
 import com.nateyolles.sling.publick.services.RecaptchaService;
+import com.nateyolles.sling.publick.sightly.WCMUse;
 
 /**
  * Recaptcha backed class for Sightly component.
@@ -17,7 +14,7 @@ import com.nateyolles.sling.publick.services.RecaptchaService;
  * The reCAPTCHA component uses the reCAPTCHA service to get the
  * site key and the options that Google provides from its service.
  */
-public class Recaptcha implements Use {
+public class Recaptcha extends WCMUse {
 
     /**
      * The current component as a resource.
@@ -111,14 +108,14 @@ public class Recaptcha implements Use {
      * </ul>
      */
     @Override
-    public void init(Bindings bindings) {
-        SlingScriptHelper scriptHelper = (SlingScriptHelper)bindings.get(SlingBindings.SLING);
+    public void activate() {
+        SlingScriptHelper scriptHelper = getSlingScriptHelper();
         RecaptchaService recaptchaService = scriptHelper.getService(RecaptchaService.class);
 
         if (recaptchaService == null) {
             show = false;
         } else {
-            resource = (Resource)bindings.get(SlingBindings.RESOURCE);
+            resource = getResource();
 
             ValueMap properties = resource.adaptTo(ValueMap.class);
             String sizeProperty = properties.get(SIZE_PROPERTY, String.class);

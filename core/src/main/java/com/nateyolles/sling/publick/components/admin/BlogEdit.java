@@ -5,16 +5,15 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
-import javax.script.Bindings;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ValueMap;
-import org.apache.sling.api.scripting.SlingBindings;
+
 import org.apache.sling.commons.json.JSONArray;
-import org.apache.sling.scripting.sightly.pojo.Use;
+
+import com.nateyolles.sling.publick.sightly.WCMUse;
 
 /**
  * Sightly component to edit blog posts in the admin section. The
@@ -22,7 +21,7 @@ import org.apache.sling.scripting.sightly.pojo.Use;
  * and existing blog post. To edit an existing blog post, pass
  * the resource path in the URL as the suffix.
  */
-public class BlogEdit implements Use {
+public class BlogEdit extends WCMUse {
 
     private Resource resource;
     private SlingHttpServletRequest request;
@@ -38,13 +37,11 @@ public class BlogEdit implements Use {
 
     /**
      * Sightly component initialization.
-     *
-     * @param bindings The current execution context.
      */
     @Override
-    public void init(Bindings bindings) {
-        resource = (Resource)bindings.get(SlingBindings.RESOURCE);
-        request = (SlingHttpServletRequest)bindings.get(SlingBindings.REQUEST);
+    public void activate() {
+        resource = getResource();
+        request = getRequest();
 
         String path = request.getParameter("post");
 

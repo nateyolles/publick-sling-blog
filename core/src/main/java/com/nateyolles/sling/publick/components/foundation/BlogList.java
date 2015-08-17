@@ -1,18 +1,17 @@
 package com.nateyolles.sling.publick.components.foundation;
 
 import javax.jcr.NodeIterator;
-import javax.script.Bindings;
 
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
-import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.api.scripting.SlingScriptHelper;
-import org.apache.sling.scripting.sightly.pojo.Use;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.nateyolles.sling.publick.services.BlogService;
+import com.nateyolles.sling.publick.sightly.WCMUse;
 
 /**
  * Sightly component to display a list of blog posts for the public visitor.
@@ -20,7 +19,7 @@ import com.nateyolles.sling.publick.services.BlogService;
  * handled via the pagination component. This component reads the pagination
  * from the URL suffix.
  */
-public class BlogList implements Use {
+public class BlogList extends WCMUse {
 
     /**
      * Default blog posts per pagination page.
@@ -64,14 +63,12 @@ public class BlogList implements Use {
 
     /**
      * Sightly component initialization.
-     *
-     * @param bindings The current execution context.
      */
     @Override
-    public void init(Bindings bindings) {
-        resource = (Resource)bindings.get(SlingBindings.RESOURCE);
-        request = (SlingHttpServletRequest)bindings.get(SlingBindings.REQUEST);
-        scriptHelper = (SlingScriptHelper)bindings.get(SlingBindings.SLING);
+    public void activate() {
+        resource = getResource();
+        request = getRequest();
+        scriptHelper = getSlingScriptHelper();
         blogService = scriptHelper.getService(BlogService.class);
 
         postsPerPage = resource.adaptTo(ValueMap.class).get(PAGE_SIZE_PROPERTY, DEFAULT_POSTS_PER_PAGE);

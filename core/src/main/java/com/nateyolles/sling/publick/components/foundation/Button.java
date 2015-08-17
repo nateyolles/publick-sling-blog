@@ -1,23 +1,15 @@
 package com.nateyolles.sling.publick.components.foundation;
 
-import javax.script.Bindings;
-
-import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
-import org.apache.sling.api.scripting.SlingBindings;
-import org.apache.sling.scripting.sightly.pojo.Use;
+
+import com.nateyolles.sling.publick.sightly.WCMUse;
 
 /**
  * Button backed class for Sightly component.
  *
  * The Button component is based on Bootstrap and styled as such.
  */
-public class Button implements Use {
-
-    /**
-     * The current component as a resource.
-     */
-    private Resource resource;
+public class Button extends WCMUse {
 
     /**
      * The Bootstrap matched CSS class for the button.
@@ -52,16 +44,15 @@ public class Button implements Use {
      * Options for "block" are true/false.
      */
     @Override
-    public void init(Bindings bindings) {
-        resource = (Resource)bindings.get(SlingBindings.RESOURCE);
+    public void activate() {
 
-        ValueMap properties = resource.adaptTo(ValueMap.class);
+        ValueMap properties = getProperties();
         String size = properties.get("size", String.class);
         String style = properties.get("style", String.class);
         boolean block = properties.get("block", Boolean.class);
-        
+
         StringBuilder css = new StringBuilder("btn");
-        
+
         if (size != null) {
             if (size.equals("large")) {
                 css.append(" btn-lg");
