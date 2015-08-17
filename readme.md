@@ -69,6 +69,71 @@ java -Xmx2048M \
      -jar org.apache.sling.launchpad-7-standalone.jar
 ```
 
+## Apache Web Server setup
+
+  1. Serve your address on port 80 and proxy to Apache Sling on port 8080.
+  2. Redirect paths to remove "/content".
+  3. Redirect for extentionless URLs.
+
+```
+<VirtualHost *:80>
+    ProxyPreserveHost On
+    ProxyPass / http://localhost:8080/
+    ProxyPassReverse / http://localhost:8080/
+    ServerName www.yourdomain.com
+
+    <IfModule mod_rewrite.c>
+        RewriteEngine On
+        RewriteRule ^/content/(.*)$ /$1 [R=301,NC,L,QSA]
+    </IfModule>
+</VirtualHost>
+```
+
+```
+<IfModule mod_dir.c>
+    DirectorySlash Off
+</IfModule>
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Step 1: Redirect all paths that end in .html or slash.
+    # Redirect to remove index.html and /content. Hopefully
+    # you've provided the correct links so that you don't
+    # have to do any of these redirects.
+
+    # remove trailing slash
+    RewriteRule     ^(.+)/$ $1 [R=301,L,NC,QSA]
+
+    # remove content
+    RewriteRule     ^/content/(.*)$ /$1 [R=301,L,NC,QSA]
+
+    # Remove .html
+    RewriteRule     (.*).html$ $1 [R=301,L,NC,QSA]
+
+    # remove /index
+    RewriteRule     (.*)/index $1 [R=301,L,NC,QSA]
+
+    # Step 2: Use a path through to do an internal rewrite rather
+    # than a 301 or 302 redirect. Add the .html extension back on
+    # so that Sling can resolve the resource with the correct
+    # renderer.
+
+    # Ending without a slash or extension, pass through to *.html
+    RewriteCond     %{REQUEST_URI} !.*/j_security_check [NC]
+    RewriteCond     %{REQUEST_URI} !^/bin [NC]
+    RewriteCond     %{REQUEST_URI} !^/etc [NC]
+    RewriteCond     %{REQUEST_URI} !^/assets [NC]
+    RewriteCond     %{REQUEST_URI} !.*\..*/$ [NC]
+    RewriteCond     %{REQUEST_URI} !.*/$ [NC]
+    RewriteRule     (.*)$ $1.html [PT,L,NC,QSA]
+
+    # Ending with slash, pass through to index.html
+    RewriteCond     %{REQUEST_URI} .*/$ [NC]
+    RewriteRule     (.*)$ $1/index.html [PT,L,NC,QSA]
+</IfModule>
+```
+
 ## Further information
 
 ### Fix a Sling bug
