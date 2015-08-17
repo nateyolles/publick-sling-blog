@@ -81,11 +81,6 @@ java -Xmx2048M \
     ProxyPass / http://localhost:8080/
     ProxyPassReverse / http://localhost:8080/
     ServerName www.yourdomain.com
-
-    <IfModule mod_rewrite.c>
-        RewriteEngine On
-        RewriteRule ^/content/(.*)$ /$1 [R=301,NC,L,QSA]
-    </IfModule>
 </VirtualHost>
 ```
 
