@@ -1,7 +1,11 @@
 package com.nateyolles.sling.publick.sightly;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
 import javax.script.Bindings;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
 import org.apache.sling.api.resource.Resource;
@@ -10,6 +14,10 @@ import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.api.scripting.SlingScriptHelper;
 import org.apache.sling.scripting.sightly.pojo.Use;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.nateyolles.sling.publick.services.LinkRewriterService;
 
 /**
  * The base class that all Sightly components should extend
@@ -19,6 +27,16 @@ import org.apache.sling.scripting.sightly.pojo.Use;
  * methods.
  */
 public class WCMUse implements Use {
+
+    /**
+     * File extension for HTML files, used in getting page paths.
+     */
+    private static final String HTML_EXTENSION = ".html";
+
+    /**
+     * Logger instance to log and debug errors.
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(WCMUse.class);
 
     /**
      * Global bindings populated by the init method.
@@ -49,7 +67,7 @@ public class WCMUse implements Use {
      * @return The current resource.
      */
     public Resource getResource() {
-        return bindings != null ? (Resource)bindings.get(SlingBindings.RESOURCE) : null;
+        return (Resource)bindings.get(SlingBindings.RESOURCE);
     }
 
     /**
@@ -58,7 +76,7 @@ public class WCMUse implements Use {
      * @return The current resource resolver.
      */
     public ResourceResolver getResourceResolver() {
-        return bindings != null ? ((Resource)bindings.get(SlingBindings.RESOURCE)).getResourceResolver() : null;
+        return ((Resource)bindings.get(SlingBindings.RESOURCE)).getResourceResolver();
     }
 
     /**
@@ -67,7 +85,7 @@ public class WCMUse implements Use {
      * @return The current resource properties.
      */
     public ValueMap getProperties() {
-        return bindings != null ? ((Resource)bindings.get(SlingBindings.RESOURCE)).adaptTo(ValueMap.class) : null;
+        return ((Resource)bindings.get(SlingBindings.RESOURCE)).adaptTo(ValueMap.class);
     }
 
     /**
@@ -76,7 +94,7 @@ public class WCMUse implements Use {
      * @return The current Sling Script Helper.
      */
     public SlingScriptHelper getSlingScriptHelper() {
-        return bindings != null ? (SlingScriptHelper)bindings.get(SlingBindings.SLING) : null;
+        return (SlingScriptHelper)bindings.get(SlingBindings.SLING);
     }
 
     /**
@@ -85,7 +103,7 @@ public class WCMUse implements Use {
      * @return The current Sling HTTP Servlet Request.
      */
     public SlingHttpServletRequest getRequest() {
-        return bindings != null ? (SlingHttpServletRequest)bindings.get(SlingBindings.REQUEST) : null;
+        return (SlingHttpServletRequest)bindings.get(SlingBindings.REQUEST);
     }
 
     /**
@@ -94,6 +112,55 @@ public class WCMUse implements Use {
      * @return The current Sling HTTP Servlet Response.
      */
     public SlingHttpServletResponse getResponse() {
-        return bindings != null ? (SlingHttpServletResponse)bindings.get(SlingBindings.RESPONSE) : null;
+        return (SlingHttpServletResponse)bindings.get(SlingBindings.RESPONSE);
+    }
+
+    /**
+     * Get the externalized relative path.
+     *
+     * @return The externalized relative path.
+     */
+    public String getRelativeExternalPath() {
+        LinkRewriterService linkRewriter = getSlingScriptHelper().getService(LinkRewriterService.class);
+
+        return linkRewriter != null
+                ? linkRewriter.rewriteLink(getResource().getPath() + HTML_EXTENSION, getRequest().getServerName())
+                : null;
+    }
+
+    /**
+     * Get the externalized absolute path.
+     *
+     * @return The externalized absolute path.
+     */
+    public String getAbsoluteExternalPath() {
+        return getAbsolutePath(getRelativeExternalPath());
+    }
+
+    /**
+     * Generate the absolute resource path from the relative path.
+     *
+     * @return The absolute blog post display path.
+     */
+    public String getAbsolutePath(final String relativePath) {
+        String displayPath = null;
+        String newRelativePath = relativePath;
+
+        if (StringUtils.isNotBlank(newRelativePath)) {
+            try {
+                URI uri = new URI(getRequest().getRequestURL().toString());
+
+                if (relativePath.startsWith("/content/")) {
+                    newRelativePath = StringUtils.removeStart(newRelativePath, "/content");
+                }
+
+                displayPath = new URI(uri.getScheme(), uri.getUserInfo(), uri.getHost(),
+                        uri.getPort(), newRelativePath, uri.getQuery(), uri.getFragment()).toString();
+            } catch (URISyntaxException e) {
+                LOGGER.error("Could not get create absolute path from Request URL", e);
+            }
+        }
+
+        return displayPath;
     }
 }

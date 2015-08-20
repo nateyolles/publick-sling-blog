@@ -76,17 +76,6 @@ public class BlogView extends WCMUse {
     private String displayDate;
 
     /**
-     * The blog post's relative path.
-     */
-    private String postRelativePath;
-
-    /**
-     * The blog post's absolute path taking extensionless
-     * URLs into account.
-     */
-    private String postAbsolutePath;
-
-    /**
      * The blog post image's relative path
      */
     private String imageRelativePath;
@@ -140,33 +129,9 @@ public class BlogView extends WCMUse {
             publishedDate = getDate(date, PUBLISHED_DATE_FORMAT);
             displayDate = getDate(date, DISPLAY_DATE_FORMAT);
 
-            postRelativePath = linkRewriter.rewriteLink(resource.getPath(), request.getServerName());
-            postAbsolutePath = createAbsolutePath(postRelativePath);
             imageRelativePath = image;
-            imageAbsolutePath = createAbsolutePath(image);
+            imageAbsolutePath = getAbsolutePath(image);
         }
-    }
-
-    /**
-     * Generate the blog post display path and remove "/content".
-     *
-     * @return The absolute blog post display path.
-     */
-    private String createAbsolutePath(String relativePath) {
-        String displayPath = null;
-
-        if (StringUtils.isNotBlank(relativePath)) {
-            try {
-                URI uri = new URI(request.getRequestURL().toString());
-
-                displayPath = new URI(uri.getScheme(), uri.getUserInfo(), uri.getHost(),
-                        uri.getPort(), relativePath, uri.getQuery(), uri.getFragment()).toString();
-            } catch (URISyntaxException e) {
-                LOGGER.error("Could not get create absolute path from Request URL", e);
-            }
-        }
-
-        return displayPath;
     }
 
     /**
@@ -286,25 +251,6 @@ public class BlogView extends WCMUse {
      */
     public String getDisplayDate() {
         return displayDate;
-    }
-
-    /**
-     * Get the blog relative path with "/content" removed.
-     *
-     * @return The blog post relative path.
-     */
-    public String getPostRelativePath() {
-        return postRelativePath;
-    }
-
-    /**
-     * Get the blog post absolute path with "/content" removed
-     * and prepared for extensionless URLs.
-     *
-     * @return The blog post absolute path.
-     */
-    public String getPostAbsolutePath() {
-        return postAbsolutePath;
     }
 
     /**
