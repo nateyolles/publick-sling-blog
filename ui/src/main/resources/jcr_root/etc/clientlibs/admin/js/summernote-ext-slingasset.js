@@ -139,8 +139,8 @@
     dialogs: {
       slingasset: function (lang) {
         var body = $.ajax({
-                      type: "GET",
-                      url: '/libs/publick/components/admin/assetList/assetList.html',
+                      type: 'GET',
+                      url: '/bin/admin/getassetlist',
                       cache: false,
                       async: false
                     }).responseText;
