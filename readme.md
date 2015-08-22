@@ -92,6 +92,10 @@ java -Xmx2048M \
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
+    # Always use www
+    RewriteCond %{HTTP_HOST} !^www\.yourdomain\.com [NC]
+    RewriteRule ^(.*)$ http://www.yourdomain.com$1 [R=301,NC,QSA]
+
     # Step 1: Redirect all paths that end in .html or slash.
     # Redirect to remove index.html and /content. Hopefully
     # you've provided the correct links so that you don't
