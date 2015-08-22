@@ -80,3 +80,8 @@
 #apacheSample .modal-body {
   height: 60vh;
 }
+
+/* summernote */
+.note-toolbar {
+  margin-left: 0px !important;
+}
