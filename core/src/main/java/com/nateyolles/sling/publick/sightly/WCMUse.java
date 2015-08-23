@@ -154,6 +154,8 @@ public class WCMUse implements Use {
                     newRelativePath = StringUtils.removeStart(newRelativePath, "/content");
                 }
 
+                newRelativePath = StringUtils.removeEnd(newRelativePath, "/");
+
                 displayPath = new URI(uri.getScheme(), uri.getUserInfo(), uri.getHost(),
                         uri.getPort(), newRelativePath, uri.getQuery(), uri.getFragment()).toString();
             } catch (URISyntaxException e) {
