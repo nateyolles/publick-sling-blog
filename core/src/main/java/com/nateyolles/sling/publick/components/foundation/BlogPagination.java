@@ -1,5 +1,7 @@
 package com.nateyolles.sling.publick.components.foundation;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,7 +13,6 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.api.scripting.SlingScriptHelper;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,6 +25,11 @@ import com.nateyolles.sling.publick.sightly.WCMUse;
 public class BlogPagination extends WCMUse {
 
     /**
+     * The querystring parameter for pagination.
+     */
+    private static final String PAGINATION_PARAMETER = "page";
+
+    /**
      * The component property name which sets the page size.
      */
     private static final String PAGE_SIZE_PROPERTY = "pageSize";
@@ -34,9 +40,9 @@ public class BlogPagination extends WCMUse {
     private static final int DEFAULT_PAGE_SIZE = 5;
 
     /**
-     * The character that begins the suffix parameter.
+     * The URL segment for the pagination querystring.
      */
-    private static final String SUFFIX_SEPARATOR = "/";
+    private static final String PAGE_QUERYSTRING = "?" + PAGINATION_PARAMETER + "=";
 
     /**
      * The current resource.
@@ -120,15 +126,11 @@ public class BlogPagination extends WCMUse {
     private int getCurrentIndex() {
         int offset = 1;
 
-        String suffix = request.getRequestPathInfo().getSuffix();
+        String param = request.getParameter(PAGINATION_PARAMETER);
 
-        if (suffix != null) {
-            if (suffix.startsWith(SUFFIX_SEPARATOR)) {
-                suffix = suffix.substring(1);
-            }
-
+        if (param != null) {
             try {
-                offset = Integer.valueOf(suffix);
+                offset = Integer.valueOf(param);
             } catch (NumberFormatException e) {
                 LOGGER.error("Could not get offset", e);
             }
@@ -179,7 +181,7 @@ public class BlogPagination extends WCMUse {
      * @return The path to the previous page.
      */
     public String getPreviousPath() {
-        return getBlogListPagePath() + SUFFIX_SEPARATOR + (currentPage - 1);
+        return request.getRequestURI() + PAGE_QUERYSTRING + (currentPage - 1);
     }
 
     /**
@@ -188,7 +190,7 @@ public class BlogPagination extends WCMUse {
      * @return The path to the next page.
      */
     public String getNextPath() {
-        return getBlogListPagePath() + SUFFIX_SEPARATOR + (currentPage + 1);
+        return request.getRequestURI() + PAGE_QUERYSTRING + (currentPage + 1);
     }
 
     /**
@@ -201,36 +203,16 @@ public class BlogPagination extends WCMUse {
      */
     public List<HashMap<String, Object>> getPages() {
         List<HashMap<String, Object>> pages = new ArrayList<HashMap<String, Object>>();
-        String path = getBlogListPagePath();
+        String path = request.getRequestURI();
 
         for (int x = 1; x <= totalPages; x++) {
             HashMap<String, Object> map = new HashMap<String, Object>();
             map.put("page", x);
-            map.put("path", path + SUFFIX_SEPARATOR + x);
+            map.put("path", path + PAGE_QUERYSTRING + x);
             map.put("current", Boolean.valueOf(x == currentPage));
             pages.add(map);
         }
 
         return pages;
-    }
-
-    /**
-     * Get the path to the blog list/digest page without any suffix.
-     *
-     * @return The path to the blog list/digest page.
-     */
-    private String getBlogListPagePath() {
-        String path = request.getRequestURI();
-        String suffix = request.getRequestPathInfo().getSuffix();
-
-        if (suffix != null) {
-            int indexOfSuffix = path.indexOf(suffix);
-
-            if (indexOfSuffix != -1) {
-                path = path.substring(0, path.indexOf(suffix));
-            }
-        }
-
-        return path;
     }
 }

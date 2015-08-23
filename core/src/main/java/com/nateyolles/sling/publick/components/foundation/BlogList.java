@@ -17,9 +17,14 @@ import com.nateyolles.sling.publick.sightly.WCMUse;
  * Sightly component to display a list of blog posts for the public visitor.
  * The component uses the Blog Service to get the posts. Pagination is
  * handled via the pagination component. This component reads the pagination
- * from the URL suffix.
+ * from querystring.
  */
 public class BlogList extends WCMUse {
+
+    /**
+     * The querystring parameter for pagination.
+     */
+    private static final String PAGINATION_PARAMETER = "page";
 
     /**
      * Default blog posts per pagination page.
@@ -92,7 +97,7 @@ public class BlogList extends WCMUse {
     }
 
     /**
-     * Get the starting point for pagination based on the URL suffix.
+     * Get the starting point for pagination based on the querystring.
      *
      * If blog post to start at is determined by the page number from
      * the suffix multiplied by the number of posts per page. If the
@@ -103,15 +108,11 @@ public class BlogList extends WCMUse {
     private Long getOffset() {
         Long offset = 0L;
 
-        String suffix = request.getRequestPathInfo().getSuffix();
+        String param = request.getParameter(PAGINATION_PARAMETER);
 
-        if (suffix != null) {
-            if (suffix.startsWith("/")) {
-                suffix = suffix.substring(1);
-            }
-
+        if (param != null) {
             try {
-                offset = Long.valueOf(suffix);
+                offset = Long.valueOf(param);
             } catch (NumberFormatException e) {
                 LOGGER.error("Could not get offset", e);
             }
