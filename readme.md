@@ -108,6 +108,11 @@ java -Xmx2048M \
     RewriteRule     ^/content/(.*)$ /$1 [R=301,L,NC,QSA]
 
     # Remove .html
+    # Condition needed for a bug in Sling 7. Updating a user group
+    # doesn't work when posting to JSON. While fixed in Sling 8, the
+    # admin JavaScript UserService#PATH_UPDATE_GROUP would need to be
+    # updated as well if you were going to use it. See readme.md.
+    RewriteCond     %{REQUEST_URI} !^/system/userManager/group/.+\.update.html [NC]
     RewriteRule     (.*).html$ $1 [R=301,L,NC,QSA]
 
     # remove /index
@@ -135,13 +140,19 @@ java -Xmx2048M \
 
 ## Further information
 
-### Fix a Sling bug
+### Dealing with Sling bugs
+
+#### /var node is incorrect jcr:primaryType
 
 If you start getting errors in the log about `/var/discovery` or the `org.apache.sling.discovey.impl` framework, it's because of a bug in Sling. You can fix the problem by changing the `jcr:primaryType` of the `/var` node from `nt:unstructured` to `sling:Folder`. Run the following cURL command:
 
 ```
 curl -u admin:admin -F"jcr:primaryType=sling:Folder" http://localhost:8080/var
 ```
+
+#### Updating groups doesn't work with JSON
+
+The post servlet that handles updating user groups doesn't work when posting to JSON in Sling 7. It has been fixed in Sling 8, however, this project is using the latest version of Sling's downloadable JAR, which is 7. The workaround is for the UserService in admin.js to post to HTML rather than JSON to update groups. The side effect is that in order to use extensionless URLs, you need to account for this in your web server redirects. See above.
 
 ### Maven Archetypes
 
