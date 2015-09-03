@@ -26,7 +26,7 @@
                     </div>
                     <div class="row">
                         <div class="col-xs-12">
-                            <button type="submit" class="btn btn-primary">Save</button>
+                            <button type="submit" class="btn btn-primary" data-sly-attribute.disabled="${!config.authorable && 'disabled'}">Save</button>
                         </div>
                     </div>
                 </form>

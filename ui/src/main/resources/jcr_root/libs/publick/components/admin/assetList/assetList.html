@@ -1,5 +1,4 @@
-<div data-ng-controller="AssetController" class="asset-controller">
-
+<div data-ng-controller="AssetController" class="asset-controller" data-sly-use.page="com.nateyolles.sling.publick.sightly.WCMUse">
   <input type="hidden" name="selectedAsset" class="selected-asset" data-ng-value="selectedAsset">
 
   <ol class="breadcrumb">
@@ -38,7 +37,7 @@
       </a>
     </div>
 
-    <div class="col-xs-6 col-sm-4 col-md-2" ngf-drop="" ngf-select="" ng-model="files" ng-model-rejected="rejFiles" ngf-drag-over-class="{accept:'hover', reject:'hover-error', delay:100}" ngf-multiple="true" ngf-allow-dir="true" ngf-accept="'image/*,application/pdf'" ngf-drop-available="dropAvailable">
+    <div class="col-xs-6 col-sm-4 col-md-2 ${!page.authorable && 'disabled-container'}" ngf-drop="" ngf-select="" ng-model="files" ng-model-rejected="rejFiles" ngf-drag-over-class="{accept:'hover', reject:'hover-error', delay:100}" ngf-multiple="true" ngf-allow-dir="true" ngf-accept="'image/*,application/pdf'" ngf-drop-available="dropAvailable" data-ng-disabled="${!page.authorable && 'true'}">
       <a class="thumbnail asset-thumbnail asset-folder asset-upload">
         <i class="fa fa-upload"></i>
         <div class="caption">

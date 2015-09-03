@@ -85,3 +85,25 @@
 .note-toolbar {
   margin-left: 0px !important;
 }
+
+.glyphicon.disabled {
+  cursor: not-allowed;
+  filter: alpha(opacity=65);
+  opacity: .65;
+}
+
+.glyphicon.disabled:hover {
+  color: inherit;
+  text-decoration: none;
+}
+
+.disabled-container {
+  cursor: not-allowed !important;
+}
+
+.disabled-container a,
+.disabled-container img {
+  cursor: not-allowed !important;
+  filter: alpha(opacity=65);
+  opacity: .65;
+}
