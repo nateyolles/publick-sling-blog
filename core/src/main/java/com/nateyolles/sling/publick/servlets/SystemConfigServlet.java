@@ -3,21 +3,19 @@ package com.nateyolles.sling.publick.servlets;
 import com.nateyolles.sling.publick.PublickConstants;
 import com.nateyolles.sling.publick.services.SystemSettingsService;
 
+import org.apache.commons.lang.CharEncoding;
 import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.sling.SlingServlet;
-import org.apache.sling.api.resource.PersistenceException;
-import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ResourceResolver;
-import org.apache.sling.api.resource.ModifiableValueMap;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
 import org.apache.sling.api.servlets.SlingAllMethodsServlet;
+import org.apache.sling.commons.json.JSONException;
+import org.apache.sling.commons.json.JSONObject;
 
 import javax.servlet.ServletException;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.PrintWriter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,22 +26,17 @@ import org.slf4j.LoggerFactory;
 @SlingServlet(paths = PublickConstants.SERVLET_PATH_ADMIN + "/systemconfig")
 public class SystemConfigServlet extends SlingAllMethodsServlet {
 
+    /** Service to get and set and set system settings. */
     @Reference
     SystemSettingsService systemSettingsService;
 
-    /**
-     * The logger.
-     */
-    private static final Logger LOGGER = LoggerFactory.getLogger(RecaptchaConfigServlet.class);
+    /** The logger */
+    private static final Logger LOGGER = LoggerFactory.getLogger(SystemConfigServlet.class);
 
-    /**
-     * The blog name property of the system config node.
-     */
+    /** The blog name property of the system config node. */
     private static final String BLOG_NAME_PROPERTY = "blogName";
 
-    /**
-     * The extensionless URLs property of the system config node.
-     */
+    /** The extensionless URLs property of the system config node. */
     private static final String EXTENSIONLESS_URLS_PROPERTY = "extensionlessUrls";
 
     /**
@@ -59,9 +52,38 @@ public class SystemConfigServlet extends SlingAllMethodsServlet {
         final String blogName = request.getParameter(BLOG_NAME_PROPERTY);
         final boolean extensionlessUrls = Boolean.parseBoolean(request.getParameter(EXTENSIONLESS_URLS_PROPERTY));
 
-        systemSettingsService.setBlogName(blogName);
-        systemSettingsService.setExtensionlessUrls(extensionlessUrls);
+        final boolean nameResult = systemSettingsService.setBlogName(blogName);
+        final boolean extensionResult = systemSettingsService.setExtensionlessUrls(extensionlessUrls);
 
-        response.sendRedirect(PublickConstants.SYSTEM_CONFIG_PATH + ".html");
+        final PrintWriter writer = response.getWriter();
+
+        response.setCharacterEncoding(CharEncoding.UTF_8);
+        response.setContentType("application/json");
+
+        if (nameResult && extensionResult) {
+            response.setStatus(SlingHttpServletResponse.SC_OK);
+            sendResponse(writer, "OK", "Settings successfully updated.");
+        } else {
+            response.setStatus(SlingHttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            sendResponse(writer, "Error", "Settings failed to update.");
+        }
+    }
+
+    /**
+     * Send the JSON response.
+     *
+     * @param writer The PrintWriter.
+     * @param header The header to send.
+     * @param message The message to send.
+     */
+    private void sendResponse(PrintWriter writer, String header, String message) {
+        try {
+            writer.write(new JSONObject()
+                .put("header", header)
+                .put("message", message)
+                .toString());
+        } catch (JSONException e) {
+            LOGGER.error("Could not write JSON", e);
+        }
     }
 }

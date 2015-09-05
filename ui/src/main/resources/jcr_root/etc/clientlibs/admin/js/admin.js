@@ -124,6 +124,48 @@ app.controller('AssetController', function($scope, $http, Upload) {
     update('/content/assets');
 });
 
+app.controller('SystemSettingsController', function($scope, FormService) {
+  var ALERT_ERROR_CLASS = 'alert-danger',
+      ALERT_SUCCESS_CLASS = 'alert-success';
+
+  $scope.status = {
+    show: false,
+    type: null,
+    header: null,
+    message: null
+  }
+
+  $scope.$watch('[blogName, extensionlessUrls]', function() {
+    $scope.hideAlert();
+  });
+
+  $scope.save = function($event) {
+    $event.preventDefault();
+    $scope.hideAlert();
+
+    function show(type, header, message) {
+      $scope.status.show = true;
+      $scope.status.type = type;
+      $scope.status.header = header;
+      $scope.status.message = message;
+    }
+
+    FormService.updateSystemSettings($scope.extensionlessUrls, $scope.blogName)
+      .then(function(result) {
+          show(ALERT_SUCCESS_CLASS, result.data.header, result.data.message);
+        }, function(result) {
+          show(ALERT_ERROR_CLASS, result.data.header, result.data.message);
+      });
+  };
+
+  $scope.hideAlert = function() {
+    $scope.status.show = false;
+    $scope.status.type = null;
+    $scope.status.header = null;
+    $scope.status.message = null;
+  };
+});
+
 app.controller('UserController', function($scope, $http, $modal, UserService) {
 
   $scope.userList = {
@@ -330,13 +372,45 @@ app.factory('UserService', function($http, formDataObject) {
     return post(PATH_UPDATE_GROUP.replace(PLACEHOLDER, group), {
       ':member' : PATH_USER_HOME.replace(PLACEHOLDER, user)
     });
-  }
+  };
 
   userFactory.deleteGroup = function(group) {
     return post(PATH_DELETE_GROUP.replace(PLACEHOLDER, group), {
       go: 1
     });
-  }
+  };
 
   return userFactory;
+});
+
+
+
+
+
+
+app.factory('FormService', function($http, formDataObject) {
+  var formFactory          = {},
+      PATH_BASE            = '/bin/admin',
+      PATH_SYSTEM_SETTINGS = PATH_BASE + '/systemconfig';
+
+  /**
+   * @private
+   */
+  function post(path, data) {
+    return $http({
+      method: 'POST',
+      url: path,
+      data: data,
+      transformRequest: formDataObject
+    });
+  }
+
+  formFactory.updateSystemSettings = function(extensionlessUrls, blogName) {
+    return post(PATH_SYSTEM_SETTINGS, {
+      extensionlessUrls : extensionlessUrls,
+      blogName : blogName
+    });
+  };
+
+  return formFactory;
 });
