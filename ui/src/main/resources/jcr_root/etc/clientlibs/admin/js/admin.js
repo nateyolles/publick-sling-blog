@@ -403,7 +403,8 @@ app.factory('SettingsService', function($http, formDataObject) {
       PATH_BASE = '/bin/admin',
       PATHS = {
         system    : PATH_BASE + '/systemconfig',
-        recaptcha : PATH_BASE + '/recaptchaconfig'
+        recaptcha : PATH_BASE + '/recaptchaconfig',
+        email     : PATH_BASE + '/emailconfig'
       };
 
   /**
