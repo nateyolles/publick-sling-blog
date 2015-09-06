@@ -192,7 +192,7 @@ app.controller('UserController', function($scope, $http, $modal, UserService) {
 
   $scope.userList = {
     groups:[
-      {displayName: "Admin", name: null, canUpdate : false, users: []},
+      {displayName: "Admin/Default", name: null, canUpdate : false, users: []},
       {displayName: "Authors", name: 'authors', canUpdate : true, users: []},
       {displayName: "Testers", name: 'testers', canUpdate : true, users: []}
     ]

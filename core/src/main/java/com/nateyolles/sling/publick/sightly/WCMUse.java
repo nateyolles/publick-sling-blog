@@ -139,6 +139,7 @@ public class WCMUse implements Use {
 
     /**
      * Get the authorable status of the current user.
+     * TODO: remove and use UserService
      *
      * @return true if the current user is an admin or author.
      */
