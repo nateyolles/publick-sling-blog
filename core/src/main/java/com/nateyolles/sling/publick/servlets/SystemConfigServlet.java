@@ -8,9 +8,6 @@ import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.sling.SlingServlet;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
-import org.apache.sling.api.servlets.SlingAllMethodsServlet;
-import org.apache.sling.commons.json.JSONException;
-import org.apache.sling.commons.json.JSONObject;
 
 import javax.servlet.ServletException;
 
@@ -24,7 +21,7 @@ import org.slf4j.LoggerFactory;
  * Post servlet to save system config updates.
  */
 @SlingServlet(paths = PublickConstants.SERVLET_PATH_ADMIN + "/systemconfig")
-public class SystemConfigServlet extends SlingAllMethodsServlet {
+public class SystemConfigServlet extends AdminServlet {
 
     /** Service to get and set and set system settings. */
     @Reference
@@ -66,24 +63,6 @@ public class SystemConfigServlet extends SlingAllMethodsServlet {
         } else {
             response.setStatus(SlingHttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             sendResponse(writer, "Error", "Settings failed to update.");
-        }
-    }
-
-    /**
-     * Send the JSON response.
-     *
-     * @param writer The PrintWriter.
-     * @param header The header to send.
-     * @param message The message to send.
-     */
-    private void sendResponse(PrintWriter writer, String header, String message) {
-        try {
-            writer.write(new JSONObject()
-                .put("header", header)
-                .put("message", message)
-                .toString());
-        } catch (JSONException e) {
-            LOGGER.error("Could not write JSON", e);
         }
     }
 }

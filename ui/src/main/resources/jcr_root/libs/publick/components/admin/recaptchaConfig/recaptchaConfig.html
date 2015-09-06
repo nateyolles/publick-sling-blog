@@ -1,6 +1,5 @@
-<div data-sly-use.recaptcha="com.nateyolles.sling.publick.components.admin.RecaptchaConfig" data-sly-unwrap></div>
-
-<div class="row">
+<div class="row" data-ng-controller="SettingsController" data-settings-type="recaptcha"
+     data-sly-use.recaptcha="com.nateyolles.sling.publick.components.admin.RecaptchaConfig">
     <div class="col-lg-12">
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -9,35 +8,44 @@
             <div class="panel-body">
                 <form action="/bin/admin/recaptchaconfig" method="post">
                     <div class="row">
-                        <div class="col-lg-6 col-md-6">
+                        <div class="col-xs-6">
                             <div class="form-group">
                                 <label>Enable</label><br>
-                                <input type="checkbox" name="enabled" value="true" data-sly-attribute.checked="${recaptcha.enabled}"> Enable reCAPTCHA
+                                <input type="checkbox" name="enabled" value="true" data-ng-model="model.enabled" data-ng-init="model.enabled = ${recaptcha.enabled}"> Enable reCAPTCHA
                             </div>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-lg-12 col-md-12">
+                        <div class="col-xs-12">
                             <div class="form-group">
                                 <label>Site key</label>
-                                <input type="text" name="siteKey" data-sly-attribute.value="${recaptcha.siteKey}" class="form-control">
+                                <input type="text" name="siteKey" data-ng-model="model.siteKey" data-ng-init="model.siteKey = '${recaptcha.siteKey}'" class="form-control">
                                 <span class="help-block">The public key used in the HTML.</span>
                             </div>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-lg-12 col-md-12">
+                        <div class="col-xs-12">
                             <div class="form-group">
                                 <label>Secret key</label>
-                                <input data-sly-attribute.type="${recaptcha.authorable ? 'text' : 'password'}" name="secretKey" data-sly-attribute.value="${recaptcha.secretKey}" class="form-control">
+                                <input data-sly-attribute.type="${recaptcha.authorable ? 'text' : 'password'}" name="secretKey" data-ng-model="model.secretKey" data-ng-init="model.secretKey = '${recaptcha.secretKey}'"
+                                class="form-control">
                                 <span class="help-block">The secret key used for communication between your site and Google.</span>
                             </div>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-lg-12 col-md-12">
-                            <button type="submit" class="btn btn-primary"
+                        <div class="col-xs-12 form-group">
+                            <button type="submit" class="btn btn-primary" data-ng-click="save($event)"
                                     data-sly-attribute.disabled="${!recaptcha.authorable && 'disabled'}">Save</button>
+                        </div>
+                    </div>
+                    <div class="row" data-ng-show="status.show">
+                        <div class="col-xs-12">
+                            <div class="alert {{status.type}} alert-dismissible" role="alert">
+                                <button type="button" class="close" aria-label="Close" data-ng-click="hideAlert()"><span aria-hidden="true">&times;</span></button>
+                                <strong data-ng-bind="status.header"></strong> <span data-ng-bind="status.message"></span>
+                            </div>
                         </div>
                     </div>
                 </form>

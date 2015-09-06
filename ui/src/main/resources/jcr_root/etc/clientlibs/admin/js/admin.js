@@ -124,9 +124,11 @@ app.controller('AssetController', function($scope, $http, Upload) {
     update('/content/assets');
 });
 
-app.controller('SystemSettingsController', function($scope, FormService) {
+app.controller('SettingsController', function($scope, $attrs, SettingsService) {
   var ALERT_ERROR_CLASS = 'alert-danger',
       ALERT_SUCCESS_CLASS = 'alert-success';
+
+  $scope.type = $attrs.settingsType;
 
   $scope.status = {
     show: false,
@@ -135,7 +137,7 @@ app.controller('SystemSettingsController', function($scope, FormService) {
     message: null
   }
 
-  $scope.$watch('[blogName, extensionlessUrls]', function() {
+  $scope.$watchCollection('model', function() {
     $scope.hideAlert();
   });
 
@@ -150,11 +152,24 @@ app.controller('SystemSettingsController', function($scope, FormService) {
       $scope.status.message = message;
     }
 
-    FormService.updateSystemSettings($scope.extensionlessUrls, $scope.blogName)
+    SettingsService.updateSettings($scope.type, $scope.model)
       .then(function(result) {
           show(ALERT_SUCCESS_CLASS, result.data.header, result.data.message);
         }, function(result) {
-          show(ALERT_ERROR_CLASS, result.data.header, result.data.message);
+          var header = "Error",
+              message = "An error occured.";
+
+          if (typeof result === 'undefined' || !result.data) {
+            if (result.data.header) {
+              header = result.data.header;
+            }
+
+            if (result.data.message) {
+              message = result.data.message;
+            }
+          }
+
+          show(ALERT_ERROR_CLASS, header, message);
       });
   };
 
@@ -383,15 +398,13 @@ app.factory('UserService', function($http, formDataObject) {
   return userFactory;
 });
 
-
-
-
-
-
-app.factory('FormService', function($http, formDataObject) {
-  var formFactory          = {},
-      PATH_BASE            = '/bin/admin',
-      PATH_SYSTEM_SETTINGS = PATH_BASE + '/systemconfig';
+app.factory('SettingsService', function($http, formDataObject) {
+  var settingsFactory = {},
+      PATH_BASE = '/bin/admin',
+      PATHS = {
+        system    : PATH_BASE + '/systemconfig',
+        recaptcha : PATH_BASE + '/recaptchaconfig'
+      };
 
   /**
    * @private
@@ -405,12 +418,9 @@ app.factory('FormService', function($http, formDataObject) {
     });
   }
 
-  formFactory.updateSystemSettings = function(extensionlessUrls, blogName) {
-    return post(PATH_SYSTEM_SETTINGS, {
-      extensionlessUrls : extensionlessUrls,
-      blogName : blogName
-    });
+  settingsFactory.updateSettings = function(type, model) {
+    return post(PATHS[type], model);
   };
 
-  return formFactory;
+  return settingsFactory;
 });

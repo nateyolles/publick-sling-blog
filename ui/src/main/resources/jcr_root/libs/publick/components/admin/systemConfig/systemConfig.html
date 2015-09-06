@@ -1,4 +1,5 @@
-<div class="row" data-ng-controller="SystemSettingsController" data-sly-use.config="com.nateyolles.sling.publick.components.admin.SystemConfig">
+<div class="row" data-ng-controller="SettingsController" data-settings-type="system"
+    data-sly-use.config="com.nateyolles.sling.publick.components.admin.SystemConfig">
     <div class="col-lg-12">
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -10,7 +11,7 @@
                         <div class="col-xs-12">
                             <div class="form-group">
                                 <label>Extensionless URLS</label><br>
-                                <input type="checkbox" name="extensionlessUrls" value="true" data-ng-model="extensionlessUrls" data-ng-init="extensionlessUrls = ${config.extensionlessUrls}"> Enable extentionless URLs
+                                <input type="checkbox" name="extensionlessUrls" value="true" data-ng-model="model.extensionlessUrls" data-ng-init="model.extensionlessUrls = ${config.extensionlessUrls}"> Enable extentionless URLs
                                 <span class="help-block">Enabling extensionless URLs will ensure that links are displayed correctly. The web server must still be setup to handle extensionless URLs through the proper rewrites and redirects. View <a href="#" data-toggle="modal" data-target="#apacheSample">sample Apache redirects</a>.</span>
                             </div>
                         </div>
@@ -19,7 +20,7 @@
                         <div class="col-xs-12">
                             <div class="form-group">
                                 <label>Blog name</label>
-                                <input type="text" name="blogName" data-ng-model="blogName" data-ng-init="blogName = '${config.blogName}'" class="form-control">
+                                <input type="text" name="blogName" data-ng-model="model.blogName" data-ng-init="model.blogName = '${config.blogName}'" class="form-control">
                                 <span class="help-block">The name of the blog to be used as titles and headers.</span>
                             </div>
                         </div>
