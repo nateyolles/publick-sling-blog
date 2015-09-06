@@ -179,6 +179,13 @@ app.controller('SettingsController', function($scope, $attrs, SettingsService) {
     $scope.status.header = null;
     $scope.status.message = null;
   };
+
+  $scope.clear = function($event) {
+    if ($event.target.type === 'password') {
+      // TODO: find the proper way to access the model bound to the element that gained focus.
+      $scope.model[angular.element($event.target).data('ngModel').replace(/model./gi, '')] = '';
+    }
+  };
 });
 
 app.controller('UserController', function($scope, $http, $modal, UserService) {

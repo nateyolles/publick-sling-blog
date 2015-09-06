@@ -1,198 +1,125 @@
 package com.nateyolles.sling.publick;
 
 /**
- * Constants used throughout the application.
+ * Constants used throughout the application
  */
 public class PublickConstants {
 
-    /**
-     * Private constructor to prevent instantiation of class.
-     */
+    /** Private constructor to prevent instantiation of class */
     private PublickConstants() {
     }
 
-    /**
-     * JCR root path.
-     */
+    /** JCR root path */
     public static final String ROOT_PATH = "/";
 
-    /**
-     * Content path.
-     */
+    /** Content path */
     public static final String CONTENT_PATH = "/content";
 
-    /**
-     * Blog path.
-     */
+    /** Blog path */
     public static final String BLOG_PATH = CONTENT_PATH + "/blog";
 
-    /**
-     * Comments path.
-     */
+    /** Comments path */
     public static final String COMMENTS_PATH = CONTENT_PATH + "/comments";
 
-    /**
-     * Admin path.
-     */
+    /** Admin path */
     public static final String ADMIN_PATH = CONTENT_PATH + "/admin";
 
-    /**
-     * Assets path.
-     */
+    /** Assets path */
     public static final String ASSET_PATH = CONTENT_PATH + "/assets";
 
-    /**
-     * Images path.
-     */
+    /** Images path */
     public static final String IMAGE_PATH = ASSET_PATH + "/images";
 
-    /**
-     * PDF path.
-     */
+    /** PDF path */
     public static final String PDF_PATH = ASSET_PATH + "/pdf";
 
-    /**
-     * Audio path.
-     */
+    /** Audio path */
     public static final String AUDIO_PATH = ASSET_PATH + "/audio";
 
-    /**
-     * Video path.
-     */
+    /** Video path */
     public static final String VIDEO_PATH = ASSET_PATH + "/video";
 
-    /**
-     * Admin dashboard path.
-     */
+    /** Admin dashboard path */
     public static final String ADMIN_LANDING_PATH = ADMIN_PATH + "/index";
 
-    /**
-     * Admin blog list path.
-     */
+    /** Admin blog list path */
     public static final String ADMIN_LIST_PATH = ADMIN_PATH + "/list";
 
-    /**
-     * Admin edit blog path;
-     */
+    /** Admin edit blog path */
     public static final String ADMIN_EDIT_PATH = ADMIN_PATH + "/edit";
 
-    /**
-     * Admin assets blog path.
-     */
+    /** Admin assets blog path */
     public static final String ADMIN_ASSETS_PATH = ADMIN_PATH + "/assets";
 
-    /**
-     * Admin config path.
-     */
+    /** Admin config path */
     public static final String ADMIN_CONFIG_PATH = ADMIN_PATH + "/config";
 
-    /**
-     * Admin reCAPTCHA config path.
-     */
+    /** Admin reCAPTCHA config path */
     public static final String RECAPTCHA_CONFIG_PATH = ADMIN_CONFIG_PATH + "/recaptcha";
 
-    /**
-     * Admin system config path.
-     */
+    /** Admin system config path */
     public static final String SYSTEM_CONFIG_PATH = ADMIN_CONFIG_PATH + "/system";
 
-    /**
-     * Admin email config path.
-     */
+    /** Admin email config path */
     public static final String EMAIL_CONFIG_PATH = ADMIN_CONFIG_PATH + "/email";
 
-    /**
-     * Node type base.
-     */
+    /** Node type base */
     private static final String NODE_TYPE = "publick";
 
-    /**
-     * Page node type.
-     */
+    /** Page node type */
     public static final String NODE_TYPE_PAGE = NODE_TYPE + ":page";
 
-    /**
-     * Template node type.
-     */
+    /** Template node type */
     public static final String NODE_TYPE_TEMPLATE = NODE_TYPE + ":template";
 
-    /**
-     * Component node type.
-     */
+    /** Component node type */
     public static final String NODE_TYPE_COMPONENT = NODE_TYPE + ":component";
 
-    /**
-     * Comment node type.
-     */
+    /** Comment node type */
     public static final String NODE_TYPE_COMMENT = NODE_TYPE + ":comment";
 
-    /**
-     * Page base resource type.
-     */
+    /** Page base resource type */
     private static final String PAGE_TYPE = "publick/pages";
 
-    /**
-     * Admin page resource type.
-     */
+    /** Admin page resource type */
     public static final String PAGE_TYPE_ADMIN = PAGE_TYPE + "/adminPage";
 
-    /**
-     * Basic page resource type.
-     */
+    /** Basic page resource type */
     public static final String PAGE_TYPE_BASIC = PAGE_TYPE + "/basicPage";
 
-    /**
-     * Blog page resource type.
-     */
+    /** Blog page resource type */
     public static final String PAGE_TYPE_BLOG = PAGE_TYPE + "/blogPage";
 
-    /**
-     * Config settings path.
-     */
+    /** Config settings path */
     public static final String CONFIG_PATH = "/etc/config";
 
-    /**
-     * reCAPTCHA config settings path.
-     */
+    /** reCAPTCHA config settings path */
     public static final String CONFIG_RECAPTCHA_PATH = CONFIG_PATH + "/recaptcha";
 
-    /**
-     * System config settings path.
-     */
+    /** System config settings path */
     public static final String CONFIG_SYSTEM_PATH = CONFIG_PATH + "/system";
 
-    /**
-     * Email config settings path.
-     */
+    /** Email config settings path */
     public static final String CONFIG_EMAIL_PATH =  CONFIG_PATH + "/email";
 
-    /**
-     * Authors group name.
-     */
+    /** Authors group name */
     public static final String GROUP_ID_AUTHORS = "authors";
 
-    /**
-     * Testers group name.
-     */
+    /** Testers group name */
     public static final String GROUP_ID_TESTERS = "testers";
 
-    /**
-     * Authors group display name.
-     */
+    /** Authors group display name */
     public static final String GROUP_DISPLAY_AUTHORS = "Authors";
 
-    /**
-     * Testers group display name.
-     */
+    /** Testers group display name */
     public static final String GROUP_DISPLAY_TESTERS = "Testers";
 
-    /**
-     * Servlet admin path
-     */
+    /** Servlet admin path */
     public static final String SERVLET_PATH_ADMIN = "/bin/admin";
 
-    /**
-     * Servlet public path
-     */
+    /** Servlet public path */
     public static final String SERVLET_PATH_PUBLIC = "/bin/publick";
+
+    /** Password replacement text */
+    public static final String PASSWORD_REPLACEMENT = "****************";
 }

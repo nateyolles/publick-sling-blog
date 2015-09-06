@@ -3,6 +3,7 @@ package com.nateyolles.sling.publick.servlets;
 import com.nateyolles.sling.publick.PublickConstants;
 
 import org.apache.commons.lang.CharEncoding;
+import org.apache.commons.lang.StringUtils;
 import org.apache.felix.scr.annotations.sling.SlingServlet;
 import org.apache.sling.api.resource.PersistenceException;
 import org.apache.sling.api.resource.Resource;
@@ -50,11 +51,18 @@ public class RecaptchaConfigServlet extends AdminServlet {
         final String siteKey = request.getParameter(SITE_KEY_PROPERTY);
         final String secretKey = request.getParameter(SECRET_KEY_PROPERTY);
         final boolean enabled = Boolean.parseBoolean(request.getParameter(ENABLED_PROPERTY));
-        final Map<String, Object> newProperties = new HashMap<String, Object>() {{
-            put(SITE_KEY_PROPERTY, siteKey);
-            put(SECRET_KEY_PROPERTY, secretKey);
-            put(ENABLED_PROPERTY, enabled);
-        }};
+        final Map<String, Object> newProperties = new HashMap<String, Object>();
+
+        newProperties.put(SITE_KEY_PROPERTY, siteKey);
+        newProperties.put(ENABLED_PROPERTY, enabled);
+
+        /* Don't save the password if it's all stars. Don't save the password
+         * if the user just added text to the end of the stars. This shouldn't
+         * happen as the JavaScript should remove the value on focus. Save the
+         * password if it's null or blank in order to clear it out. */
+        if (StringUtils.isBlank(secretKey) || !secretKey.contains(PublickConstants.PASSWORD_REPLACEMENT)) {
+            newProperties.put(SECRET_KEY_PROPERTY, secretKey);
+        }
 
         ResourceResolver resolver = null;
 

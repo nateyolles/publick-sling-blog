@@ -2,6 +2,7 @@ package com.nateyolles.sling.publick.components.admin;
 
 import org.apache.sling.api.scripting.SlingScriptHelper;
 
+import com.nateyolles.sling.publick.PublickConstants;
 import com.nateyolles.sling.publick.services.EmailService;
 import com.nateyolles.sling.publick.sightly.WCMUse;
 
@@ -37,6 +38,15 @@ public class EmailConfig extends WCMUse {
      */
     public String getSmtpUsername() {
         return emailService.getSmtpUsername();
+    }
+
+    /**
+     * Get the email server SMTP password.
+     *
+     * @return The email server SMTP password.
+     */
+    public String getSmtpPassword() {
+        return PublickConstants.PASSWORD_REPLACEMENT;
     }
 
     /**

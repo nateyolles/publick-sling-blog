@@ -2,6 +2,7 @@ package com.nateyolles.sling.publick.components.admin;
 
 import org.apache.sling.api.scripting.SlingScriptHelper;
 
+import com.nateyolles.sling.publick.PublickConstants;
 import com.nateyolles.sling.publick.services.RecaptchaService;
 import com.nateyolles.sling.publick.sightly.WCMUse;
 
@@ -54,7 +55,7 @@ public class RecaptchaConfig extends WCMUse {
 
         if (recaptchaService != null) {
             siteKey = recaptchaService.getSiteKey();
-            secretKey = recaptchaService.getSecretKey();
+            secretKey = isAuthorable() ? recaptchaService.getSecretKey() : PublickConstants.PASSWORD_REPLACEMENT;
             enabled = recaptchaService.getEnabled();
         }
     }

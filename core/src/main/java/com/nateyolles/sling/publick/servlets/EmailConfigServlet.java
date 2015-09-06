@@ -4,6 +4,7 @@ import com.nateyolles.sling.publick.PublickConstants;
 import com.nateyolles.sling.publick.services.EmailService;
 
 import org.apache.commons.lang.CharEncoding;
+import org.apache.commons.lang.StringUtils;
 import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.sling.SlingServlet;
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -69,7 +70,17 @@ public class EmailConfigServlet extends AdminServlet {
         final boolean resultRecipient = emailService.setRecipient(recipient);
         final boolean resultHost = emailService.setHost(host);
         final boolean resultPort = emailService.setPort(port);
-        final boolean resultPass = emailService.setSmtpPassword(smtpPassword);
+        final boolean resultPass;
+
+        /* Don't save the password if it's all stars. Don't save the password
+         * if the user just added text to the end of the stars. This shouldn't
+         * happen as the JavaScript should remove the value on focus. Save the
+         * password if it's null or blank in order to clear it out. */
+        if (smtpPassword != null && smtpPassword.contains(PublickConstants.PASSWORD_REPLACEMENT)) {
+            resultPass = true;
+        } else {
+            resultPass = emailService.setSmtpPassword(smtpPassword);
+        }
 
         final PrintWriter writer = response.getWriter();
 
