@@ -29,16 +29,17 @@ public class SystemConfigServlet extends AdminServlet {
     @Reference
     SystemSettingsService systemSettingsService;
 
+    /** Service to determine if the current user has write permissions. */
     @Reference
     UserService userService;
 
     /** The logger */
     private static final Logger LOGGER = LoggerFactory.getLogger(SystemConfigServlet.class);
 
-    /** The blog name property of the system config node. */
+    /** The blog name request parameter */
     private static final String BLOG_NAME_PROPERTY = "blogName";
 
-    /** The extensionless URLs property of the system config node. */
+    /** The extensionless URLs request parameter */
     private static final String EXTENSIONLESS_URLS_PROPERTY = "extensionlessUrls";
 
     /**
