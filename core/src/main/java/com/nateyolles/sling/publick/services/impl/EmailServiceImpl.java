@@ -2,6 +2,13 @@ package com.nateyolles.sling.publick.services.impl;
 
 import java.util.Map;
 
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.felix.scr.annotations.Activate;
 import org.apache.felix.scr.annotations.Component;
@@ -10,10 +17,14 @@ import org.apache.felix.scr.annotations.Properties;
 import org.apache.felix.scr.annotations.Property;
 import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.Service;
+
 import org.osgi.framework.Constants;
 import org.osgi.service.component.ComponentContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.mail.*;
+import javax.mail.internet.*;
 
 import com.nateyolles.sling.publick.PublickConstants;
 import com.nateyolles.sling.publick.services.EmailService;
@@ -201,5 +212,78 @@ public class EmailServiceImpl implements EmailService {
      */
     public boolean setPort(final Long port){
         return osgiService.setProperty(COMPONENT_PID, EMAIL_SMTP_PORT, port);
+    }
+
+    /**
+     * Send an email to the recipient configured in the service.
+     *
+     * @param subject The subject of the email.
+     * @param body The body of the email.
+     * @return true if the email was sent successfully.
+     */
+    public boolean sendMail(final String subject, final String body) {
+        return sendMail(getRecipient(), subject, body);
+    }
+
+    /**
+     * Send an email.
+     *
+     * @param recipient The recipient of the email
+     * @param subject The subject of the email.
+     * @param body The body of the email.
+     * @return true if the email was sent successfully.
+     */
+    public boolean sendMail(final String recipient, final String subject, final String body) {
+        boolean result = false;
+
+        // Create a Properties object to contain connection configuration information.
+        java.util.Properties props = System.getProperties();
+        props.put("mail.transport.protocol", "smtp");
+        props.put("mail.smtp.port", getPort());
+
+        // Set properties indicating that we want to use STARTTLS to encrypt the connection.
+        // The SMTP session will begin on an unencrypted connection, and then the client
+        // will issue a STARTTLS command to upgrade to an encrypted connection.
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.starttls.required", "true");
+
+        // Create a Session object to represent a mail session with the specified properties.
+        Session session = Session.getDefaultInstance(props);
+
+        // Create a message with the specified information.
+        MimeMessage msg = new MimeMessage(session);
+
+        Transport transport = null;
+
+        // Send the message.
+        try {
+            msg.setFrom(new InternetAddress(getSender()));
+            msg.setRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
+            msg.setSubject(subject);
+            msg.setContent(body, "text/plain");
+
+            // Create a transport.
+            transport = session.getTransport();
+
+            // Connect to email server using the SMTP username and password you specified above.
+            transport.connect(getHost(), getSmtpUsername(), getSmtpPassword());
+
+            // Send the email.
+            transport.sendMessage(msg, msg.getAllRecipients());
+
+            result = true;
+        } catch (Exception ex) {
+            LOGGER.error("The email was not sent.", ex);
+        } finally {
+            // Close and terminate the connection.
+            try {
+                transport.close();
+            } catch (MessagingException e) {
+                LOGGER.error("Could not close transport", e);
+            }
+        }
+
+        return result;
     }
 }

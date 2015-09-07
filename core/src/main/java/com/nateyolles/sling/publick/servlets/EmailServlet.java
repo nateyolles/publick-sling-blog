@@ -17,44 +17,34 @@ import javax.servlet.ServletException;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Properties;
-
-import javax.mail.*;
-import javax.mail.internet.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
+/**
+ * Servlet accepts posts and sends emails on behalf of the administrator
+ * with the passed in request parameters for recipient, sender and
+ * message.
+ */
 @SlingServlet(paths = PublickConstants.SERVLET_PATH_PUBLIC + "/sendmail")
 public class EmailServlet extends SlingAllMethodsServlet {
 
-    /**
-     * The logger.
-     */
-    private static final Logger LOGGER = LoggerFactory.getLogger(EmailServlet.class);
+    /** The email service to get the server configurations. */
+    @Reference
+    private EmailService emailService;
 
-    /**
-     * The email subject.
-     */
-    static final String SUBJECT = "Email submission from Publick blog engine.";
-
-    /**
-     * The email body template.
-     */
-    static final String BODY = "From: %s <%s>\n\n%s";
-
-    /**
-     * The reCAPTCHA service to verify the submitter isn't a robot.
-     */
+    /** The reCAPTCHA service to verify the submitter isn't a robot. */
     @Reference
     private RecaptchaService recaptchaService;
 
-    /**
-     * The email service to get the server configurations.
-     */
-    @Reference
-    private EmailService emailService;
+    /** The logger. */
+    private static final Logger LOGGER = LoggerFactory.getLogger(EmailServlet.class);
+
+    /** The email subject. */
+    static final String SUBJECT = "Email submission from Publick blog engine.";
+
+    /** The email body template. */
+    static final String BODY = "From: %s <%s>\n\n%s";
 
     /**
      * Send email on post to servlet. The submission is verified through the reCAPTCHA
@@ -68,7 +58,6 @@ public class EmailServlet extends SlingAllMethodsServlet {
     protected void doPost(SlingHttpServletRequest request, SlingHttpServletResponse response)
             throws ServletException, IOException {
 
-        // TODO: org.apache.http.entity.ContentType.APPLICATION_JSON
         response.setContentType("application/json");
 
         PrintWriter writer = response.getWriter();
@@ -82,67 +71,16 @@ public class EmailServlet extends SlingAllMethodsServlet {
             if (StringUtils.isNotEmpty(submitterName)
                     && StringUtils.isNotEmpty(submitterName)
                     && StringUtils.isNotEmpty(submitterName)) {
-                final String sender = emailService.getSender();
-                final String recipient = emailService.getRecipient();
-                final String smtpUsername = emailService.getSmtpUsername();
-                final String smtpPassword = emailService.getSmtpPassword();
-                final String host = emailService.getHost();
-                final Long port = emailService.getPort();
 
-                final String emailBody = String.format(BODY, submitterName, submitterEmail, submitterMessage);
+                final String body = String.format(BODY, submitterName, submitterEmail, submitterMessage);
+                final boolean result = emailService.sendMail(SUBJECT, body);
 
-                // Create a Properties object to contain connection configuration information.
-                Properties props = System.getProperties();
-                props.put("mail.transport.protocol", "smtp");
-                props.put("mail.smtp.port", port);
-
-                // Set properties indicating that we want to use STARTTLS to encrypt the connection.
-                // The SMTP session will begin on an unencrypted connection, and then the client
-                // will issue a STARTTLS command to upgrade to an encrypted connection.
-                props.put("mail.smtp.auth", "true");
-                props.put("mail.smtp.starttls.enable", "true");
-                props.put("mail.smtp.starttls.required", "true");
-
-                // Create a Session object to represent a mail session with the specified properties.
-                Session session = Session.getDefaultInstance(props);
-
-                // Create a message with the specified information.
-                MimeMessage msg = new MimeMessage(session);
-
-                Transport transport = null;
-
-                // Send the message.
-                try {
-                    msg.setFrom(new InternetAddress(sender));
-                    msg.setRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
-                    msg.setSubject(SUBJECT);
-                    msg.setContent(emailBody, "text/plain");
-
-                    // Create a transport.
-                    transport = session.getTransport();
-
-                    // Connect to email server using the SMTP username and password you specified above.
-                    transport.connect(host, smtpUsername, smtpPassword);
-
-                    // Send the email.
-                    transport.sendMessage(msg, msg.getAllRecipients());
-
+                if (result) {
                     response.setStatus(SlingHttpServletResponse.SC_OK);
-                    sendResponse(writer, SlingHttpServletResponse.SC_OK,
-                            "Email was sent successfully.");
-                } catch (Exception ex) {
-                    LOGGER.error("The email was not sent.", ex);
-
+                    sendResponse(writer, SlingHttpServletResponse.SC_OK, "Email was sent successfully.");
+                } else {
                     response.setStatus(SlingHttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                    sendResponse(writer, SlingHttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-                            "Internal server error.");
-                } finally {
-                    // Close and terminate the connection.
-                    try {
-                        transport.close();
-                    } catch (MessagingException e) {
-                        LOGGER.error("Could not close transport", e);
-                    }
+                    sendResponse(writer, SlingHttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal server error.");
                 }
             } else {
                 response.setStatus(SlingHttpServletResponse.SC_INTERNAL_SERVER_ERROR);

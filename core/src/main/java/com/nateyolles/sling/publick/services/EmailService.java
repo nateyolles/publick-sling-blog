@@ -126,4 +126,23 @@ public interface EmailService {
      * @return true if save was successful.
      */
     boolean setPort(final Long port);
+
+    /**
+     * Send an email to the recipient configured in the service.
+     *
+     * @param subject The subject of the email.
+     * @param body The body of the email.
+     * @return true if the email was sent successfully.
+     */
+    boolean sendMail(final String subject, final String body);
+
+    /**
+     * Send an email.
+     *
+     * @param recipient The recipient of the email
+     * @param subject The subject of the email.
+     * @param body The body of the email.
+     * @return true if the email was sent successfully.
+     */
+    boolean sendMail(final String recipient, final String subject, final String body);
 }
