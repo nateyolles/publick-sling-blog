@@ -135,7 +135,7 @@ app.controller('SettingsController', function($scope, $attrs, SettingsService) {
     type: null,
     header: null,
     message: null
-  }
+  };
 
   $scope.$watchCollection('model', function() {
     $scope.hideAlert();
@@ -156,17 +156,12 @@ app.controller('SettingsController', function($scope, $attrs, SettingsService) {
       .then(function(result) {
           show(ALERT_SUCCESS_CLASS, result.data.header, result.data.message);
         }, function(result) {
-          var header = "Error",
-              message = "An error occured.";
+          var header = 'Error',
+              message = 'An error occured.';
 
-          if (typeof result === 'undefined' || !result.data) {
-            if (result.data.header) {
-              header = result.data.header;
-            }
-
-            if (result.data.message) {
-              message = result.data.message;
-            }
+          if (typeof result !== 'undefined' && result.data) {
+            header = result.data.header;
+            message = result.data.message;
           }
 
           show(ALERT_ERROR_CLASS, header, message);

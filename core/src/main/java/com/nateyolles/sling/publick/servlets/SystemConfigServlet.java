@@ -2,6 +2,7 @@ package com.nateyolles.sling.publick.servlets;
 
 import com.nateyolles.sling.publick.PublickConstants;
 import com.nateyolles.sling.publick.services.SystemSettingsService;
+import com.nateyolles.sling.publick.services.UserService;
 
 import org.apache.commons.lang.CharEncoding;
 import org.apache.felix.scr.annotations.Reference;
@@ -9,6 +10,7 @@ import org.apache.felix.scr.annotations.sling.SlingServlet;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
 
+import javax.jcr.Session;
 import javax.servlet.ServletException;
 
 import java.io.IOException;
@@ -26,6 +28,9 @@ public class SystemConfigServlet extends AdminServlet {
     /** Service to get and set and set system settings. */
     @Reference
     SystemSettingsService systemSettingsService;
+
+    @Reference
+    UserService userService;
 
     /** The logger */
     private static final Logger LOGGER = LoggerFactory.getLogger(SystemConfigServlet.class);
@@ -46,23 +51,29 @@ public class SystemConfigServlet extends AdminServlet {
     protected void doPost(SlingHttpServletRequest request, SlingHttpServletResponse response)
             throws ServletException, IOException {
 
-        final String blogName = request.getParameter(BLOG_NAME_PROPERTY);
-        final boolean extensionlessUrls = Boolean.parseBoolean(request.getParameter(EXTENSIONLESS_URLS_PROPERTY));
-
-        final boolean nameResult = systemSettingsService.setBlogName(blogName);
-        final boolean extensionResult = systemSettingsService.setExtensionlessUrls(extensionlessUrls);
-
         final PrintWriter writer = response.getWriter();
+        final boolean allowWrite = userService.isAuthorable(request.getResourceResolver().adaptTo(Session.class));
 
         response.setCharacterEncoding(CharEncoding.UTF_8);
         response.setContentType("application/json");
 
-        if (nameResult && extensionResult) {
-            response.setStatus(SlingHttpServletResponse.SC_OK);
-            sendResponse(writer, "OK", "Settings successfully updated.");
+        if (allowWrite) {
+            final String blogName = request.getParameter(BLOG_NAME_PROPERTY);
+            final boolean extensionlessUrls = Boolean.parseBoolean(request.getParameter(EXTENSIONLESS_URLS_PROPERTY));
+
+            final boolean nameResult = systemSettingsService.setBlogName(blogName);
+            final boolean extensionResult = systemSettingsService.setExtensionlessUrls(extensionlessUrls);
+
+            if (nameResult && extensionResult) {
+                response.setStatus(SlingHttpServletResponse.SC_OK);
+                sendResponse(writer, "OK", "Settings successfully updated.");
+            } else {
+                response.setStatus(SlingHttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                sendResponse(writer, "Error", "Settings failed to update.");
+            }
         } else {
-            response.setStatus(SlingHttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            sendResponse(writer, "Error", "Settings failed to update.");
+            response.setStatus(SlingHttpServletResponse.SC_FORBIDDEN);
+            sendResponse(writer, "Error", "Current user not authorized.");
         }
     }
 }
