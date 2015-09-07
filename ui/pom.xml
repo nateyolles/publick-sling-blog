@@ -25,7 +25,6 @@
                         <Sling-Initial-Content>
                             jcr_root/libs;overwrite:=true;uninstall:=true;path:=/libs,
                             jcr_root/etc/clientlibs;overwrite:=true;uninstall:=true;path:=/etc/clientlibs,
-                            jcr_root/etc/config;overwrite:=false;uninstall:=false;path:=/etc/config,
                             jcr_root/content/admin;overwrite:=true;uninstall:=true;path:=/content/admin,
                             jcr_root/content/assets;overwrite:=false;uninstall:=false;path:=/content/assets,
                             jcr_root/content;overwrite:=false;overwriteProperties:=true;uninstall:=false;path:=/content,

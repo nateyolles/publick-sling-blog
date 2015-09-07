@@ -90,18 +90,6 @@ public class PublickConstants {
     /** Blog page resource type */
     public static final String PAGE_TYPE_BLOG = PAGE_TYPE + "/blogPage";
 
-    /** Config settings path */
-    public static final String CONFIG_PATH = "/etc/config";
-
-    /** reCAPTCHA config settings path */
-    public static final String CONFIG_RECAPTCHA_PATH = CONFIG_PATH + "/recaptcha";
-
-    /** System config settings path */
-    public static final String CONFIG_SYSTEM_PATH = CONFIG_PATH + "/system";
-
-    /** Email config settings path */
-    public static final String CONFIG_EMAIL_PATH =  CONFIG_PATH + "/email";
-
     /** Authors group name */
     public static final String GROUP_ID_AUTHORS = "authors";
 
