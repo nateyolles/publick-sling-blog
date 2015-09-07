@@ -2,18 +2,22 @@ package com.nateyolles.sling.publick.servlets;
 
 import com.nateyolles.sling.publick.PublickConstants;
 import com.nateyolles.sling.publick.services.EmailService;
+import com.nateyolles.sling.publick.services.UserService;
+import com.nateyolles.sling.publick.services.impl.EmailServiceImpl;
 
 import org.apache.commons.lang.CharEncoding;
-import org.apache.commons.lang.StringUtils;
 import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.sling.SlingServlet;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
 
+import javax.jcr.Session;
 import javax.servlet.ServletException;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +31,10 @@ public class EmailConfigServlet extends AdminServlet {
     /** Service to get and set email configurations. */
     @Reference
     private EmailService emailService;
+
+    /** Service to determine if the current user has write permissions. */
+    @Reference
+    private UserService userService;
 
     /** The logger. */
     private static final Logger LOGGER = LoggerFactory.getLogger(EmailConfigServlet.class);
@@ -58,42 +66,48 @@ public class EmailConfigServlet extends AdminServlet {
     @Override
     protected void doPost(SlingHttpServletRequest request, SlingHttpServletResponse response)
             throws ServletException, IOException {
-        final String smtpUsername = request.getParameter(SMTP_USERNAME_PROPERTY);
-        final String smtpPassword = request.getParameter(SMTP_PASSWORD_PROPERTY);
-        final String sender = request.getParameter(SENDER_PROPERTY);
-        final String recipient = request.getParameter(RECIPIENT_PROPERTY);
-        final String host = request.getParameter(HOST_PROPERTY);
-        final Long port = getPortNumber(request.getParameter(PORT_PROPERTY));
-
-        final boolean resultUser = emailService.setSmtpUsername(smtpUsername);
-        final boolean resultSender = emailService.setSender(sender);
-        final boolean resultRecipient = emailService.setRecipient(recipient);
-        final boolean resultHost = emailService.setHost(host);
-        final boolean resultPort = emailService.setPort(port);
-        final boolean resultPass;
-
-        /* Don't save the password if it's all stars. Don't save the password
-         * if the user just added text to the end of the stars. This shouldn't
-         * happen as the JavaScript should remove the value on focus. Save the
-         * password if it's null or blank in order to clear it out. */
-        if (smtpPassword != null && smtpPassword.contains(PublickConstants.PASSWORD_REPLACEMENT)) {
-            resultPass = true;
-        } else {
-            resultPass = emailService.setSmtpPassword(smtpPassword);
-        }
-
         final PrintWriter writer = response.getWriter();
+        final boolean allowWrite = userService.isAuthorable(request.getResourceResolver().adaptTo(Session.class));
 
         response.setCharacterEncoding(CharEncoding.UTF_8);
         response.setContentType("application/json");
 
-        if (resultUser && resultSender && resultRecipient && resultHost
-                && resultHost && resultPort && resultPass) {
-            response.setStatus(SlingHttpServletResponse.SC_OK);
-            sendResponse(writer, "OK", "Settings successfully updated.");
+        if (allowWrite) {
+            final String smtpUsername = request.getParameter(SMTP_USERNAME_PROPERTY);
+            final String smtpPassword = request.getParameter(SMTP_PASSWORD_PROPERTY);
+            final String sender = request.getParameter(SENDER_PROPERTY);
+            final String recipient = request.getParameter(RECIPIENT_PROPERTY);
+            final String host = request.getParameter(HOST_PROPERTY);
+            final Long port = getPortNumber(request.getParameter(PORT_PROPERTY));
+
+            final Map<String, Object> properties = new HashMap<String, Object>();
+
+            properties.put(EmailService.EMAIL_SMTP_USERNAME, smtpUsername);
+            properties.put(EmailService.EMAIL_SENDER, sender);
+            properties.put(EmailService.EMAIL_RECIPIENT, recipient);
+            properties.put(EmailService.EMAIL_SMTP_HOST, host);
+            properties.put(EmailService.EMAIL_SMTP_PORT, port);
+
+            /* Don't save the password if it's all stars. Don't save the password
+             * if the user just added text to the end of the stars. This shouldn't
+             * happen as the JavaScript should remove the value on focus. Save the
+             * password if it's null or blank in order to clear it out. */
+            if (smtpPassword == null || !smtpPassword.contains(PublickConstants.PASSWORD_REPLACEMENT)) {
+                properties.put(EmailService.EMAIL_SMTP_PASSWORD, smtpPassword);
+            }
+
+            final boolean result = emailService.setProperties(properties);
+
+            if (result) {
+                response.setStatus(SlingHttpServletResponse.SC_OK);
+                sendResponse(writer, "OK", "Settings successfully updated.");
+            } else {
+                response.setStatus(SlingHttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                sendResponse(writer, "Error", "Settings failed to update.");
+            }
         } else {
-            response.setStatus(SlingHttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            sendResponse(writer, "Error", "Settings failed to update.");
+            response.setStatus(SlingHttpServletResponse.SC_FORBIDDEN);
+            sendResponse(writer, "Error", "Current user not authorized.");
         }
     }
 

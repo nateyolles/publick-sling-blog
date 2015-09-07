@@ -46,7 +46,7 @@ public class EmailConfig extends WCMUse {
      * @return The email server SMTP password.
      */
     public String getSmtpPassword() {
-        return PublickConstants.PASSWORD_REPLACEMENT;
+        return emailService.getSmtpPassword();
     }
 
     /**

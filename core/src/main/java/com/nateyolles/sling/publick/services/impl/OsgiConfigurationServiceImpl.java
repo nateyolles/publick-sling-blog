@@ -1,10 +1,12 @@
 package com.nateyolles.sling.publick.services.impl;
 
 import java.io.IOException;
-
 import java.util.Dictionary;
 import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.felix.scr.annotations.Component;
 import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.Service;
@@ -56,7 +58,45 @@ public class OsgiConfigurationServiceImpl implements OsgiConfigurationService {
                 props = new Hashtable<String, Object>();
             }
 
-            props.put(property, value);
+            props.put(property, value != null ? value : StringUtils.EMPTY);
+            conf.update(props);
+        } catch (IOException e) {
+            LOGGER.error("Could not set property", e);
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Set the values of an OSGi configuration for a given PID.
+     *
+     * @param pid The PID of the OSGi component to update
+     * @param properties The properties and values of the config to update
+     * @return true if the properties were updated successfully
+     */
+    public boolean setProperties(final String pid, final Map<String, Object> properties) {
+        try {
+            Configuration conf = configAdmin.getConfiguration(pid);
+
+            @SuppressWarnings("unchecked")
+            Dictionary<String, Object> props = conf.getProperties();
+
+            if (props == null) {
+                props = new Hashtable<String, Object>();
+            }
+
+            /* props is of type org.apache.felix.cm.impl.CaseInsensitiveDictionary which
+             * contains an internal HashTable and doesn't contain a putAll(Map) method.
+             * Iterate over the map and put the values into the Dictionary individually.
+             * Remove null values from HashMap as HashTable doesn't support them. */
+            for (Map.Entry<String, Object> entry : properties.entrySet()) {
+                String key = entry.getKey();
+                Object value = entry.getValue();
+
+                props.put(key, value != null ? value : StringUtils.EMPTY);
+            }
+
             conf.update(props);
         } catch (IOException e) {
             LOGGER.error("Could not set property", e);
@@ -108,6 +148,36 @@ public class OsgiConfigurationServiceImpl implements OsgiConfigurationService {
 
             if (props != null) {
                 return PropertiesUtil.toBoolean(props.get(property), defaultValue);
+            }
+        } catch (IOException e) {
+            LOGGER.error("Could not get property", e);
+        }
+
+        return defaultValue;
+    }
+
+    /**
+     * Get the value of an OSGi configuration long property for a given PID.
+     *
+     * @param pid The PID of the OSGi component to retrieve
+     * @param property The property of the config to retrieve
+     * @param value The value to assign the provided property
+     * @return The property value
+     */
+    public Long getLongProperty(final String pid, final String property, final Long defaultValue) {
+        long placeholder = -1L;
+        long defaultTemp = defaultValue != null ? defaultValue : placeholder;
+
+        try {
+            Configuration conf = configAdmin.getConfiguration(pid);
+
+            @SuppressWarnings("unchecked")
+            Dictionary<String, Object> props = conf.getProperties();
+
+            if (props != null) {
+                long result = PropertiesUtil.toLong(props.get(property), defaultTemp);
+
+                return result == placeholder ? null : result;
             }
         } catch (IOException e) {
             LOGGER.error("Could not get property", e);
