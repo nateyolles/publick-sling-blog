@@ -19,11 +19,9 @@ import org.apache.felix.scr.annotations.Service;
 import org.apache.felix.scr.annotations.Properties;
 import org.apache.felix.scr.annotations.Property;
 import org.apache.sling.api.SlingHttpServletRequest;
-
 import org.apache.sling.commons.json.JSONException;
 import org.apache.sling.commons.json.JSONObject;
 import org.osgi.service.component.ComponentContext;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,14 +40,14 @@ import org.osgi.framework.Constants;
            name = "Publick reCAPTCHA settings",
            description = "reCAPTCHA settings for Google's service.")
 @Properties({
-    @Property(name = RecaptchaServiceImpl.PROPERTY_SITE_KEY_NAME,
+    @Property(name = RecaptchaServiceImpl.RECAPTCHA_SITE_KEY,
               label = "Site Key",
               description = "The public key used in the HTML."),
-    @Property(name = RecaptchaServiceImpl.PROPERTY_SECRET_KEY_NAME,
+    @Property(name = RecaptchaServiceImpl.RECAPTCHA_SECRET_KEY,
               label = "Secret Key",
               description = "The secret key used for communication between your site and Google."),
-    @Property(name = RecaptchaServiceImpl.PROPERTY_ENABLED_NAME,
-              boolValue = RecaptchaServiceImpl.PROPERTY_ENABLED_VALUE,
+    @Property(name = RecaptchaServiceImpl.RECAPTCHA_ENABLED,
+              boolValue = RecaptchaServiceImpl.ENABLED_DEFAULT_VALUE,
               label = "Enabled",
               description = "Enable reCAPTCHA."),
     @Property(name = Constants.SERVICE_DESCRIPTION,
@@ -66,17 +64,8 @@ public class RecaptchaServiceImpl implements RecaptchaService {
     /** PID of the current OSGi component */
     private static final String COMPONENT_PID = "Publick reCAPTCHA settings";
 
-    /** OSGi property name for the site key */
-    public static final String PROPERTY_SITE_KEY_NAME = "recaptcha.siteKey";
-
-    /** OSGi property name for the secret key */
-    public static final String PROPERTY_SECRET_KEY_NAME = "recaptcha.secretKey";
-
-    /** OSGi property name for enabled */
-    public static final String PROPERTY_ENABLED_NAME = "recaptcha.enabled";
-
     /** Default value for enabled */
-    public static final boolean PROPERTY_ENABLED_VALUE = false;
+    public static final boolean ENABLED_DEFAULT_VALUE = false;
 
     /** The logger. */
     private static final Logger LOGGER = LoggerFactory.getLogger(RecaptchaServiceImpl.class);
@@ -94,12 +83,26 @@ public class RecaptchaServiceImpl implements RecaptchaService {
     private static final String RECAPTCHA_REQUEST_PARAMETER = "g-recaptcha-response";
 
     /**
+     * Set multiple properties for the reCAPTCHA Settings service.
+     *
+     * This is useful for setting multiple properties as the same
+     * time in that the OSGi component will only be updated once
+     * and thus reset only once.
+     *
+     * @param properties A map of properties to set.
+     * @return true if save was successful.
+     */
+    public boolean setProperties(final Map<String, Object> properties) {
+        return osgiService.setProperties(COMPONENT_PID, properties);
+    }
+
+    /**
      * Get the reCAPTCHA site key.
      *
      * @return The reCAPTCHA site key.
      */
     public String getSiteKey() {
-        return osgiService.getStringProperty(COMPONENT_PID, PROPERTY_SITE_KEY_NAME, null);
+        return osgiService.getStringProperty(COMPONENT_PID, RECAPTCHA_SITE_KEY, null);
     }
 
     /**
@@ -108,8 +111,8 @@ public class RecaptchaServiceImpl implements RecaptchaService {
      * @param sitekey The public reCAPTCHA site key.
      * @return true if the save was successful.
      */
-    public boolean setSiteKey(String siteKey) {
-        return osgiService.setProperty(COMPONENT_PID, PROPERTY_SITE_KEY_NAME, siteKey);
+    public boolean setSiteKey(final String siteKey) {
+        return osgiService.setProperty(COMPONENT_PID, RECAPTCHA_SITE_KEY, siteKey);
     }
 
     /**
@@ -118,7 +121,7 @@ public class RecaptchaServiceImpl implements RecaptchaService {
      * @return The reCAPTCHA secret key.
      */
     public String getSecretKey() {
-        return osgiService.getStringProperty(COMPONENT_PID, PROPERTY_SECRET_KEY_NAME, null);
+        return osgiService.getStringProperty(COMPONENT_PID, RECAPTCHA_SECRET_KEY, null);
     }
 
     /**
@@ -127,8 +130,8 @@ public class RecaptchaServiceImpl implements RecaptchaService {
      * @param secretkey The private reCAPTCHA secret key.
      * @return true if the save was successful.
      */
-    public boolean setSecretKey(String secretKey) {
-        return osgiService.setProperty(COMPONENT_PID, PROPERTY_SECRET_KEY_NAME, secretKey);
+    public boolean setSecretKey(final String secretKey) {
+        return osgiService.setProperty(COMPONENT_PID, RECAPTCHA_SECRET_KEY, secretKey);
     }
 
     /**
@@ -137,7 +140,7 @@ public class RecaptchaServiceImpl implements RecaptchaService {
      * @return True if the reCAPTCHA service is enabled.
      */
     public boolean getEnabled() {
-        return osgiService.getBooleanProperty(COMPONENT_PID, PROPERTY_ENABLED_NAME, PROPERTY_ENABLED_VALUE);
+        return osgiService.getBooleanProperty(COMPONENT_PID, RECAPTCHA_ENABLED, ENABLED_DEFAULT_VALUE);
     }
 
     /**
@@ -146,8 +149,8 @@ public class RecaptchaServiceImpl implements RecaptchaService {
      * @param enabled The enabled property to set.
      * @return true if the save was successful.
      */
-    public boolean setEnabled(boolean enabled) {
-        return osgiService.setProperty(COMPONENT_PID, PROPERTY_ENABLED_NAME, enabled);
+    public boolean setEnabled(final boolean enabled) {
+        return osgiService.setProperty(COMPONENT_PID, RECAPTCHA_ENABLED, enabled);
     }
 
     /**
@@ -158,7 +161,7 @@ public class RecaptchaServiceImpl implements RecaptchaService {
      * @param remoteIP The remote user's IP address.
      * @return true if not a robot
      */
-    public boolean validate(SlingHttpServletRequest request) {
+    public boolean validate(final SlingHttpServletRequest request) {
         return validate(request.getParameter(RECAPTCHA_REQUEST_PARAMETER), getIPAddress(request));
     }
 
@@ -239,7 +242,7 @@ public class RecaptchaServiceImpl implements RecaptchaService {
      * @param request The SlingHttpServlet request.
      * @return The submitter's IP address.
      */
-    private String getIPAddress(SlingHttpServletRequest request) {
+    private String getIPAddress(final SlingHttpServletRequest request) {
         String ipAddress = request.getHeader("X-FORWARDED-FOR");
 
         if (ipAddress == null) {

@@ -8,7 +8,6 @@ import org.apache.commons.lang.CharEncoding;
 import org.apache.commons.lang.StringUtils;
 import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.sling.SlingServlet;
-
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
 
@@ -17,6 +16,8 @@ import javax.servlet.ServletException;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,22 +67,22 @@ public class RecaptchaConfigServlet extends AdminServlet {
             final String secretKey = request.getParameter(SECRET_KEY_PROPERTY);
             final boolean enabled = Boolean.parseBoolean(request.getParameter(ENABLED_PROPERTY));
 
-            final boolean siteKeyResult = recaptchaService.setSiteKey(siteKey);
-            final boolean enabledResult = recaptchaService.setEnabled(enabled);
-            final boolean secretKeyResult;
+            final Map<String, Object> properties = new HashMap<String, Object>();
+
+            properties.put(RecaptchaService.RECAPTCHA_SITE_KEY, siteKey);
+            properties.put(RecaptchaService.RECAPTCHA_ENABLED, enabled);
 
             /* Don't save the password if it's all stars. Don't save the password
              * if the user just added text to the end of the stars. This shouldn't
              * happen as the JavaScript should remove the value on focus. Save the
              * password if it's null or blank in order to clear it out. */
             if (StringUtils.isBlank(secretKey) || !secretKey.contains(PublickConstants.PASSWORD_REPLACEMENT)) {
-                secretKeyResult = recaptchaService.setSecretKey(secretKey);
-            } else {
-                /* Don't update the settings and continue. */
-                secretKeyResult = true;
+                properties.put(RecaptchaService.RECAPTCHA_SECRET_KEY, secretKey);
             }
 
-            if (siteKeyResult && secretKeyResult && enabledResult) {
+            final boolean result = recaptchaService.setProperties(properties);
+
+            if (result) {
                 response.setStatus(SlingHttpServletResponse.SC_OK);
                 sendResponse(writer, "OK", "Settings successfully updated.");
             } else {
