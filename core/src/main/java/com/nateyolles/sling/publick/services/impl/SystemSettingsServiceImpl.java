@@ -8,7 +8,6 @@ import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.Service;
 import org.apache.felix.scr.annotations.Properties;
 import org.apache.felix.scr.annotations.Property;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,12 +26,12 @@ import org.osgi.framework.Constants;
            name = "Publick system settings",
            description = "General blog engine system settings.")
 @Properties({
-    @Property(name = SystemSettingsServiceImpl.PROPERTY_BLOGNAME_NAME,
-              value = SystemSettingsServiceImpl.PROPERTY_BLOGNAME_VALUE,
+    @Property(name = SystemSettingsServiceImpl.SYSTEM_BLOG_NAME,
+              value = SystemSettingsServiceImpl.BLOG_NAME_DEFAULT_VALUE,
               label = "Blog name",
               description = "The blog name is used in the title, header, and meta tags."),
-    @Property(name = SystemSettingsServiceImpl.PROPERTY_EXTENSIONLESS_URLS_NAME,
-              boolValue = SystemSettingsServiceImpl.PROPERTY_EXTENSIONLESS_URLS_VALUE,
+    @Property(name = SystemSettingsServiceImpl.SYSTEM_EXTENSIONLESS_URLS,
+              boolValue = SystemSettingsServiceImpl.EXTENSIONLESS_URLS_DEFAULT_VALUE,
               label = "Extentionless URLs",
               description = "Enabling extenionless URLs alters links written by the blog engine. "
                       + "You must also have corresponding web server redirects in place."),
@@ -53,21 +52,29 @@ public class SystemSettingsServiceImpl implements SystemSettingsService {
     /** PID of the current OSGi component */
     private static final String COMPONENT_PID = "Publick system settings";
 
-    /** OSGi property name for the blog name */
-    public static final String PROPERTY_BLOGNAME_NAME = "system.blogName";
-
     /** Default value for the blog name */
-    public static final String PROPERTY_BLOGNAME_VALUE = "Publick Sling + Sightly blog engine";
-
-    /** OSGi property name for extensionless URLs */
-    public static final String PROPERTY_EXTENSIONLESS_URLS_NAME = "system.extentionlessUrls";
+    public static final String BLOG_NAME_DEFAULT_VALUE = "Publick Sling + Sightly blog engine";
 
     /** Default value for extensionless URLs */
-    public static final boolean PROPERTY_EXTENSIONLESS_URLS_VALUE = false;
+    public static final boolean EXTENSIONLESS_URLS_DEFAULT_VALUE = false;
 
     /** Service activation */
     @Activate
     protected void activate(Map<String, Object> properties) {
+    }
+
+    /**
+     * Set multiple properties for the System Settings service.
+     *
+     * This is useful for setting multiple properties as the same
+     * time in that the OSGi component will only be updated once
+     * and thus reset only once.
+     *
+     * @param properties A map of properties to set.
+     * @return true if save was successful.
+     */
+    public boolean setProperties(final Map<String, Object> properties) {
+        return osgiService.setProperties(COMPONENT_PID, properties);
     }
 
     /**
@@ -76,7 +83,7 @@ public class SystemSettingsServiceImpl implements SystemSettingsService {
      * @return The name of the blog.
      */
     public String getBlogName() {
-        return osgiService.getStringProperty(COMPONENT_PID, PROPERTY_BLOGNAME_NAME, PROPERTY_BLOGNAME_VALUE);
+        return osgiService.getStringProperty(COMPONENT_PID, SYSTEM_BLOG_NAME, BLOG_NAME_DEFAULT_VALUE);
     }
 
     /**
@@ -85,8 +92,8 @@ public class SystemSettingsServiceImpl implements SystemSettingsService {
      * @param name The name of the blog.
      * @return true if the save was successful.
      */
-    public boolean setBlogName(String name) {
-        return osgiService.setProperty(COMPONENT_PID, PROPERTY_BLOGNAME_NAME, name);
+    public boolean setBlogName(final String name) {
+        return osgiService.setProperty(COMPONENT_PID, SYSTEM_BLOG_NAME, name);
     }
 
     /**
@@ -95,7 +102,7 @@ public class SystemSettingsServiceImpl implements SystemSettingsService {
      * @return The setting for extensionless URLS.
      */
     public boolean getExtensionlessUrls() {
-        return osgiService.getBooleanProperty(COMPONENT_PID, PROPERTY_EXTENSIONLESS_URLS_NAME, PROPERTY_EXTENSIONLESS_URLS_VALUE);
+        return osgiService.getBooleanProperty(COMPONENT_PID, SYSTEM_EXTENSIONLESS_URLS, EXTENSIONLESS_URLS_DEFAULT_VALUE);
     }
 
     /**
@@ -104,7 +111,7 @@ public class SystemSettingsServiceImpl implements SystemSettingsService {
      * @param value The setting for extensionless URLs.
      * @return true if the save was successful.
      */
-    public boolean setExtensionlessUrls(boolean value) {
-        return osgiService.setProperty(COMPONENT_PID, PROPERTY_EXTENSIONLESS_URLS_NAME, value);
+    public boolean setExtensionlessUrls(final boolean value) {
+        return osgiService.setProperty(COMPONENT_PID, SYSTEM_EXTENSIONLESS_URLS, value);
     }
 }

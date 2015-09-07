@@ -15,6 +15,8 @@ import javax.servlet.ServletException;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,10 +64,14 @@ public class SystemConfigServlet extends AdminServlet {
             final String blogName = request.getParameter(BLOG_NAME_PROPERTY);
             final boolean extensionlessUrls = Boolean.parseBoolean(request.getParameter(EXTENSIONLESS_URLS_PROPERTY));
 
-            final boolean nameResult = systemSettingsService.setBlogName(blogName);
-            final boolean extensionResult = systemSettingsService.setExtensionlessUrls(extensionlessUrls);
+            final Map<String, Object> properties = new HashMap<String, Object>();
 
-            if (nameResult && extensionResult) {
+            properties.put(SystemSettingsService.SYSTEM_BLOG_NAME, blogName);
+            properties.put(SystemSettingsService.SYSTEM_EXTENSIONLESS_URLS, extensionlessUrls);
+
+            boolean result = systemSettingsService.setProperties(properties);
+
+            if (result) {
                 response.setStatus(SlingHttpServletResponse.SC_OK);
                 sendResponse(writer, "OK", "Settings successfully updated.");
             } else {
