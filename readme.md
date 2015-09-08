@@ -45,7 +45,7 @@ Configurations can be set in any of three ways:
 
 1. The Publick dashboard [http://localhost:8080/admin.html](http://localhost:8080/admin.html)
 2. The Apache Felix (OSGi) console [http://localhost:8080/system/console/configMgr](http://localhost:8080/system/console/configMgr)
-3. Create preconfigured sling:OsgiConfig nodes. See examples under: `/publick/ui/src/main/resources/jcr_root/libs/publick/install/`.
+3. Create preconfigured sling:OsgiConfig nodes. View examples under [/publick/ui/src/main/resources/jcr_root/libs/publick/install](https://github.com/nateyolles/publick-sling-blog/tree/master/ui/src/main/resources/jcr_root/libs/publick/install)
 
 Setup reCAPTCHA
 
