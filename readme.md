@@ -2,7 +2,7 @@
 
 Publick is named after [Publick Occurrences Both Forreign and Domestick](https://en.wikipedia.org/wiki/Publick_Occurrences_Both_Forreign_and_Domestick), the first newspaper in the American colonies.
 
-View a custom implementation of Publick with custom styling and components at [https://github.com/nateyolles/publick-nateyolles](https://github.com/nateyolles/publick-nateyolles) and the live implementation at [nateyolles.com](http://www.nateyolles.com).
+View a custom implementation of Publick with custom styling and components at [https://github.com/nateyolles/publick-nateyolles](https://github.com/nateyolles/publick-nateyolles) and the live implementation at [nateyolles.com](http://www.nateyolles.com). You can log into [nateyolles.com/admin](http://www.nateyolles.com/admin) with user *demo* and password *demo*.
 
 View the [Trello Board](https://trello.com/b/2zcNr5qV/publick-sling-sightly-blog-engine).
 
@@ -33,13 +33,19 @@ Build and deploy to a running Sling instance with default values of port *8080*,
 
 Navigate to [http://localhost:8080/admin/login.html](http://localhost:8080/admin/login.html). The default credentials are *admin*/*admin*.
 
-## Setup
-
-Create user
+## Create Users
 
 1. Navigate to [http://localhost:8080/admin/users.html](http://localhost:8080/admin/users.html)
 2. Change admin password
 3. Create an Author account
+
+## Configuration
+
+Configurations can be set in any of three ways:
+
+1. The Publick dashboard [http://localhost:8080/admin.html](http://localhost:8080/admin.html)
+2. The Apache Felix (OSGi) console [http://localhost:8080/system/console/configMgr](http://localhost:8080/system/console/configMgr)
+3. Create preconfigured sling:OsgiConfig nodes. See examples under: `/publick/ui/src/main/resources/jcr_root/libs/publick/install/`.
 
 Setup reCAPTCHA
 
