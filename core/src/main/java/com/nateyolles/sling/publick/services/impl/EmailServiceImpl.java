@@ -100,12 +100,12 @@ public class EmailServiceImpl implements EmailService {
     }
 
     /**
-     * Get the SMTP password.
+     * Get the SMTP password for display use only.
      *
-     * @return The SMTP password.
+     * @return The SMTP password for display use only.
      */
     public String getSmtpPassword() {
-        String password = osgiService.getStringProperty(COMPONENT_PID, EMAIL_SMTP_PASSWORD, null);
+        String password = getUnobfuscatedSmtpPassword();
 
         return StringUtils.isNotBlank(password) ? PublickConstants.PASSWORD_REPLACEMENT : null;
     }
@@ -226,6 +226,15 @@ public class EmailServiceImpl implements EmailService {
     }
 
     /**
+     * Get the SMTP password suitable for transport.
+     *
+     * @return The real SMTP password.
+     */
+    private String getUnobfuscatedSmtpPassword() {
+        return osgiService.getStringProperty(COMPONENT_PID, EMAIL_SMTP_PASSWORD, null);
+    }
+
+    /**
      * Send an email.
      *
      * @param recipient The recipient of the email
@@ -267,7 +276,7 @@ public class EmailServiceImpl implements EmailService {
             transport = session.getTransport();
 
             // Connect to email server using the SMTP username and password you specified above.
-            transport.connect(getHost(), getSmtpUsername(), getSmtpPassword());
+            transport.connect(getHost(), getSmtpUsername(), getUnobfuscatedSmtpPassword());
 
             // Send the email.
             transport.sendMessage(msg, msg.getAllRecipients());

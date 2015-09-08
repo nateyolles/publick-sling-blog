@@ -33,9 +33,9 @@ public interface EmailService {
     String getSmtpUsername();
 
     /**
-     * Get the SMTP password.
+     * Get the SMTP password for display use only.
      *
-     * @return The SMTP password.
+     * @return The SMTP password for display use only.
      */
     String getSmtpPassword();
 
