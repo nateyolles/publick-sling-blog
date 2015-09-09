@@ -17,6 +17,10 @@ This project requires Apache Sling 7.
 java -jar org.apache.sling.launchpad-7-standalone.jar
 ```
 
+## Install Apache Maven
+
+[Apache Maven](https://maven.apache.org/) is used to build the project.
+
 ## Install Sightly
 
 Install external dependencies to a running Sling instance with default values of port *8080*, user *admin* and password *admin*:
