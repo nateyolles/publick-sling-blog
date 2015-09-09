@@ -107,3 +107,7 @@
   filter: alpha(opacity=65);
   opacity: .65;
 }
+
+.clear {
+  clear: both;
+}

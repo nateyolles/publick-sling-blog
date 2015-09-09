@@ -6,6 +6,7 @@
             <div class="form-group">
                 <label>Title</label>
                 <input type="text" name="title" data-sly-attribute.value="${blog.title}" class="form-control">
+                <span class="help-block">Used as the title of the page and when shared on Twitter, LinkedIn or Facebook.</span>
             </div>
         </div>
     </div>
@@ -16,6 +17,7 @@
                 <select name="month" data-sly-list="${blog.months}" class="form-control">
                     <option data-sly-attribute.selected="${blog.month == item}">${item}</option>
                 </select>
+                <span class="help-block">The publish month. Used in the post's URL (e.g. /2015/<strong>01</strong>/friendly-url.html)</span>
             </div>
         </div>
     </div>
@@ -26,6 +28,7 @@
                 <select name="year" data-sly-list="${blog.years}" class="form-control">
                     <option data-sly-attribute.selected="${blog.year == item}">${item}</option>
                 </select>
+                <span class="help-block">The publish year. Used in the post's URL (e.g. /<strong>2015</strong>/01/friendly-url.html)</span>
             </div>
         </div>
     </div>
@@ -34,6 +37,7 @@
             <div class="form-group">
                 <label>Friendly URL</label>
                 <input type="text" name="url" data-sly-attribute.value="${blog.url}" class="form-control">
+                <span class="help-block">The page name. Used in the post's URL (e.g. /2015/01/<strong>friendly-url</strong>.html)</span>
             </div>
         </div>
     </div>
@@ -46,7 +50,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-lg-3 col-md-3">
+        <div class="col-lg-4 col-md-4">
             <div class="form-group" data-ng-controller="KeywordsController" data-ng-init="keywords = ${blog.getKeywordsJSON}">
                 <label>Keywords</label>
                 <div data-ng-repeat="keyword in keywords track by $index" class="input-group">
@@ -58,11 +62,12 @@
                 <div class="input-group keywords-add-container">
                     <a href="#" data-ng-click="addKeyword($event)">Add keyword<i class="fa fa-plus-circle"></i></a>
                 </div>
+                <span class="help-block clear">Used for tag clouds, meta tags, and searching.</span>
             </div>
         </div>
     </div>
     <div class="row">
-        <div class="col-lg-6 col-md-6">
+        <div class="col-lg-12 col-md-12">
             <div class="form-group">
                 <label>Image</label>
                 <input type="file" name="image">
@@ -70,6 +75,7 @@
                     <img src="${blog.imageRelativePath}"><br>
                     <span data-sly-text="${blog.imageRelativePath}"></span>
                 </div>
+                <span class="help-block">Used as the page's main graphic and image when shared on Twitter, LinkedIn or Facebook.</span>
             </div>
         </div>
     </div>
@@ -78,6 +84,7 @@
             <div class="form-group">
                 <label>Description</label>
                 <input type="text" name="description" data-sly-attribute.value="${blog.description}" class="form-control">
+                <span class="help-block">Used as the description of the page for SEO in meta tags and when shared on Twitter, LinkedIn or Facebook.</span>
             </div>
         </div>
     </div>
