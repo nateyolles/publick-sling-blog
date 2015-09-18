@@ -21,6 +21,14 @@ java -jar org.apache.sling.launchpad-7-standalone.jar
 
 [Apache Maven](https://maven.apache.org/) is used to build the project.
 
+## Install static asset build tools
+
+  1. Navigate to /ui bundle.
+  2. Install [NodeJS and NPM](https://nodejs.org/)
+  3. Install [Grunt CLI](http://gruntjs.com/getting-started): `npm install -g grunt-cli`
+  4. Install Grunt plugins: `npm install`
+  5. Optional: Run Grunt: `grunt build`
+
 ## Install Sightly
 
 Install external dependencies to a running Sling instance with default values of port *8080*, user *admin* and password *admin*:

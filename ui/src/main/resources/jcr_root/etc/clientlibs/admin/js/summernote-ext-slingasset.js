@@ -1,3 +1,8 @@
+/**
+ * SlingAsset extension to browse and upload assets to the JCR, then to insert
+ * selected images into the Summernote HTML5 rich text editor. This pulls in the
+ * /libs/publick/components/assetList component.
+ */
 (function (factory) {
   /* global define */
   if (typeof define === 'function' && define.amd) {

@@ -41,6 +41,45 @@
             <build>
                 <plugins>
                     <plugin>
+                        <groupId>org.codehaus.gmaven</groupId>
+                        <artifactId>gmaven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>execute</goal>
+                                </goals>
+                                <configuration>
+                                    <providerSelection>2.0</providerSelection>
+                                    <source><![CDATA[
+                                        def commands = []
+                                        commands.add("grunt build")
+
+                                        def doExecute(com) {
+                                            def command = System.properties["os.name"].contains("Windows") ? "cmd /c "+com : com
+                                            def process = command.execute(null, new File("${project.basedir}"))
+                                            process.waitForProcessOutput(System.out, System.err)
+
+                                            return process.exitValue()
+                                        }
+
+                                        def exitStatus = 0
+                                        for (command in commands) {
+                                            exitStatus += doExecute(command)
+                                            if (exitStatus != 0) {
+                                                break;
+                                            }
+                                        }
+
+                                        if (exitStatus) {
+                                            throw new org.apache.maven.plugin.MojoExecutionException("Error while executing Reimagine build")
+                                        }
+                                    ]]></source>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
                         <groupId>org.apache.sling</groupId>
                         <artifactId>maven-sling-plugin</artifactId>
                         <version>2.0.4-incubator</version>
