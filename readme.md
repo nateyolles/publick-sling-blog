@@ -59,11 +59,17 @@ Configurations can be set in any of three ways:
 2. The Apache Felix (OSGi) console [http://localhost:8080/system/console/configMgr](http://localhost:8080/system/console/configMgr)
 3. Create preconfigured sling:OsgiConfig nodes. View examples under [/publick/ui/src/main/resources/jcr_root/libs/publick/install](https://github.com/nateyolles/publick-sling-blog/tree/master/ui/src/main/resources/jcr_root/libs/publick/install)
 
-Setup reCAPTCHA
+Setup reCAPTCHA (prevent automated comment spam)
 
-1. Sign up at [https://www.google.com/recaptcha](https://www.google.com/recaptcha)
-2. Navigate to [http://localhost:8080/admin/config.html](http://localhost:8080/admin/config.html)
+1. Sign up for free at [https://www.google.com/recaptcha](https://www.google.com/recaptcha)
+2. Navigate to [http://localhost:8080/admin/config/recaptcha.html](http://localhost:8080/admin/config/recaptcha.html)
 3. Insert site key and secret key
+
+Setup Akismet (prevent comment spam)
+
+1. Sign up for free at [http://akismet.com](http://akismet.com)
+2. Navigate to [http://localhost:8080/admin/config/akismet.html](http://localhost:8080/admin/config/akismet.html)
+3. Insert your API key and domain name
 
 Setup your SMTP server
 
