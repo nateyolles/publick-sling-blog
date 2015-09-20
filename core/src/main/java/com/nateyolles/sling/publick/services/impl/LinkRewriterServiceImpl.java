@@ -63,6 +63,16 @@ public class LinkRewriterServiceImpl implements LinkRewriterService {
      * Rewrite links based on the extensionless URLs settings.
      *
      * @param value The link URL.
+     * @return The rewritten link URL.
+     */
+    public String rewriteLink(final String link) {
+        return rewriteLink(link, null);
+    }
+
+    /**
+     * Rewrite links based on the extensionless URLs settings.
+     *
+     * @param value The link URL.
      * @param requestHost The host name from the request.
      * @return The rewritten link URL.
      */

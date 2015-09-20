@@ -110,4 +110,19 @@ public class PublickConstants {
 
     /** Password replacement text */
     public static final String PASSWORD_REPLACEMENT = "****************";
+
+    /** Comment Resource IP Address property */
+    public static final String COMMENT_PROPERTY_USER_IP = "userIp";
+
+    /** Comment Resource user agent property */
+    public static final String COMMENT_PROPERTY_USER_AGENT = "userAgent";
+
+    /** Comment Resource referrer property */
+    public static final String COMMENT_PROPERTY_REFERRER = "referrer";
+
+    /** Comment Resource comment property */
+    public static final String COMMENT_PROPERTY_COMMENT = "comment";
+
+    /** Comment Resource author property */
+    public static final String COMMENT_PROPERTY_AUTHOR = "author";
 }

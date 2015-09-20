@@ -1,0 +1,55 @@
+<div class="row" data-ng-controller="SettingsController" data-settings-type="akismet"
+     data-sly-use.akismet="com.nateyolles.sling.publick.components.admin.AkismetConfig">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Akismet</h3>
+            </div>
+            <div class="panel-body">
+                <form action="/bin/admin/akismetconfig" method="post">
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label>Enable</label><br>
+                                <input type="checkbox" name="enabled" value="true" data-ng-model="model.enabled" data-ng-init="model.enabled = ${akismet.enabled}"> Enable Akismet
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="form-group">
+                                <label>Blog Domain</label>
+                                <input type="text" name="domainName" data-ng-model="model.domainName" data-ng-init="model.domainName = '${akismet.domainName}'" class="form-control" placeholder="http://www.domainname.com">
+                                <span class="help-block">The domain name starting with http:// or https://</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="form-group">
+                                <label>API key</label>
+                                <input data-sly-attribute.type="${akismet.authorable ? 'text' : 'password'}" name="apiKey" data-ng-model="model.apiKey" data-ng-init="model.apiKey = '${akismet.apiKey}'" data-ng-focus="clear($event)"
+                                class="form-control">
+                                <span class="help-block">The API key provided by <a href="http://www.akismet.com" target="_blank">akismet.com</a></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 form-group">
+                            <button type="submit" class="btn btn-primary" data-ng-click="save($event)"
+                                    data-sly-attribute.disabled="${!akismet.authorable && 'disabled'}">Save</button>
+                        </div>
+                    </div>
+                    <div class="row" data-ng-show="status.show">
+                        <div class="col-xs-12">
+                            <div class="alert {{status.type}} alert-dismissible" role="alert">
+                                <button type="button" class="close" aria-label="Close" data-ng-click="hideAlert()"><span aria-hidden="true">&times;</span></button>
+                                <strong data-ng-bind="status.header"></strong> <span data-ng-bind="status.message"></span>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

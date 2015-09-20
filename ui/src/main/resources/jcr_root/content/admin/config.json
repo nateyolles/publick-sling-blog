@@ -16,6 +16,21 @@
             }
         }
     },
+    "email" : {
+        "jcr:primaryType": "publick:page",
+        "sling:resourceType" : "publick/pages/adminSecurePage",
+        "title" : "Email configuration",
+        "jcr:content" : {
+            "mainContent" : {
+                "jcr:primaryType": "nt:unstructured",
+                "sling:resourceType" : "publick/components/foundation/parsys",
+                "emailConfig" : {
+                    "jcr:primaryType": "nt:unstructured",
+                    "sling:resourceType" : "publick/components/admin/emailConfig"
+                }
+            }
+        }
+    },
     "recaptcha" : {
         "jcr:primaryType": "publick:page",
         "sling:resourceType" : "publick/pages/adminSecurePage",
@@ -31,17 +46,17 @@
             }
         }
     },
-    "email" : {
+    "akismet" : {
         "jcr:primaryType": "publick:page",
         "sling:resourceType" : "publick/pages/adminSecurePage",
-        "title" : "Email configuration",
+        "title" : "Akismet configuration",
         "jcr:content" : {
             "mainContent" : {
                 "jcr:primaryType": "nt:unstructured",
                 "sling:resourceType" : "publick/components/foundation/parsys",
-                "emailConfig" : {
+                "akismetConfig" : {
                     "jcr:primaryType": "nt:unstructured",
-                    "sling:resourceType" : "publick/components/admin/emailConfig"
+                    "sling:resourceType" : "publick/components/admin/akismetConfig"
                 }
             }
         }

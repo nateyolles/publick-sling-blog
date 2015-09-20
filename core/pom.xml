@@ -32,6 +32,24 @@
                 <artifactId>maven-bundle-plugin</artifactId>
                 <extensions>true</extensions>
                 <version>2.4.0</version>
+                <executions>
+                    <execution>
+                        <id>wrap-dependency</id>
+                        <goals>
+                            <goal>bundle</goal>
+                        </goals>
+                        <configuration>
+                            <instructions>
+                                <Embed-Dependency>
+                                    commons-lang3,
+                                    httpcore,
+                                    httpclient,
+                                    java-akismet
+                                </Embed-Dependency>
+                            </instructions>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -95,13 +113,20 @@
                         <artifactId>maven-dependency-plugin</artifactId>
                         <executions>
                             <execution>
-                                <id>copy-sightly</id>
+                                <id>copy-dependencies</id>
                                 <goals>
                                     <goal>copy-dependencies</goal>
                                 </goals>
                                 <configuration>
                                     <artifactItems>
-                                        <includeArtifactIds>org.apache.sling.i18n,mail,org.apache.sling.jcr.compiler,org.apache.sling.xss,org.apache.sling.scripting.sightly,org.jsoup</includeArtifactIds>
+                                        <includeArtifactIds>
+                                            org.apache.sling.i18n,
+                                            mail,
+                                            org.apache.sling.jcr.compiler,
+                                            org.apache.sling.xss,
+                                            org.apache.sling.scripting.sightly,
+                                            org.jsoup
+                                        </includeArtifactIds>
                                     </artifactItems>
                                 </configuration>
                             </execution>
@@ -199,6 +224,16 @@
                                 <phase>install</phase>
                                 <configuration>
                                     <bundleFileName>${project.build.directory}/dependency/org.apache.servicemix.bundles.jsoup-1.5.2_2.jar</bundleFileName>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>install-logging</id>
+                                <goals>
+                                    <goal>install-file</goal>
+                                </goals>
+                                <phase>install</phase>
+                                <configuration>
+                                    <bundleFileName>${project.build.directory}/dependency/commons-logging-1.2.jar</bundleFileName>
                                 </configuration>
                             </execution>
                         </executions>
@@ -369,6 +404,31 @@
             <groupId>org.apache.servicemix.bundles</groupId>
             <artifactId>org.apache.servicemix.bundles.jsoup</artifactId>
             <version>1.5.2_2</version>
+        </dependency>
+        <dependency>
+            <groupId>eu.michael-simons</groupId>
+            <artifactId>java-akismet</artifactId>
+            <version>0.1.8</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpcore</artifactId>
+            <version>4.4.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.4</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+            <version>1.2</version>
         </dependency>
     </dependencies>
 

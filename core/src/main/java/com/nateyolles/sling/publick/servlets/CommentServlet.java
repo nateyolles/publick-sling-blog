@@ -1,6 +1,8 @@
 package com.nateyolles.sling.publick.servlets;
 
 import com.nateyolles.sling.publick.PublickConstants;
+import com.nateyolles.sling.publick.services.AkismetService;
+import com.nateyolles.sling.publick.services.HttpService;
 import com.nateyolles.sling.publick.services.RecaptchaService;
 
 import org.apache.commons.lang.StringUtils;
@@ -50,45 +52,37 @@ public class CommentServlet extends SlingAllMethodsServlet {
     @Reference
     private ResourceResolverFactory resourceResolverFactory;
 
-    /**
-     * reCAPTCHA service to verify user isn't a robot.
-     */
+    /** reCAPTCHA service to verify user isn't a robot. */
     @Reference
     private RecaptchaService recaptchaService;
 
-    /**
-     * The logger.
-     */
+    /** HTTP helper methods */
+    @Reference
+    private HttpService httpService;
+
+    /** Akismet service to check if comment is spam */
+    @Reference
+    private AkismetService akismetService;
+
+    /** The logger. */
     private static final Logger LOGGER = LoggerFactory.getLogger(CommentServlet.class);
 
-    /**
-     * Resource Resolver to get resources.
-     */
+    /** Resource Resolver to get resources. */
     private ResourceResolver resolver;
 
-    /**
-     * Request parameter sent from the comment form for Author.
-     */
+    /** Request parameter sent from the comment form for Author. */
     private static final String AUTHOR_PARAMETER = "author";
 
-    /**
-     * Request parameter sent from the comment form for Comment.
-     */
+    /** Request parameter sent from the comment form for Comment. */
     private static final String COMMENT_PARAMETER = "comment";
 
-    /**
-     * Request parameter sent from the comment form for the blog path.
-     */
+    /** Request parameter sent from the comment form for the blog path. */
     private static final String BLOG_PATH_PARAMETER = "blogPath";
 
-    /**
-     * Request parameter sent from the comment form for the parent comment path.
-     */
+    /** Request parameter sent from the comment form for the parent comment path. */
     private static final String COMMENT_PATH_PARAMETER = "commentPath";
 
-    /**
-     * Comment node name in the form of "comment_1", "comment_2", etc...
-     */
+    /** Comment node name in the form of "comment_1", "comment_2", etc... */
     private static final String COMMENT_NODE_NAME = "comment_%d";
 
     /**
@@ -126,9 +120,12 @@ public class CommentServlet extends SlingAllMethodsServlet {
                 String nodeName = getCommentName(parentPath);
 
                 Map<String, Object> properties = new HashMap<String, Object>();
-                properties.put(AUTHOR_PARAMETER, author);
-                properties.put(COMMENT_PARAMETER, comment);
+                properties.put(PublickConstants.COMMENT_PROPERTY_AUTHOR, author);
+                properties.put(PublickConstants.COMMENT_PROPERTY_COMMENT, comment);
                 properties.put(JcrConstants.JCR_PRIMARYTYPE, PublickConstants.NODE_TYPE_COMMENT);
+                properties.put(PublickConstants.COMMENT_PROPERTY_USER_AGENT, httpService.getUserAgent(request));
+                properties.put(PublickConstants.COMMENT_PROPERTY_USER_IP, httpService.getIPAddress(request));
+                properties.put(PublickConstants.COMMENT_PROPERTY_REFERRER, httpService.getReferrer(request));
 
                 Resource commentResource = resolver.create(resolver.getResource(parentPath), nodeName, properties);
                 Node commentNode = commentResource.adaptTo(Node.class);
