@@ -1,0 +1,32 @@
+<div data-ng-controller="CommentController" data-sly-use.page="com.nateyolles.sling.publick.sightly.WCMUse">
+    <div class="row">
+        <div class="col-xs-12">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th class="column-small">#</th>
+                        <th>Comment</th>
+                        <th class="column-small">Edit</th>
+                        <th class="column-small">Spam</th>
+                        <th class="column-small">Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr data-ng-repeat="comment in comments" data-ng-class="{danger: comment.spam}">
+                        <td data-ng-bind="$index + 1"></td>
+                        <td>
+                            <div data-ng-bind="comment.comment"></div>
+                            <div>
+                                <a data-ng-bind="comment.post.text" data-ng-href="{{comment.post.link}}" target="_blank"></a>
+                                <span data-ng-show="comment.replies > 0" data-ng-bind="'(' + comment.replies + ' replies)'"></span>
+                            </div>
+                        </td>
+                        <td><a href="" data-ng-click="edit()"><i class="glyphicon glyphicon-pencil"></i></a></td>
+                        <td><a href="" data-ng-click="akismet()"><i data-ng-class="{'glyphicon glyphicon-remove-sign': !comment.spam, 'glyphicon glyphicon-ok-sign': comment.spam}" tooltip="{{comment.spam ? 'Mark as valid' : 'Mark as spam'}}"></i></a></td>
+                        <td><a href="" data-ng-click="delete()"><i class="glyphicon glyphicon-trash"></i></a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

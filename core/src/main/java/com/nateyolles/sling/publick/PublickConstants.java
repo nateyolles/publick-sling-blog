@@ -3,7 +3,7 @@ package com.nateyolles.sling.publick;
 /**
  * Constants used throughout the application
  */
-public class PublickConstants {
+public final class PublickConstants {
 
     /** Private constructor to prevent instantiation of class */
     private PublickConstants() {
@@ -125,4 +125,7 @@ public class PublickConstants {
 
     /** Comment Resource author property */
     public static final String COMMENT_PROPERTY_AUTHOR = "author";
+
+    /** Comment Resource spam property */
+    public static final String COMMENT_PROPERTY_SPAM = "spam";
 }

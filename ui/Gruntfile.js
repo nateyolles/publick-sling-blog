@@ -24,13 +24,15 @@ module.exports = function(grunt) {
           '<%=conf.dist%>/js/richtext.js',
           '<%=conf.dist%>/js/app.js',
           '<%=conf.dist%>/js/keywordsController.js',
+          '<%=conf.dist%>/js/commentController.js',
           '<%=conf.dist%>/js/assetsController.js',
           '<%=conf.dist%>/js/settingsController.js',
           '<%=conf.dist%>/js/userController.js',
           '<%=conf.dist%>/js/userModalController.js',
           '<%=conf.dist%>/js/formDataObjectFactory.js',
           '<%=conf.dist%>/js/userService.js',
-          '<%=conf.dist%>/js/settingsService.js'
+          '<%=conf.dist%>/js/settingsService.js',
+          '<%=conf.dist%>/js/commentService.js'
         ],
         dest: '<%=conf.src%>/js/admin.js'
       }
