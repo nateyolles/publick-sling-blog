@@ -24,8 +24,8 @@ import com.nateyolles.sling.publick.services.CommentService;
  */
 @Service(value = CommentService.class)
 @Component(immediate = true,
-           name = "Publick HTTP helper service",
-           description = "HTTP helper methods for HTTP requests and responses.")
+           name = "Publick comments service",
+           description = "Service to get, delete, update and add comments.")
 public class CommentServiceImpl implements CommentService {
 
     /**
