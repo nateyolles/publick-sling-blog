@@ -14,8 +14,23 @@ app.controller('CommentController', function($scope, $modal, CommentService) {
     alert('TODO: akismet');
   };
 
-  $scope.delete = function() {
-    alert('TODO: delete');
+  $scope.delete = function(index) {
+
+    var modalInstance = $modal.open({
+      templateUrl: 'confirm.html',
+      controller: 'CommentModalController',
+      resolve: {
+        comment: function() {
+          return $scope.comments[index];
+        }
+      }
+    });
+
+    modalInstance.result.then(function(data) {
+      if (data.success) {
+        $scope.comments.splice($scope.comments.indexOf(data.comment), 1);
+      }
+    });
   };
 
   CommentService.getComments().success(function(data){

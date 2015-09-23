@@ -29,5 +29,12 @@ app.factory('CommentService', function($http, formDataObject) {
     });
   };
 
+  commentFactory.deleteComment = function(comment) {
+    return post({
+      action: DELETE_COMMENT,
+      id: comment.id
+    });
+  }
+
   return commentFactory;
 });

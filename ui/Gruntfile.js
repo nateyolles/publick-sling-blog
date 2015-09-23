@@ -32,7 +32,8 @@ module.exports = function(grunt) {
           '<%=conf.dist%>/js/formDataObjectFactory.js',
           '<%=conf.dist%>/js/userService.js',
           '<%=conf.dist%>/js/settingsService.js',
-          '<%=conf.dist%>/js/commentService.js'
+          '<%=conf.dist%>/js/commentService.js',
+          '<%=conf.dist%>/js/commentModalController.js'
         ],
         dest: '<%=conf.src%>/js/admin.js'
       }

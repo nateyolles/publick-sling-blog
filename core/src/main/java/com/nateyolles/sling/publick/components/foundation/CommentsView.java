@@ -85,7 +85,6 @@ public class CommentsView extends WCMUse {
             Iterator<Resource> iterator = resource.listChildren();
 
             while (iterator.hasNext()) {
-                count++;
 
                 Resource commentResource = iterator.next();
                 ValueMap properties = commentResource.adaptTo(ValueMap.class);
@@ -94,16 +93,21 @@ public class CommentsView extends WCMUse {
                 String author = properties.get("author", String.class);
                 String comment = properties.get("comment", String.class);
                 String date = getDate(properties.get(JcrConstants.JCR_CREATED, Date.class), DISPLAY_DATE_FORMAT);
+                boolean display = properties.get("display", false);
+                boolean spam = properties.get("spam", false);
 
-                if (StringUtils.isNotBlank(author) && StringUtils.isNotBlank(comment) && StringUtils.isNotBlank(date)) {
-                    commentProperties.put("author", author);
-                    commentProperties.put("comment", comment);
+                if (StringUtils.isNotBlank(author)
+                        && StringUtils.isNotBlank(comment)
+                        && StringUtils.isNotBlank(date)) {
+                    commentProperties.put("author", display || spam ? author : "--");
+                    commentProperties.put("comment", display || spam ? comment : "Comment removed by author.");
                     commentProperties.put("date", date);
                     commentProperties.put("path", commentResource.getPath());
                     if (getReplies) {
                         commentProperties.put("replies", getCommentList(commentResource, false));
                     }
                     comments.add(commentProperties);
+                    count++;
                 }
             }
         }

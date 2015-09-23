@@ -59,7 +59,7 @@
   overflow-y: initial !important
 }
 
-.modal-body{
+.modal-body.large {
   height: 250px;
   overflow-y: auto;
 }

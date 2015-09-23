@@ -20,6 +20,15 @@ public interface CommentService {
     List<Resource> getComments(final SlingHttpServletRequest request);
 
     /**
+     * Delete comment by setting it's display property to false.
+     *
+     * @param request The current request to get session and Resource Resolver
+     * @param id The comment UUID
+     * @return true if the operation was successful
+     */
+    boolean deleteComment(final SlingHttpServletRequest request, final String id);
+
+    /**
      * Get the number of replies for a given comment.
      *
      * @param comment The current comment

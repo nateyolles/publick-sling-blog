@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.jcr.Node;
+import javax.jcr.RepositoryException;
+import javax.jcr.Session;
 import javax.jcr.query.Query;
 
 import org.apache.felix.scr.annotations.Component;
@@ -12,6 +15,7 @@ import org.apache.jackrabbit.JcrConstants;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
+import org.apache.sling.jcr.resource.JcrResourceUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,12 +38,14 @@ public class CommentServiceImpl implements CommentService {
     private static final Logger LOGGER = LoggerFactory.getLogger(CommentServiceImpl.class);
 
     /**
-     * JCR_SQL2 query to get all comments in order of newest first.
+     * JCR_SQL2 query to get all comments that are not hidden in order of newest first.
      */
     private static final String BLOG_QUERY = String.format("SELECT * FROM [%s] AS s WHERE "
-            + "ISDESCENDANTNODE([%s]) ORDER BY [%s] desc",
+            + "ISDESCENDANTNODE([%s]) AND s.[%s] = '%s' ORDER BY [%s] desc",
             PublickConstants.NODE_TYPE_COMMENT,
             PublickConstants.COMMENTS_PATH,
+            PublickConstants.COMMENT_PROPERTY_DISPLAY,
+            true,
             JcrConstants.JCR_CREATED);
 
     /**
@@ -57,6 +63,32 @@ public class CommentServiceImpl implements CommentService {
         }
 
         return comments;
+    }
+
+    /**
+     * Delete comment by setting it's display property to false.
+     *
+     * @param request The current request to get session and Resource Resolver
+     * @param id The comment UUID
+     * @return true if the operation was successful
+     */
+    public boolean deleteComment(final SlingHttpServletRequest request, final String id) {
+        boolean result = false;
+
+        try {
+            Session session = request.getResourceResolver().adaptTo(Session.class); 
+            Node node = session.getNodeByIdentifier(id);
+
+            if (node != null) {
+                JcrResourceUtil.setProperty(node, PublickConstants.COMMENT_PROPERTY_DISPLAY, false);
+                session.save();
+                result = true;
+            }
+        } catch (RepositoryException e) {
+            LOGGER.error("Could not retrieve comment from JCR", e);
+        }
+
+        return result;
     }
 
     /**

@@ -128,4 +128,10 @@ public final class PublickConstants {
 
     /** Comment Resource spam property */
     public static final String COMMENT_PROPERTY_SPAM = "spam";
+
+    /** Comment Resource title property */
+    public static final String COMMENT_PROPERTY_TITLE = "title";
+
+    /** Comment Resource display property */
+    public static final String COMMENT_PROPERTY_DISPLAY = "display";
 }
