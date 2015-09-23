@@ -7,6 +7,7 @@ app.factory('CommentService', function($http, formDataObject) {
   var commentFactory = {},
       PATH = '/bin/admin/comment',
       DELETE_COMMENT = 'delete_comment',
+      EDIT_COMMENT = 'edit_comment',
       MARK_SPAM = 'mark_spam',
       MARK_HAM = 'mark_ham'
 
@@ -34,7 +35,15 @@ app.factory('CommentService', function($http, formDataObject) {
       action: DELETE_COMMENT,
       id: comment.id
     });
-  }
+  };
+
+  commentFactory.editComment = function(comment) {
+    return post({
+      action: EDIT_COMMENT,
+      id: comment.id,
+      text: comment.comment
+    });
+  };
 
   return commentFactory;
 });

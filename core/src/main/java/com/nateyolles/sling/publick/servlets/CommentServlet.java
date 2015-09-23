@@ -127,6 +127,7 @@ public class CommentServlet extends SlingAllMethodsServlet {
                 properties.put(PublickConstants.COMMENT_PROPERTY_USER_IP, httpService.getIPAddress(request));
                 properties.put(PublickConstants.COMMENT_PROPERTY_REFERRER, httpService.getReferrer(request));
                 properties.put(PublickConstants.COMMENT_PROPERTY_DISPLAY, true);
+                properties.put(PublickConstants.COMMENT_PROPERTY_EDITED, false);
 
                 Resource commentResource = resolver.create(resolver.getResource(parentPath), nodeName, properties);
                 Node commentNode = commentResource.adaptTo(Node.class);

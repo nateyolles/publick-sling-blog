@@ -85,7 +85,35 @@ public class CommentServiceImpl implements CommentService {
                 result = true;
             }
         } catch (RepositoryException e) {
-            LOGGER.error("Could not retrieve comment from JCR", e);
+            LOGGER.error("Could not delete comment from JCR", e);
+        }
+
+        return result;
+    }
+
+    /**
+     * Edit comment and mark it as author edited.
+     *
+     * @param request The current request to get session and Resource Resolver
+     * @param id The comment UUID
+     * @param text The comment text
+     * @return true if the operation was successful
+     */
+    public boolean editComment(final SlingHttpServletRequest request, final String id, String text) {
+        boolean result = false;
+
+        try {
+            Session session = request.getResourceResolver().adaptTo(Session.class);
+            Node node = session.getNodeByIdentifier(id);
+
+            if (node != null) {
+                JcrResourceUtil.setProperty(node, PublickConstants.COMMENT_PROPERTY_COMMENT, text);
+                JcrResourceUtil.setProperty(node, PublickConstants.COMMENT_PROPERTY_EDITED, true);
+                session.save();
+                result = true;
+            }
+        } catch (RepositoryException e) {
+            LOGGER.error("Could not update comment from JCR", e);
         }
 
         return result;

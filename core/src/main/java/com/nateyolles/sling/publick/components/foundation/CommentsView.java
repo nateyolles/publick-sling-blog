@@ -94,6 +94,7 @@ public class CommentsView extends WCMUse {
                 String comment = properties.get("comment", String.class);
                 String date = getDate(properties.get(JcrConstants.JCR_CREATED, Date.class), DISPLAY_DATE_FORMAT);
                 boolean display = properties.get("display", false);
+                boolean edited = properties.get("edited", false);
                 boolean spam = properties.get("spam", false);
 
                 if (StringUtils.isNotBlank(author)
@@ -102,6 +103,7 @@ public class CommentsView extends WCMUse {
                     commentProperties.put("author", display || spam ? author : "--");
                     commentProperties.put("comment", display || spam ? comment : "Comment removed by author.");
                     commentProperties.put("date", date);
+                    commentProperties.put("edited", edited);
                     commentProperties.put("path", commentResource.getPath());
                     if (getReplies) {
                         commentProperties.put("replies", getCommentList(commentResource, false));

@@ -134,4 +134,9 @@ public final class PublickConstants {
 
     /** Comment Resource display property */
     public static final String COMMENT_PROPERTY_DISPLAY = "display";
+
+    /**
+     * Comment Resource edited property to indicate the author/admin
+     * updated the comment text. */
+    public static final String COMMENT_PROPERTY_EDITED = "edited";
 }

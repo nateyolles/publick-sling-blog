@@ -12,6 +12,7 @@
       <div class="media-body">
         <h4 class="media-heading">${comment.author} <small>${comment.date} <a href="#" class="comment-reply">Reply</a></small></h4>
         <p data-sly-text="${comment.comment}"></p>
+        <small data-sly-test="${comment.edited}">Comment edited by author.</small>
         <div data-sly-list.reply="${comment.replies}" data-sly-unwrap>
           <div class="media">
             <div class="media-left">

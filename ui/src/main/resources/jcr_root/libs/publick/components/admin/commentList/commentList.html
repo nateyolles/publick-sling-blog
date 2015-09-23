@@ -1,13 +1,16 @@
 <div data-ng-controller="CommentController" data-sly-use.page="com.nateyolles.sling.publick.sightly.WCMUse">
-    <script type="text/ng-template" id="confirm.html">
+    <script type="text/ng-template" id="comment.html">
         <div class="modal-header">
-            <h3 class="modal-title">Delete</h3>
+            <h3 data-ng-show="deleteMode" class="modal-title">Delete</h3>
+            <h3 data-ng-show="editMode" lass="modal-title">Edit</h3>
         </div>
         <div class="modal-body">
-            <p>Are you sure that you want to delete this comment?</p>
-            <div class="well well-sm">
+            <p data-ng-show="deleteMode">Are you sure that you want to delete this comment?</p>
+            <p data-ng-show="editMode">Edit the comment and click 'OK'.</p>
+            <div class="well well-sm" data-ng-show="deleteMode">
                 <p data-ng-bind="comment.comment"></p>
             </div>
+            <textarea class="form-control" rows="3" data-ng-show="editMode" data-ng-model="comment.comment"></textarea>
         </div>
         <div class="modal-footer">
             <button class="btn btn-primary" ng-click="ok()" ${!page.authorable ? 'disabled' : '' @ context='attribute'}>OK</button>
@@ -22,6 +25,9 @@
                     <tr>
                         <th class="column-small">#</th>
                         <th>Comment</th>
+                        <th>Post</th>
+                        <th class="column-small">Replies</th>
+                        <th class="column-small">Edited</th>
                         <th class="column-small">Edit</th>
                         <th class="column-small">Spam</th>
                         <th class="column-small">Delete</th>
@@ -30,15 +36,12 @@
                 <tbody>
                     <tr data-ng-repeat="comment in comments" data-ng-class="{danger: comment.spam}">
                         <td data-ng-bind="$index + 1"></td>
-                        <td>
-                            <div data-ng-bind="comment.comment"></div>
-                            <div>
-                                <a data-ng-bind="comment.post.text" data-ng-href="{{comment.post.link}}" target="_blank"></a>
-                                <span data-ng-show="comment.replies > 0" data-ng-bind="'(' + comment.replies + ' replies)'"></span>
-                            </div>
-                        </td>
-                        <td><a href="" data-ng-click="edit()"><i class="glyphicon glyphicon-pencil"></i></a></td>
-                        <td><a href="" data-ng-click="akismet()"><i data-ng-class="{'glyphicon glyphicon-remove-sign': !comment.spam, 'glyphicon glyphicon-ok-sign': comment.spam}" tooltip="{{comment.spam ? 'Mark as valid' : 'Mark as spam'}}"></i></a></td>
+                        <td data-ng-bind="comment.comment"></td>
+                        <td><a data-ng-bind="comment.post.text" data-ng-href="{{comment.post.link}}" target="_blank"></a></td>
+                        <td data-ng-bind="comment.replies"></td>
+                        <td><i data-ng-show="comment.edited" class="fa fa-check"></i></td>
+                        <td><a href="" data-ng-click="edit($index)"><i class="glyphicon glyphicon-pencil"></i></a></td>
+                        <td><a href="" data-ng-click="akismet($index)"><i data-ng-class="{'glyphicon glyphicon-remove-sign': !comment.spam, 'glyphicon glyphicon-ok-sign': comment.spam}" tooltip="{{comment.spam ? 'Mark as valid' : 'Mark as spam'}}"></i></a></td>
                         <td><a href="" data-ng-click="delete($index)"><i class="glyphicon glyphicon-trash"></i></a></td>
                     </tr>
                 </tbody>

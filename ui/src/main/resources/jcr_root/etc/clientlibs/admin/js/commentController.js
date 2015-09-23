@@ -4,10 +4,33 @@
  */
 app.controller('CommentController', function($scope, $modal, CommentService) {
 
+  function openModal(action, index, callback) {
+    var modalInstance = $modal.open({
+      templateUrl: 'comment.html',
+      controller: 'CommentModalController',
+      resolve: {
+        action: function() {
+          return action;
+        },
+        comment: function() {
+          return $scope.comments[index];
+        }
+      }
+    });
+
+    modalInstance.result.then(function(data){
+      callback(data);
+    });
+  }
+
   $scope.comments = [];
 
-  $scope.edit = function() {
-    alert('TODO: edit');
+  $scope.edit = function(index) {
+    openModal('edit', index, function(data) {
+      if (data.success) {
+        $scope.comments[index] = data.comment;
+      }
+    });
   };
 
   $scope.akismet = function() {
@@ -15,26 +38,15 @@ app.controller('CommentController', function($scope, $modal, CommentService) {
   };
 
   $scope.delete = function(index) {
-
-    var modalInstance = $modal.open({
-      templateUrl: 'confirm.html',
-      controller: 'CommentModalController',
-      resolve: {
-        comment: function() {
-          return $scope.comments[index];
-        }
-      }
-    });
-
-    modalInstance.result.then(function(data) {
+    openModal('delete', index, function(data) {
       if (data.success) {
         $scope.comments.splice($scope.comments.indexOf(data.comment), 1);
       }
     });
   };
 
+  /* Get all comments on load */
   CommentService.getComments().success(function(data){
     $scope.comments = data;
   });
-
 });

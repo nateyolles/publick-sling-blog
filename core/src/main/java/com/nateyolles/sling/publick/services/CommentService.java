@@ -29,6 +29,16 @@ public interface CommentService {
     boolean deleteComment(final SlingHttpServletRequest request, final String id);
 
     /**
+     * Edit comment and mark it as author edited.
+     *
+     * @param request The current request to get session and Resource Resolver
+     * @param id The comment UUID
+     * @param text The comment text
+     * @return true if the operation was successful
+     */
+    boolean editComment(final SlingHttpServletRequest request, final String id, String text);
+
+    /**
      * Get the number of replies for a given comment.
      *
      * @param comment The current comment
