@@ -5,9 +5,11 @@
  */
 app.controller('CommentModalController', function ($scope, $modalInstance, CommentService, action, comment) {
 
+  $scope.comment = angular.copy(comment);
   $scope.editMode = action === 'edit';
   $scope.deleteMode = action === 'delete';
-  $scope.comment = angular.copy(comment);
+  $scope.spamMode = action === 'akismet' && !$scope.comment.spam;
+  $scope.hamMode = action === 'akismet' && $scope.comment.spam;
 
   $scope.ok = function () {
     if ($scope.deleteMode) {
@@ -17,6 +19,16 @@ app.controller('CommentModalController', function ($scope, $modalInstance, Comme
     } else if ($scope.editMode) {
       CommentService.editComment($scope.comment).success(function(data){
         $scope.comment.edited = true;
+        $modalInstance.close({success: true, comment: $scope.comment});
+      });
+    } else if ($scope.spamMode) {
+      CommentService.submitSpam($scope.comment).success(function(data){
+        $scope.comment.spam = true;
+        $modalInstance.close({success: true, comment: $scope.comment});
+      });
+    } else if ($scope.hamMode) {
+      CommentService.submitHam($scope.comment).success(function(data){
+        $scope.comment.spam = false;
         $modalInstance.close({success: true, comment: $scope.comment});
       });
     }

@@ -3,11 +3,15 @@
         <div class="modal-header">
             <h3 data-ng-show="deleteMode" class="modal-title">Delete</h3>
             <h3 data-ng-show="editMode" lass="modal-title">Edit</h3>
+            <h3 data-ng-show="spamMode" lass="modal-title">Submit as spam</h3>
+            <h3 data-ng-show="hamMode" lass="modal-title">Submit as ham</h3>
         </div>
         <div class="modal-body">
             <p data-ng-show="deleteMode">Are you sure that you want to delete this comment?</p>
+            <p data-ng-show="spamMode">Are you sure that you want to mark this comment as spam?</p>
+            <p data-ng-show="hamMode">Are you sure that you want to mark this comment as ham (a valid comment)?</p>
             <p data-ng-show="editMode">Edit the comment and click 'OK'.</p>
-            <div class="well well-sm" data-ng-show="deleteMode">
+            <div class="well well-sm" data-ng-show="deleteMode || spamMode || hamMode">
                 <p data-ng-bind="comment.comment"></p>
             </div>
             <textarea class="form-control" rows="3" data-ng-show="editMode" data-ng-model="comment.comment"></textarea>

@@ -12,6 +12,8 @@ import org.apache.felix.scr.annotations.Properties;
 import org.apache.felix.scr.annotations.Property;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.resource.ModifiableValueMap;
+import org.apache.sling.api.resource.PersistenceException;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 import org.osgi.service.component.ComponentContext;
@@ -216,7 +218,19 @@ public class AkismetServiceImpl implements AkismetService {
      * @return true if comment is spam, false if comment is valid.
      */
     public boolean isSpam(final Resource commentResource) {
-        return doAkismet(AkismetAction.CHECK_COMMENT, commentResource);
+        final boolean result = doAkismet(AkismetAction.CHECK_COMMENT, commentResource);
+
+        if (result) {
+            try {
+                final ModifiableValueMap properties = commentResource.adaptTo(ModifiableValueMap.class);
+                properties.put(PublickConstants.COMMENT_PROPERTY_SPAM, true);
+                commentResource.getResourceResolver().commit();
+            } catch (PersistenceException e) {
+                LOGGER.error("Could not save spam properties", e);
+            }
+        }
+
+        return result;
     }
 
     /**
@@ -230,7 +244,20 @@ public class AkismetServiceImpl implements AkismetService {
      * @return true if submission was successful.
      */
     public boolean submitSpam(final Resource commentResource) {
-        return doAkismet(AkismetAction.SUBMIT_SPAM, commentResource);
+        final boolean result = doAkismet(AkismetAction.SUBMIT_SPAM, commentResource);
+
+        if (result) {
+            try {
+                final ModifiableValueMap properties = commentResource.adaptTo(ModifiableValueMap.class);
+                properties.put(PublickConstants.COMMENT_PROPERTY_SPAM, true);
+                properties.put(PublickConstants.COMMENT_PROPERTY_DISPLAY, false);
+                commentResource.getResourceResolver().commit();
+            } catch (PersistenceException e) {
+                LOGGER.error("Could not save spam properties", e);
+            }
+        }
+
+        return result;
     }
 
     /**
@@ -243,7 +270,20 @@ public class AkismetServiceImpl implements AkismetService {
      * @return true if submission was successful.
      */
     public boolean submitHam(final Resource commentResource) {
-        return doAkismet(AkismetAction.SUBMIT_HAM, commentResource);
+        final boolean result = doAkismet(AkismetAction.SUBMIT_HAM, commentResource);
+
+        if (result) {
+            try {
+                final ModifiableValueMap properties = commentResource.adaptTo(ModifiableValueMap.class);
+                properties.put(PublickConstants.COMMENT_PROPERTY_SPAM, false);
+                properties.put(PublickConstants.COMMENT_PROPERTY_DISPLAY, true);
+                commentResource.getResourceResolver().commit();
+            } catch (PersistenceException e) {
+                LOGGER.error("Could not save spam properties", e);
+            }
+        }
+
+        return result;
     }
 
     /**

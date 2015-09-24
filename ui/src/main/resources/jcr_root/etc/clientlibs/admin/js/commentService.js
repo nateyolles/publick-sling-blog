@@ -45,5 +45,19 @@ app.factory('CommentService', function($http, formDataObject) {
     });
   };
 
+  commentFactory.submitSpam = function(comment) {
+    return post({
+      action: MARK_SPAM,
+      id: comment.id
+    });
+  };
+
+  commentFactory.submitHam = function(comment) {
+    return post({
+      action: MARK_HAM,
+      id: comment.id
+    });
+  };
+
   return commentFactory;
 });

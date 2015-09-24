@@ -100,8 +100,8 @@ public class CommentsView extends WCMUse {
                 if (StringUtils.isNotBlank(author)
                         && StringUtils.isNotBlank(comment)
                         && StringUtils.isNotBlank(date)) {
-                    commentProperties.put("author", display || spam ? author : "--");
-                    commentProperties.put("comment", display || spam ? comment : "Comment removed by author.");
+                    commentProperties.put("author", display && !spam ? author : "--");
+                    commentProperties.put("comment", display && !spam ? comment : "Comment removed by author.");
                     commentProperties.put("date", date);
                     commentProperties.put("edited", edited);
                     commentProperties.put("path", commentResource.getPath());

@@ -10,6 +10,7 @@ import javax.jcr.Session;
 import javax.jcr.query.Query;
 
 import org.apache.felix.scr.annotations.Component;
+import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.Service;
 import org.apache.jackrabbit.JcrConstants;
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -20,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.nateyolles.sling.publick.PublickConstants;
+import com.nateyolles.sling.publick.services.AkismetService;
 import com.nateyolles.sling.publick.services.CommentService;
 
 /**
@@ -31,6 +33,10 @@ import com.nateyolles.sling.publick.services.CommentService;
            name = "Publick comments service",
            description = "Service to get, delete, update and add comments.")
 public class CommentServiceImpl implements CommentService {
+
+    /** Akismet service to mark comments as spam or ham. */
+    @Reference
+    private AkismetService akismetService;
 
     /**
      * The logger.
@@ -114,6 +120,60 @@ public class CommentServiceImpl implements CommentService {
             }
         } catch (RepositoryException e) {
             LOGGER.error("Could not update comment from JCR", e);
+        }
+
+        return result;
+    }
+
+    /**
+     * Mark comment as spam, submit it to Akismet and delete it by setting
+     * it's display property to false.
+     *
+     * @param request The current request to get session and Resource Resolver
+     * @param id The comment UUID
+     * @return true if the operation was successful
+     */
+    public boolean markAsSpam(final SlingHttpServletRequest request, final String id) {
+        boolean result = false;
+
+        try {
+            final ResourceResolver resolver = request.getResourceResolver();
+            final Session session = resolver.adaptTo(Session.class);
+            final Node node = session.getNodeByIdentifier(id);
+
+            if (node != null) {
+                final Resource resource = resolver.getResource(node.getPath());
+                result = akismetService.submitSpam(resource);
+            }
+        } catch (RepositoryException e) {
+            LOGGER.error("Could not submit spam.", e);
+        }
+
+        return result;
+    }
+
+    /**
+     * Mark comment as ham, submit it to Akismet and mark it valid it by setting
+     * it's display property to true.
+     *
+     * @param request The current request to get session and Resource Resolver
+     * @param id The comment UUID
+     * @return true if the operation was successful
+     */
+    public boolean markAsHam(final SlingHttpServletRequest request, final String id) {
+        boolean result = false;
+
+        try {
+            final ResourceResolver resolver = request.getResourceResolver();
+            final Session session = resolver.adaptTo(Session.class);
+            final Node node = session.getNodeByIdentifier(id);
+
+            if (node != null) {
+                final Resource resource = resolver.getResource(node.getPath());
+                result = akismetService.submitHam(resource);
+            }
+        } catch (RepositoryException e) {
+            LOGGER.error("Could not submit ham.", e);
         }
 
         return result;

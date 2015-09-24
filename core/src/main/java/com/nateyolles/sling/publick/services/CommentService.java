@@ -39,6 +39,26 @@ public interface CommentService {
     boolean editComment(final SlingHttpServletRequest request, final String id, String text);
 
     /**
+     * Mark comment as spam, submit it to Akismet and delete it by setting
+     * it's display property to false.
+     *
+     * @param request The current request to get session and Resource Resolver
+     * @param id The comment UUID
+     * @return true if the operation was successful
+     */
+    boolean markAsSpam(final SlingHttpServletRequest request, final String id);
+
+    /**
+     * Mark comment as ham, submit it to Akismet and mark it valid it by setting
+     * it's display property to true.
+     *
+     * @param request The current request to get session and Resource Resolver
+     * @param id The comment UUID
+     * @return true if the operation was successful
+     */
+    boolean markAsHam(final SlingHttpServletRequest request, final String id);
+
+    /**
      * Get the number of replies for a given comment.
      *
      * @param comment The current comment

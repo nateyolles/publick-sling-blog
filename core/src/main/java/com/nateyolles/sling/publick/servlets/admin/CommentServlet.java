@@ -1,6 +1,7 @@
 package com.nateyolles.sling.publick.servlets.admin;
 
 import com.nateyolles.sling.publick.PublickConstants;
+import com.nateyolles.sling.publick.services.AkismetService;
 import com.nateyolles.sling.publick.services.CommentService;
 import com.nateyolles.sling.publick.services.LinkRewriterService;
 import com.nateyolles.sling.publick.services.UserService;
@@ -182,6 +183,30 @@ public class CommentServlet extends AdminServlet {
                     status = SlingHttpServletResponse.SC_INTERNAL_SERVER_ERROR;
                     header = "Error";
                     message = "Comment could not be edited.";
+                }
+            } else if (ACTION_MARK_SPAM.equals(action)) {
+                final boolean result = commentService.markAsSpam(request, commentId);
+
+                if (result) {
+                    status = SlingHttpServletResponse.SC_OK;
+                    header = "OK";
+                    message = "Comment successfully submitted as spam.";
+                } else {
+                    status = SlingHttpServletResponse.SC_INTERNAL_SERVER_ERROR;
+                    header = "Error";
+                    message = "Comment could not be submitted as spam.";
+                }
+            } else if (ACTION_MARK_HAM.equals(action)) {
+                final boolean result = commentService.markAsHam(request, commentId);
+
+                if (result) {
+                    status = SlingHttpServletResponse.SC_OK;
+                    header = "OK";
+                    message = "Comment successfully submitted as ham.";
+                } else {
+                    status = SlingHttpServletResponse.SC_INTERNAL_SERVER_ERROR;
+                    header = "Error";
+                    message = "Comment could not be submitted as ham.";
                 }
             } else {
                 status = SlingHttpServletResponse.SC_INTERNAL_SERVER_ERROR;

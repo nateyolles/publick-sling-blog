@@ -33,8 +33,16 @@ app.controller('CommentController', function($scope, $modal, CommentService) {
     });
   };
 
-  $scope.akismet = function() {
-    alert('TODO: akismet');
+  $scope.akismet = function(index) {
+    openModal('akismet', index, function(data) {
+      if (data.success) {
+        if (data.comment.spam) {
+          $scope.comments.splice($scope.comments.indexOf(data.comment), 1);
+        } else {
+          $scope.comments[index] = data.comment;
+        }
+      }
+    });
   };
 
   $scope.delete = function(index) {

@@ -135,6 +135,8 @@ public class CommentServlet extends SlingAllMethodsServlet {
                 commentNode.addMixin(NodeType.MIX_REFERENCEABLE);
 
                 resolver.commit();
+
+                akismetService.isSpam(commentResource);
             } catch (LoginException e) {
                 LOGGER.error("Could not login", e);
             } catch (RepositoryException e) {
