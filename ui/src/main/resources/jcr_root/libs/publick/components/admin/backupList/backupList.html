@@ -1,0 +1,28 @@
+<div data-ng-controller="BackupController" data-sly-use.page="com.nateyolles.sling.publick.sightly.WCMUse">
+    <div class="row">
+        <div class="col-xs-12">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th class="column-small">#</th>
+                        <th>Package</th>
+                        <th>Date</th>
+                        <th class="column-small">Size</th>
+                        <th class="column-small">Install</th>
+                        <th class="column-small">Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr data-ng-repeat="package in packages">
+                        <td data-ng-bind="$index + 1"></td>
+                        <td><a data-ng-bind="package.name" data-ng-href="{{package.path}}" target="_blank"></a></td>
+                        <td data-ng-bind="package.date"></td>
+                        <td data-ng-bind="package.size"></td>
+                        <td><a href="" data-ng-click="install($index)"><i class="glyphicon glyphicon-open"></i></a></td>
+                        <td><a href="" data-ng-click="delete($index)"><i class="glyphicon glyphicon-trash"></i></a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

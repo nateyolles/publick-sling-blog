@@ -14,6 +14,9 @@ public interface SystemSettingsService {
     /** OSGi property name for extensionless URLs */
     public static final String SYSTEM_EXTENSIONLESS_URLS = "system.extentionlessUrls";
 
+    /** OSGi property name for the temporary directory */
+    public static final String SYSTEM_TEMPORARY_DIRECTORY = "system.temporaryDirectory";
+
     /**
      * Set multiple properties for the System Settings service.
      *
@@ -55,4 +58,19 @@ public interface SystemSettingsService {
      * @return true if the save was successful.
      */
     boolean setExtensionlessUrls(final boolean value);
+
+    /**
+     * Get the setting for temporary directory.
+     *
+     * @return The setting for temporary directory.
+     */
+    String getTemporaryDirectory();
+
+    /**
+     * Set the value for temporary directory.
+     *
+     * @param directory The setting for the temporary directory.
+     * @return true if the save was successful.
+     */
+    boolean setTemporaryDirectory(final String directory);
 }

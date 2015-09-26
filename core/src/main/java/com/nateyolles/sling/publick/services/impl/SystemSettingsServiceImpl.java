@@ -114,4 +114,23 @@ public class SystemSettingsServiceImpl implements SystemSettingsService {
     public boolean setExtensionlessUrls(final boolean value) {
         return osgiService.setProperty(COMPONENT_PID, SYSTEM_EXTENSIONLESS_URLS, value);
     }
+
+    /**
+     * Get the setting for temporary directory.
+     *
+     * @return The setting for temporary directory.
+     */
+    public String getTemporaryDirectory() {
+        return osgiService.getStringProperty(COMPONENT_PID, SYSTEM_TEMPORARY_DIRECTORY, null);
+    }
+
+    /**
+     * Set the value for temporary directory.
+     *
+     * @param value The setting for the temporary directory.
+     * @return true if the save was successful.
+     */
+    public boolean setTemporaryDirectory(final String directory) {
+        return osgiService.setProperty(COMPONENT_PID, SYSTEM_TEMPORARY_DIRECTORY, directory);
+    }
 }

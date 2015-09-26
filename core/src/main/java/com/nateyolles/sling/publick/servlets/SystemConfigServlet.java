@@ -44,6 +44,9 @@ public class SystemConfigServlet extends AdminServlet {
     /** The extensionless URLs request parameter */
     private static final String EXTENSIONLESS_URLS_PROPERTY = "extensionlessUrls";
 
+    /** The temporary directory request parameter */
+    private static final String TEMPORARY_DIRECTORY_PROPERTY = "temporaryDirectory";
+
     /**
      * Save system properties on POST.
      *
@@ -63,11 +66,13 @@ public class SystemConfigServlet extends AdminServlet {
         if (allowWrite) {
             final String blogName = request.getParameter(BLOG_NAME_PROPERTY);
             final boolean extensionlessUrls = Boolean.parseBoolean(request.getParameter(EXTENSIONLESS_URLS_PROPERTY));
+            final String tempDir = request.getParameter(TEMPORARY_DIRECTORY_PROPERTY);
 
             final Map<String, Object> properties = new HashMap<String, Object>();
 
             properties.put(SystemSettingsService.SYSTEM_BLOG_NAME, blogName);
             properties.put(SystemSettingsService.SYSTEM_EXTENSIONLESS_URLS, extensionlessUrls);
+            properties.put(SystemSettingsService.SYSTEM_TEMPORARY_DIRECTORY, tempDir);
 
             boolean result = systemSettingsService.setProperties(properties);
 

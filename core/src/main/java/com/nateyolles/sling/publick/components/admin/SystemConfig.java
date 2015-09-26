@@ -14,39 +14,28 @@ import com.nateyolles.sling.publick.sightly.WCMUse;
  */
 public class SystemConfig extends WCMUse {
 
-    /**
-     * The Sling Script Helper to get services.
-     */
+    /** The Sling Script Helper to get services. */
     private SlingScriptHelper scriptHelper;
 
-    /**
-     * The current resource.
-     */
+    /** The current resource. */
     private Resource resource;
 
-    /**
-     * The name of the blog.
-     */
+    /** The name of the blog. */
     private String blogName;
 
-    /**
-     * Setting for extensionless URLs.
-     */
+    /** The file system temporary directory */
+    private String temporaryDirectory;
+
+    /** Setting for extensionless URLs. */
     private boolean extensionlessUrls;
 
-    /**
-     * The separator between blog name and page title.
-     */
+    /** The separator between blog name and page title. */
     private static final String TITLE_SEPARATOR = " - ";
 
-    /**
-     * The title property of the resource.
-     */
+    /** The title property of the resource. */
     private static final String TITLE_PROPERTY = "title";
 
-    /**
-     * Initialize the Sightly component.
-     */
+    /** Initialize the Sightly component. */
     @Override
     public void activate() {
         scriptHelper = getSlingScriptHelper();
@@ -57,6 +46,7 @@ public class SystemConfig extends WCMUse {
         if (systemSettingsService != null) {
             blogName = systemSettingsService.getBlogName();
             extensionlessUrls = systemSettingsService.getExtensionlessUrls();
+            temporaryDirectory = systemSettingsService.getTemporaryDirectory();
         }
     }
 
@@ -67,6 +57,15 @@ public class SystemConfig extends WCMUse {
      */
     public String getBlogName() {
         return blogName;
+    }
+
+    /**
+     * Get the temporary directory.
+     *
+     * @return The temporary directory.
+     */
+    public String getTemporaryDirectory() {
+        return temporaryDirectory;
     }
 
     /**

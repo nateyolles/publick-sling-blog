@@ -1,0 +1,15 @@
+{
+    "jcr:primaryType": "publick:page",
+    "sling:resourceType" : "publick/pages/adminSecurePage",
+    "title" : "Backups",
+    "jcr:content" : {
+        "mainContent" : {
+            "jcr:primaryType": "nt:unstructured",
+            "sling:resourceType" : "publick/components/foundation/parsys",
+            "backupList" : {
+                "jcr:primaryType": "nt:unstructured",
+                "sling:resourceType" : "publick/components/admin/backupList"
+            }
+        }
+    }
+}
