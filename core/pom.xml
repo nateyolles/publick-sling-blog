@@ -42,8 +42,6 @@
                             <instructions>
                                 <Embed-Dependency>
                                     commons-lang3,
-                                    httpcore,
-                                    httpclient,
                                     java-akismet
                                 </Embed-Dependency>
                             </instructions>
@@ -236,6 +234,26 @@
                                     <bundleFileName>${project.build.directory}/dependency/commons-logging-1.2.jar</bundleFileName>
                                 </configuration>
                             </execution>
+                            <execution>
+                                <id>install-httpcore</id>
+                                <goals>
+                                    <goal>install-file</goal>
+                                </goals>
+                                <phase>install</phase>
+                                <configuration>
+                                    <bundleFileName>${project.build.directory}/dependency/httpcore-osgi-4.4.3.jar</bundleFileName>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>install-httpclient</id>
+                                <goals>
+                                    <goal>install-file</goal>
+                                </goals>
+                                <phase>install</phase>
+                                <configuration>
+                                    <bundleFileName>${project.build.directory}/dependency/httpclient-osgi-4.5.jar</bundleFileName>
+                                </configuration>
+                            </execution>
                         </executions>
                     </plugin>
                 </plugins>
@@ -412,12 +430,12 @@
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpcore</artifactId>
+            <artifactId>httpcore-osgi</artifactId>
             <version>4.4.3</version>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
+            <artifactId>httpclient-osgi</artifactId>
             <version>4.5</version>
         </dependency>
         <dependency>
