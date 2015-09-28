@@ -16,3 +16,4 @@ bin
 .metadata/
 ui/node_modules/
 ui/src/main/resources/jcr_root/etc/clientlibs/admin/js/admin.js
+ui/node/

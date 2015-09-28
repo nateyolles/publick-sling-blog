@@ -14,71 +14,68 @@
     <description>com.nateyolles.sling.publick - ui</description>
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
-                <extensions>true</extensions>
-                <version>2.0.1</version>
-                <configuration>
-                    <instructions>
-                        <Sling-Nodetypes>SLING-INF/nodetypes/nodetypes.cnd</Sling-Nodetypes>
-                        <Sling-Initial-Content>
-                            jcr_root/libs;overwrite:=true;uninstall:=true;path:=/libs,
-                            jcr_root/etc/clientlibs;overwrite:=true;uninstall:=true;path:=/etc/clientlibs,
-                            jcr_root/content/admin;overwrite:=true;uninstall:=true;path:=/content/admin,
-                            jcr_root/content/assets;overwrite:=false;uninstall:=false;path:=/content/assets,
-                            jcr_root/content;overwrite:=false;overwriteProperties:=true;uninstall:=false;path:=/content,
-                            jcr_root/content/comments;overwrite:=false;uninstall:=false;path:=/content/comments
-                        </Sling-Initial-Content>
-                    </instructions>
-                </configuration>
-            </plugin>
-        </plugins>
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<extensions>true</extensions>
+				<version>2.0.1</version>
+				<configuration>
+					<instructions>
+						<Sling-Nodetypes>SLING-INF/nodetypes/nodetypes.cnd</Sling-Nodetypes>
+						<Sling-Initial-Content>
+							jcr_root/libs;overwrite:=true;uninstall:=true;path:=/libs,
+							jcr_root/etc/clientlibs;overwrite:=true;uninstall:=true;path:=/etc/clientlibs,
+							jcr_root/content/admin;overwrite:=true;uninstall:=true;path:=/content/admin,
+							jcr_root/content/assets;overwrite:=false;uninstall:=false;path:=/content/assets,
+							jcr_root/content;overwrite:=false;overwriteProperties:=true;uninstall:=false;path:=/content,
+							jcr_root/content/comments;overwrite:=false;uninstall:=false;path:=/content/comments
+						</Sling-Initial-Content>
+					</instructions>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.github.eirslett</groupId>
+				<artifactId>frontend-maven-plugin</artifactId>
+				<version>0.0.26</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>install-node-and-npm</goal>
+						</goals>
+						<configuration>
+							<nodeVersion>v0.12.1</nodeVersion>
+							<npmVersion>1.4.9</npmVersion>
+						</configuration>
+					</execution>
+					<execution>
+						<id>npm install</id>
+						<goals>
+							<goal>npm</goal>
+						</goals>
+					</execution>
+		
+					<execution>
+						<id>grunt_build</id>
+						<goals>
+							<goal>grunt</goal>
+						</goals>
+		
+						<!-- optional: default phase is "generate-resources" -->
+						<phase>generate-resources</phase>
+		
+						<configuration>
+							<arguments>build</arguments>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
     </build>
     <profiles>
         <profile>
             <id>autoInstallBundle</id>
             <build>
                 <plugins>
-                    <plugin>
-                        <groupId>org.codehaus.gmaven</groupId>
-                        <artifactId>gmaven-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <phase>generate-sources</phase>
-                                <goals>
-                                    <goal>execute</goal>
-                                </goals>
-                                <configuration>
-                                    <providerSelection>2.0</providerSelection>
-                                    <source><![CDATA[
-                                        def commands = []
-                                        commands.add("grunt build")
-
-                                        def doExecute(com) {
-                                            def command = System.properties["os.name"].contains("Windows") ? "cmd /c "+com : com
-                                            def process = command.execute(null, new File("${project.basedir}"))
-                                            process.waitForProcessOutput(System.out, System.err)
-
-                                            return process.exitValue()
-                                        }
-
-                                        def exitStatus = 0
-                                        for (command in commands) {
-                                            exitStatus += doExecute(command)
-                                            if (exitStatus != 0) {
-                                                break;
-                                            }
-                                        }
-
-                                        if (exitStatus) {
-                                            throw new org.apache.maven.plugin.MojoExecutionException("Error while executing Reimagine build")
-                                        }
-                                    ]]></source>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
                     <plugin>
                         <groupId>org.apache.sling</groupId>
                         <artifactId>maven-sling-plugin</artifactId>
