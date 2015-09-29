@@ -5,7 +5,8 @@
  */
 app.factory('BackupService', function($http, formDataObject) {
   var backupFactory = {},
-      PATH = '/bin/admin/backup';
+      PATH = '/bin/admin/backup',
+      ACTION_CREATE = "create_package";
 
   /**
    * @private
@@ -23,6 +24,13 @@ app.factory('BackupService', function($http, formDataObject) {
     return $http({
       method: 'GET',
       url: PATH
+    });
+  };
+
+  backupFactory.createBackup = function(name) {
+    return post({
+      action: ACTION_CREATE,
+      name: name
     });
   };
 

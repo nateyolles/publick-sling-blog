@@ -1,4 +1,42 @@
 <div data-ng-controller="BackupController" data-sly-use.page="com.nateyolles.sling.publick.sightly.WCMUse">
+    <script type="text/ng-template" id="package.html">
+        <div class="modal-header">
+            <h3 data-ng-show="createMode" class="modal-title">Create Package</h3>
+            <h3 data-ng-show="installMode" class="modal-title">Install Package</h3>
+            <h3 data-ng-show="uploadMode" class="modal-title">Upload Package</h3>
+            <h3 data-ng-show="deleteMode" class="modal-title">Delete Package</h3>
+        </div>
+        <div class="modal-body">
+            <div data-ng-show="deleteMode">
+                <p>Are you sure that you want to delete this package? You will not be able to recover the package.</p>
+                <div class="well well-sm">
+                    <p data-ng-bind="package.name"></p>
+                </div>
+            </div>
+            <div data-ng-show="installMode">
+                <p>Are you sure that you want to install this package? Installing the package will overwrite current data.</p>
+                <div class="well well-sm">
+                    <p data-ng-bind="package.name"></p>
+                </div>
+            </div>
+            <div data-ng-show="createMode">
+                <p>Give the package a name and click 'OK'.</p>
+                <div class="form-group">
+                    <label>Package name</label>
+                    <input type="text" class="form-control" data-ng-model="name">
+                </div>
+            </div>
+            <div data-ng-show="uploadMode">
+                <p>Choose the package from your computer and click 'OK'.</p>
+                <input type="file">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" ng-click="ok()" ${!page.authorable ? 'disabled' : '' @ context='attribute'}>OK</button>
+            <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+        </div>
+    </script>
+
     <div class="row">
         <div class="col-xs-12">
             <table class="table table-hover">
@@ -15,7 +53,7 @@
                 <tbody>
                     <tr data-ng-repeat="package in packages">
                         <td data-ng-bind="$index + 1"></td>
-                        <td><a data-ng-bind="package.name" data-ng-href="{{package.path}}" target="_blank"></a></td>
+                        <td><a data-ng-bind="package.name" data-ng-href="{{package.path}}"></a></td>
                         <td data-ng-bind="package.date"></td>
                         <td data-ng-bind="package.size"></td>
                         <td><a href="" data-ng-click="install($index)"><i class="glyphicon glyphicon-open"></i></a></td>
@@ -23,6 +61,12 @@
                     </tr>
                 </tbody>
             </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <button data-ng-click="upload()" type="submit" class="btn btn-primary">Upload package</button>
+            <button data-ng-click="create()" type="submit" class="btn btn-primary">Create new package</button>
         </div>
     </div>
 </div>

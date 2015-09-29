@@ -26,9 +26,9 @@ public interface PackageService {
      * @param packageName The name of the package
      * @param version The version of the package
      * @param paths The JCR paths to include in the package
-     * @return true if package is created successfully
+     * @return the saved JCR Package
      */
-    boolean createPackage(final SlingHttpServletRequest request, final String groupName,
+    JcrPackage createPackage(final SlingHttpServletRequest request, final String groupName,
             final String packageName, final String version, final String[] paths);
 
     /**
@@ -36,7 +36,7 @@ public interface PackageService {
      *
      * @param request The Sling HTTP servlet request
      * @param packageName The name of the package
-     * @return true if package is created successfully
+     * @return the saved JCR Package
      */
-    boolean createBackupPackage(final SlingHttpServletRequest request, final String packageName);
+    JcrPackage createBackupPackage(final SlingHttpServletRequest request, final String packageName);
 }

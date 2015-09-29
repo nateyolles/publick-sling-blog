@@ -1,7 +1,7 @@
 package com.nateyolles.sling.publick.servlets;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.servlets.SlingAllMethodsServlet;
-
 import org.apache.sling.commons.json.JSONException;
 import org.apache.sling.commons.json.JSONObject;
 
@@ -25,15 +25,38 @@ public abstract class AdminServlet extends SlingAllMethodsServlet {
      * @param header The header to send.
      * @param message The message to send.
      */
-    protected void sendResponse(PrintWriter writer, String header, String message) {
+    protected void sendResponse(final PrintWriter writer, final String header, final String message) {
+        sendResponse(writer, header, message, null);
+    }
+
+    /**
+     * Send the JSON response.
+     *
+     * @param writer The PrintWriter.
+     * @param header The header to send.
+     * @param message The message to send.
+     * @param data The data, probably JSON string
+     */
+    protected void sendResponse(final PrintWriter writer, final String header, final String message, final String data) {
         try {
-            writer.write(new JSONObject()
-                .put("header", header)
-                .put("message", message)
-                .toString());
+            JSONObject json = new JSONObject();
+
+            json.put("header", header);
+            json.put("message", message);
+
+            if (StringUtils.isNotBlank(data)) {
+                json.put("data", data);
+            }
+
+            writer.write(json.toString());
         } catch (JSONException e) {
             LOGGER.error("Could not write JSON", e);
-            writer.write(String.format("{\"header\" : \"%s\", \"message\" : \"%s\"}", header, message));
+
+            if (StringUtils.isNotBlank(data)) {
+                writer.write(String.format("{\"header\" : \"%s\", \"message\" : \"%s\", \"data\" :  \"%s\"}", header, message, data));
+            } else {
+                writer.write(String.format("{\"header\" : \"%s\", \"message\" : \"%s\"}", header, message));
+            }
         }
     }
 }

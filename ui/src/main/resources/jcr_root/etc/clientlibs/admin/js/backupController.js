@@ -19,8 +19,35 @@ app.controller('BackupController', function($scope, $modal, BackupService) {
   };
 
   $scope.create = function() {
-    alert('TODO: create');
+    openModal('create', null, function(data) {
+      if (data.success) {
+        $scope.packages.unshift(data.package);
+      }
+    });
   };
+
+  function openModal(action, index, callback) {
+    var modalInstance = $modal.open({
+      templateUrl: 'package.html',
+      controller: 'BackupModalController',
+      resolve: {
+        action: function() {
+          return action;
+        },
+        package: function() {
+          if (index) {
+            return $scope.packages[index];
+          } else {
+            return null;
+          }
+        }
+      }
+    });
+
+    modalInstance.result.then(function(data){
+      callback(data);
+    });
+  }
 
   /* Get all packages on load */
   BackupService.getPackages().success(function(data){

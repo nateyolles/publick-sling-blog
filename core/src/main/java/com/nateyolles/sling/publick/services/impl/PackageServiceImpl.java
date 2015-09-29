@@ -84,13 +84,15 @@ public class PackageServiceImpl implements PackageService {
      * @param packageName The name of the package
      * @param version The version of the package
      * @param paths The JCR paths to include in the package
-     * @return true if package is created successfully
+     * @return true  the saved JCR Package
      */
-    public boolean createPackage(final SlingHttpServletRequest request, final String groupName,
+    public JcrPackage createPackage(final SlingHttpServletRequest request, final String groupName,
             final String packageName, final String version, final String[] paths) {
 
         Session session = null;
         VaultPackage vaultPackage = null;
+        JcrPackage savedPackage = null;
+
         File tempDirectory = VltUtils.getTempFolder(settingsService.getTemporaryDirectory());
 
         try {
@@ -101,18 +103,14 @@ public class PackageServiceImpl implements PackageService {
 
             vaultPackage = VltUtils.createPackage(packaging.getPackageManager(), session, opts, tempDirectory);
 
-            uploadPackage(session, vaultPackage);
+            savedPackage = uploadPackage(session, vaultPackage);
+
             session.save();
         } catch (Exception e) {
             VltUtils.deletePackage(vaultPackage);
-        } finally {
-            if (session != null && session.isLive()) {
-                session.logout();
-                session = null;
-            }
         }
 
-        return true;
+        return savedPackage;
     }
 
     /**
@@ -120,9 +118,9 @@ public class PackageServiceImpl implements PackageService {
      *
      * @param request The Sling HTTP servlet request
      * @param packageName The name of the package
-     * @return true if package is created successfully
+     * @return  the saved JCR Package
      */
-    public boolean createBackupPackage(final SlingHttpServletRequest request, final String packageName) {
+    public JcrPackage createBackupPackage(final SlingHttpServletRequest request, final String packageName) {
         return createPackage(request, BACKUP_GROUP, packageName, BACKUP_VERSION, BACKUP_PATHS);
     }
 
