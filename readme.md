@@ -21,13 +21,15 @@ java -jar org.apache.sling.launchpad-7-standalone.jar
 
 [Apache Maven](https://maven.apache.org/) is used to build the project.
 
-## Install static asset build tools
+## Install static asset build tools (optional)
+
+The [frontend-maven-plugin](https://github.com/eirslett/frontend-maven-plugin) installs NodeJS and NPM locally then runs Bower and Grunt. The following steps are not required.
 
   1. Navigate to /ui bundle.
   2. Install [NodeJS and NPM](https://nodejs.org/)
   3. Install [Grunt CLI](http://gruntjs.com/getting-started): `npm install -g grunt-cli`
   4. Install Grunt plugins: `npm install`
-  5. Optional: Run Grunt: `grunt build`
+  5. Run Grunt: `grunt build`
 
 ## Install Sightly
 

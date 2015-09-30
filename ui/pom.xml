@@ -53,16 +53,13 @@
                             <goal>npm</goal>
                         </goals>
                     </execution>
-
                     <execution>
                         <id>grunt_build</id>
                         <goals>
                             <goal>grunt</goal>
                         </goals>
-		
-						<!-- optional: default phase is "generate-resources" -->
+                        <!-- optional: default phase is "generate-resources" -->
                         <phase>generate-resources</phase>
-		
                         <configuration>
                             <arguments>build</arguments>
                         </configuration>
