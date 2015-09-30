@@ -82,6 +82,7 @@ Setup your System Settings
 1. Navigate to [http://localhost:8080/admin/config/system.html](http://localhost:8080/admin/config/system.html)
 2. Insert your blog name.
 3. Turn extensionless URLs on/off and setup your web server rewrites accordingly.
+4. Declare a temporary directory on your file system. This is needed to create backup packages.
 
 ## Debugging
 
