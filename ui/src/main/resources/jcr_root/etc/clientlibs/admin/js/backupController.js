@@ -7,7 +7,12 @@ app.controller('BackupController', function($scope, $modal, BackupService) {
   $scope.packages = [];
 
   $scope.install = function(index) {
-    alert('TODO: install');
+    openModal('install', index, function(data) {
+      if (data.success) {
+        // TODO: Display success/failure alerts
+        alert('success');
+      }
+    });
   };
 
   $scope.delete = function(index) {

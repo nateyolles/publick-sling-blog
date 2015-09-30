@@ -2,6 +2,8 @@ package com.nateyolles.sling.publick.services;
 
 import java.util.List;
 
+import org.apache.jackrabbit.vault.fs.api.ImportMode;
+import org.apache.jackrabbit.vault.fs.io.AccessControlHandling;
 import org.apache.jackrabbit.vault.packaging.JcrPackage;
 import org.apache.sling.api.SlingHttpServletRequest;
 
@@ -39,4 +41,34 @@ public interface PackageService {
      * @return the saved JCR Package
      */
     JcrPackage createBackupPackage(final SlingHttpServletRequest request, final String packageName);
+
+    /**
+     * Install package.
+     *
+     * Read about ImportModes: {@link http://jackrabbit.apache.org/filevault/importmode.html}.
+     * Read about AccessControlHandling: {@link https://jackrabbit.apache.org/filevault/apidocs/org/apache/jackrabbit/vault/fs/io/AccessControlHandling.html}.
+     *
+     * @param request The current request.
+     * @param groupName The name of the package group to install
+     * @param packageName The name of the package to install
+     * @param version The version of the package to install
+     * @param importMode The import mode to use while installing
+     * @param aclHandling The Access Control Handing to use while installing
+     * @return true if package was installed successfully
+     */
+    boolean installPackage(final SlingHttpServletRequest request, final String groupName,
+            final String packageName, final String version, final ImportMode importMode,
+            final AccessControlHandling aclHandling);
+
+    /**
+     * Install backup package.
+     *
+     * Ignore access control so that authors can't upload a package and change them.
+     * Replace all content so that it's a complete restore.
+     *
+     * @param request The current request.
+     * @param packageName The name of the package to install
+     * @return true if package was installed successfully
+     */
+    boolean installBackupPackage(final SlingHttpServletRequest request, final String packageName);
 }

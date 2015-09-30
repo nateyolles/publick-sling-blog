@@ -55,6 +55,9 @@ public class BackupServlet extends AdminServlet {
     /** Create new package action parameter value */
     private static final String ACTION_CREATE = "create_package";
 
+    /** Install new package action parameter value */
+    private static final String ACTION_INSTALL = "install_package";
+
     /** Package name request parameter */
     private static final String PACKAGE_NAME_PARAMETER = "name";
 
@@ -144,6 +147,18 @@ public class BackupServlet extends AdminServlet {
                     status = SlingHttpServletResponse.SC_INTERNAL_SERVER_ERROR;
                     header = "Error";
                     message = "Package could not be created.";
+                }
+            } else if (ACTION_INSTALL.equals(action)) {
+                final boolean result = packageService.installBackupPackage(request, packageName);
+
+                if (result) {
+                    status = SlingHttpServletResponse.SC_OK;
+                    header = "OK";
+                    message = "Package successfully installed.";
+                } else {
+                    status = SlingHttpServletResponse.SC_INTERNAL_SERVER_ERROR;
+                    header = "Error";
+                    message = "Package could not be installed.";
                 }
             } else {
                 status = SlingHttpServletResponse.SC_INTERNAL_SERVER_ERROR;

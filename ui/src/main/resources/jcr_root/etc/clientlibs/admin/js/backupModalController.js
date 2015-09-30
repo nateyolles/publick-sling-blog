@@ -21,7 +21,9 @@ app.controller('BackupModalController', function ($scope, $modalInstance, Backup
     } else if ($scope.uploadMode) {
       // TODO
     } else if ($scope.installMode) {
-      // TODO
+      BackupService.installBackup($scope.package.name).success(function(data){
+        $modalInstance.close({success: true});
+      });
     }
   };
 

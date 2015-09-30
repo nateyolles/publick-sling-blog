@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+import javax.jcr.Node;
 import javax.jcr.Session;
 import javax.jcr.RepositoryException;
 
@@ -20,10 +21,15 @@ import com.nateyolles.sling.publick.services.SystemSettingsService;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.jackrabbit.vault.fs.api.ImportMode;
 import org.apache.jackrabbit.vault.fs.api.WorkspaceFilter;
+import org.apache.jackrabbit.vault.fs.io.AccessControlHandling;
+import org.apache.jackrabbit.vault.fs.io.ImportOptions;
 import org.apache.jackrabbit.vault.packaging.ExportOptions;
 import org.apache.jackrabbit.vault.packaging.JcrPackage;
 import org.apache.jackrabbit.vault.packaging.JcrPackageManager;
+import org.apache.jackrabbit.vault.packaging.PackageException;
+import org.apache.jackrabbit.vault.packaging.PackageId;
 import org.apache.jackrabbit.vault.packaging.Packaging;
 import org.apache.jackrabbit.vault.packaging.VaultPackage;
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -122,6 +128,64 @@ public class PackageServiceImpl implements PackageService {
      */
     public JcrPackage createBackupPackage(final SlingHttpServletRequest request, final String packageName) {
         return createPackage(request, BACKUP_GROUP, packageName, BACKUP_VERSION, BACKUP_PATHS);
+    }
+
+    /**
+     * Install package.
+     *
+     * Read about ImportModes: {@link http://jackrabbit.apache.org/filevault/importmode.html}.
+     * Read about AccessControlHandling: {@link https://jackrabbit.apache.org/filevault/apidocs/org/apache/jackrabbit/vault/fs/io/AccessControlHandling.html}.
+     *
+     * @param request The current request.
+     * @param groupName The name of the package group to install
+     * @param packageName The name of the package to install
+     * @param version The version of the package to install
+     * @param importMode The import mode to use while installing
+     * @param aclHandling The Access Control Handing to use while installing
+     * @return true if package was installed successfully
+     */
+    public boolean installPackage(final SlingHttpServletRequest request, final String groupName,
+            final String packageName, final String version, final ImportMode importMode,
+            final AccessControlHandling aclHandling) {
+
+        Session session = request.getResourceResolver().adaptTo(Session.class);
+        boolean result;
+
+        final JcrPackageManager packageManager = packaging.getPackageManager(session);
+        final PackageId packageId = new PackageId(groupName, packageName, version);
+
+        try {
+            final JcrPackage jcrPackage = packageManager.open(packageId);
+            final ImportOptions opts = VltUtils.getImportOptions(aclHandling, importMode);
+
+            jcrPackage.install(opts);
+            result = true;
+        } catch (RepositoryException | PackageException | IOException e) {
+            LOGGER.error("Could not install package", e);
+            result = false;
+        } finally {
+            if (session != null && session.isLive()) {
+                session.logout();
+                session = null;
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Install Publick backup package.
+     *
+     * Ignore access control so that authors can't upload a package and change them.
+     * Replace all content so that it's a complete restore.
+     *
+     * @param request The current request.
+     * @param packageName The name of the package to install
+     * @return true if package was installed successfully
+     */
+    public boolean installBackupPackage(final SlingHttpServletRequest request, final String packageName) {
+        return installPackage(request, BACKUP_GROUP, packageName, BACKUP_VERSION, ImportMode.REPLACE,
+                AccessControlHandling.IGNORE);
     }
 
     /**
