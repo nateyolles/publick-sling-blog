@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.Session;
@@ -21,6 +22,7 @@ import com.nateyolles.sling.publick.services.SystemSettingsService;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.jackrabbit.commons.JcrUtils;
 import org.apache.jackrabbit.vault.fs.api.ImportMode;
 import org.apache.jackrabbit.vault.fs.api.WorkspaceFilter;
 import org.apache.jackrabbit.vault.fs.io.AccessControlHandling;
@@ -33,6 +35,10 @@ import org.apache.jackrabbit.vault.packaging.PackageId;
 import org.apache.jackrabbit.vault.packaging.Packaging;
 import org.apache.jackrabbit.vault.packaging.VaultPackage;
 import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.request.RequestParameter;
+import org.apache.sling.api.request.RequestParameterMap;
+import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ResourceResolver;
 
 /**
  * Service to get, create, upload, install and delete packages.
@@ -186,6 +192,39 @@ public class PackageServiceImpl implements PackageService {
     public boolean installBackupPackage(final SlingHttpServletRequest request, final String packageName) {
         return installPackage(request, BACKUP_GROUP, packageName, BACKUP_VERSION, ImportMode.REPLACE,
                 AccessControlHandling.IGNORE);
+    }
+
+    /**
+     * Upload a package.
+     *
+     * @param request The current Sling HTTP servlet request
+     * @return The uploaded JCR Package
+     */
+    public JcrPackage uploadBackupPackage(final SlingHttpServletRequest request) {
+        final RequestParameterMap params = request.getRequestParameterMap();
+        Session session = null;
+        JcrPackage jcrPackage = null;
+
+        for (final Map.Entry<String, RequestParameter[]> pairs : params.entrySet()) {
+            final RequestParameter[] pArr = pairs.getValue();
+            final RequestParameter param = pArr[0];
+
+            if (!param.isFormField()) {
+                try {
+                    session = request.getResourceResolver().adaptTo(Session.class);
+                    final JcrPackageManager packageManager = packaging.getPackageManager(session);
+                    final InputStream stream = param.getInputStream();
+
+                    jcrPackage = packageManager.upload(stream, true);
+                } catch (java.io.IOException e) {
+                    LOGGER.error("Could not get image input stream", e);
+                } catch (RepositoryException e) {
+                    LOGGER.error("Could not upload package to repository", e);
+                }
+            }
+        }
+
+        return jcrPackage;
     }
 
     /**

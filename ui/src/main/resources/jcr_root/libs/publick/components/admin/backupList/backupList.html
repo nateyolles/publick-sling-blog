@@ -3,7 +3,6 @@
         <div class="modal-header">
             <h3 data-ng-show="createMode" class="modal-title">Create Package</h3>
             <h3 data-ng-show="installMode" class="modal-title">Install Package</h3>
-            <h3 data-ng-show="uploadMode" class="modal-title">Upload Package</h3>
             <h3 data-ng-show="deleteMode" class="modal-title">Delete Package</h3>
         </div>
         <div class="modal-body">
@@ -26,10 +25,6 @@
                     <input type="text" class="form-control" data-ng-model="name">
                 </div>
             </div>
-            <div data-ng-show="uploadMode">
-                <p>Choose the package from your computer and click 'OK'.</p>
-                <input type="file">
-            </div>
         </div>
         <div class="modal-footer">
             <button class="btn btn-primary" ng-click="ok()" ${!page.authorable ? 'disabled' : '' @ context='attribute'}>OK</button>
@@ -51,6 +46,13 @@
                     </tr>
                 </thead>
                 <tbody>
+                    <tr class="warning">
+                        <td colspan="6">
+                            <div class="package-upload" ngf-drop="" ngf-select="" ng-model="files" ng-model-rejected="rejFiles" ngf-drag-over-class="{accept:'hover', reject:'hover-error', delay:100}" ngf-multiple="false" ngf-allow-dir="true" ngf-accept="'application/zip'" ngf-drop-available="dropAvailable" data-ng-disabled="${!page.authorable && 'true'}">
+                                Drag &amp; Drop or click to upload package.
+                            </div>
+                        </td>
+                    </tr>
                     <tr data-ng-repeat="package in packages">
                         <td data-ng-bind="$index + 1"></td>
                         <td><a data-ng-bind="package.name" data-ng-href="{{package.path}}"></a></td>

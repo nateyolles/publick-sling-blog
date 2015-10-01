@@ -6,7 +6,6 @@ app.controller('BackupModalController', function ($scope, $modalInstance, Backup
 
   $scope.installMode = action == 'install';
   $scope.deleteMode = action == 'delete';
-  $scope.uploadMode = action == 'upload';
   $scope.createMode = action == 'create';
   $scope.package = package;
 
@@ -17,8 +16,6 @@ app.controller('BackupModalController', function ($scope, $modalInstance, Backup
         $modalInstance.close({success: true, package: $scope.package});
       });
     } else if ($scope.deleteMode) {
-      // TODO
-    } else if ($scope.uploadMode) {
       // TODO
     } else if ($scope.installMode) {
       BackupService.installBackup($scope.package.name).success(function(data){

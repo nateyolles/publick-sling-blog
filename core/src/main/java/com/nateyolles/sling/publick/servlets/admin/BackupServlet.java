@@ -1,6 +1,7 @@
 package com.nateyolles.sling.publick.servlets.admin;
 
 import com.nateyolles.sling.publick.PublickConstants;
+import com.nateyolles.sling.publick.services.FileUploadService;
 import com.nateyolles.sling.publick.services.PackageService;
 import com.nateyolles.sling.publick.services.UserService;
 import com.nateyolles.sling.publick.servlets.AdminServlet;
@@ -38,6 +39,10 @@ public class BackupServlet extends AdminServlet {
     /** The logger. */
     private static final Logger LOGGER = LoggerFactory.getLogger(BackupServlet.class);
 
+    /** File Upload service to handle the upload. */
+    @Reference
+    private FileUploadService fileUploadService;
+
     /** Service to determine if the current user has write permissions. */
     @Reference
     private UserService userService;
@@ -57,6 +62,9 @@ public class BackupServlet extends AdminServlet {
 
     /** Install new package action parameter value */
     private static final String ACTION_INSTALL = "install_package";
+
+    /** Install new package action parameter value */
+    private static final String ACTION_UPLOAD = "upload_package";
 
     /** Package name request parameter */
     private static final String PACKAGE_NAME_PARAMETER = "name";
@@ -159,6 +167,25 @@ public class BackupServlet extends AdminServlet {
                     status = SlingHttpServletResponse.SC_INTERNAL_SERVER_ERROR;
                     header = "Error";
                     message = "Package could not be installed.";
+                }
+            } else if (ACTION_UPLOAD.equals(action)){
+                final JcrPackage savedPackage = packageService.uploadBackupPackage(request);
+
+                if (savedPackage != null) {
+                    try {
+                        status = SlingHttpServletResponse.SC_OK;
+                        header = "OK";
+                        message = "Package successfully uploaded.";
+                        data = getJsonFromJcrPackage(savedPackage).toString();
+                    } catch (JSONException | RepositoryException e) {
+                        status = SlingHttpServletResponse.SC_INTERNAL_SERVER_ERROR;
+                        header = "Error";
+                        message = "JSON response could not be created";
+                    }
+                } else {
+                    status = SlingHttpServletResponse.SC_INTERNAL_SERVER_ERROR;
+                    header = "Error";
+                    message = "Package could not be uploaded.";
                 }
             } else {
                 status = SlingHttpServletResponse.SC_INTERNAL_SERVER_ERROR;

@@ -71,4 +71,12 @@ public interface PackageService {
      * @return true if package was installed successfully
      */
     boolean installBackupPackage(final SlingHttpServletRequest request, final String packageName);
+
+    /**
+     * Upload a package.
+     *
+     * @param request The current Sling HTTP servlet request
+     * @return The uploaded JCR Package
+     */
+    JcrPackage uploadBackupPackage(final SlingHttpServletRequest request);
 }

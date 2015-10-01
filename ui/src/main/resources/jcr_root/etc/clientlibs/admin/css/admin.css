@@ -111,3 +111,17 @@
 .clear {
   clear: both;
 }
+
+.package-upload {
+  border: dashed 1px green;
+  text-align: center;
+  padding: 5px;
+}
+
+.package-upload.hover {
+  background: lightgreen;
+}
+
+.package-upload.hover-error {
+  background: indianred;
+}

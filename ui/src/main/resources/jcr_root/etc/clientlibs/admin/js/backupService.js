@@ -3,11 +3,12 @@
  * will get all packages, create packages, delete packages, install packages,
  * and upload packages.
  */
-app.factory('BackupService', function($http, formDataObject) {
+app.factory('BackupService', function($http, formDataObject, Upload) {
   var backupFactory = {},
       PATH = '/bin/admin/backup',
       ACTION_CREATE = 'create_package',
-      ACTION_INSTALL = 'install_package';
+      ACTION_INSTALL = 'install_package',
+      ACTION_UPLOAD = 'upload_package';
 
   /**
    * @private
@@ -39,6 +40,15 @@ app.factory('BackupService', function($http, formDataObject) {
     return post({
       action: ACTION_INSTALL,
       name: name
+    });
+  };
+
+  backupFactory.uploadPackage = function(file) {
+    return Upload.upload({
+      url: PATH,
+      file: file,
+      fields: {action : ACTION_UPLOAD},
+      sendFieldsAs: 'form'
     });
   };
 

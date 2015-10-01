@@ -19,9 +19,15 @@ app.controller('BackupController', function($scope, $modal, BackupService) {
     alert('TODO: delete');
   };
 
-  $scope.upload = function() {
-    alert('TODO: upload');
-  };
+  $scope.$watch('files', function() {
+    if ($scope.files && $scope.files.length) {
+      BackupService.uploadPackage($scope.files[0]).success(function(data, status, headers, config){
+        if (data && data.data) {
+          $scope.packages.unshift(JSON.parse(data.data));
+        }
+      });
+    }
+  });
 
   $scope.create = function() {
     openModal('create', null, function(data) {
