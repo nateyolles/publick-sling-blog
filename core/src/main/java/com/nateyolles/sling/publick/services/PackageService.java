@@ -79,4 +79,24 @@ public interface PackageService {
      * @return The uploaded JCR Package
      */
     JcrPackage uploadBackupPackage(final SlingHttpServletRequest request);
+
+    /**
+     * Delete Publick backup package from the JCR.
+     *
+     * @param request The current request.
+     * @param packageName The name of the package to install
+     * @return true if package was installed successfully
+     */
+    boolean deleteBackupPackage(final SlingHttpServletRequest request, final String packageName);
+
+    /**
+     * Delete package from the JCR.
+     *
+     * @param request The current request.
+     * @param groupName The name of the package group to install
+     * @param packageName The name of the package to install
+     * @param version The version of the package to install
+     * @return true if package was installed successfully
+     */
+    boolean deletePackage(final SlingHttpServletRequest request, final String groupName, final String packageName, final String version);
 }

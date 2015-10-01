@@ -49,7 +49,7 @@
                     <tr class="warning">
                         <td colspan="6">
                             <div class="package-upload" ngf-drop="" ngf-select="" ng-model="files" ng-model-rejected="rejFiles" ngf-drag-over-class="{accept:'hover', reject:'hover-error', delay:100}" ngf-multiple="false" ngf-allow-dir="true" ngf-accept="'application/zip'" ngf-drop-available="dropAvailable" data-ng-disabled="${!page.authorable && 'true'}">
-                                Drag &amp; Drop or click to upload package.
+                                Drag &amp; drop or click to upload package.
                             </div>
                         </td>
                     </tr>
@@ -67,7 +67,6 @@
     </div>
     <div class="row">
         <div class="col-xs-12">
-            <button data-ng-click="upload()" type="submit" class="btn btn-primary">Upload package</button>
             <button data-ng-click="create()" type="submit" class="btn btn-primary">Create new package</button>
         </div>
     </div>

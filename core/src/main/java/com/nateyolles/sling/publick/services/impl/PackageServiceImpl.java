@@ -169,11 +169,6 @@ public class PackageServiceImpl implements PackageService {
         } catch (RepositoryException | PackageException | IOException e) {
             LOGGER.error("Could not install package", e);
             result = false;
-        } finally {
-            if (session != null && session.isLive()) {
-                session.logout();
-                session = null;
-            }
         }
 
         return result;
@@ -225,6 +220,46 @@ public class PackageServiceImpl implements PackageService {
         }
 
         return jcrPackage;
+    }
+
+    /**
+     * Delete Publick backup package from the JCR.
+     *
+     * @param request The current request.
+     * @param packageName The name of the package to install
+     * @return true if package was installed successfully
+     */
+    public boolean deleteBackupPackage(final SlingHttpServletRequest request, final String packageName) {
+        return deletePackage(request, BACKUP_GROUP, packageName, BACKUP_VERSION);
+    }
+
+    /**
+     * Delete package from the JCR.
+     *
+     * @param request The current request.
+     * @param groupName The name of the package group to install
+     * @param packageName The name of the package to install
+     * @param version The version of the package to install
+     * @return true if package was installed successfully
+     */
+    public boolean deletePackage(final SlingHttpServletRequest request, final String groupName, final String packageName, final String version) {
+        Session session = request.getResourceResolver().adaptTo(Session.class);
+        boolean result;
+
+        final JcrPackageManager packageManager = packaging.getPackageManager(session);
+        final PackageId packageId = new PackageId(groupName, packageName, version);
+
+        try {
+            final JcrPackage jcrPackage = packageManager.open(packageId);
+            packageManager.remove(jcrPackage);
+
+            result = true;
+        } catch (RepositoryException e) {
+            LOGGER.error("Could not remove package", e);
+            result = false;
+        }
+
+        return result;
     }
 
     /**

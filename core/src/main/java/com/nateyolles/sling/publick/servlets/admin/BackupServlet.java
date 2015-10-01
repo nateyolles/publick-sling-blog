@@ -66,6 +66,9 @@ public class BackupServlet extends AdminServlet {
     /** Install new package action parameter value */
     private static final String ACTION_UPLOAD = "upload_package";
 
+    /** Delete package action parameter value */
+    private static final String ACTION_DELETE = "delete_package";
+
     /** Package name request parameter */
     private static final String PACKAGE_NAME_PARAMETER = "name";
 
@@ -186,6 +189,18 @@ public class BackupServlet extends AdminServlet {
                     status = SlingHttpServletResponse.SC_INTERNAL_SERVER_ERROR;
                     header = "Error";
                     message = "Package could not be uploaded.";
+                }
+            } else if (ACTION_DELETE.equals(action)){
+                final boolean result = packageService.deleteBackupPackage(request, packageName);
+
+                if (result) {
+                    status = SlingHttpServletResponse.SC_OK;
+                    header = "OK";
+                    message = "Package successfully deleted.";
+                } else {
+                    status = SlingHttpServletResponse.SC_INTERNAL_SERVER_ERROR;
+                    header = "Error";
+                    message = "Package could not be deleted.";
                 }
             } else {
                 status = SlingHttpServletResponse.SC_INTERNAL_SERVER_ERROR;

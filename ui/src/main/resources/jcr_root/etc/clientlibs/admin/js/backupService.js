@@ -8,7 +8,8 @@ app.factory('BackupService', function($http, formDataObject, Upload) {
       PATH = '/bin/admin/backup',
       ACTION_CREATE = 'create_package',
       ACTION_INSTALL = 'install_package',
-      ACTION_UPLOAD = 'upload_package';
+      ACTION_UPLOAD = 'upload_package',
+      ACTION_DELETE = 'delete_package';
 
   /**
    * @private
@@ -39,6 +40,13 @@ app.factory('BackupService', function($http, formDataObject, Upload) {
   backupFactory.installBackup = function(name) {
     return post({
       action: ACTION_INSTALL,
+      name: name
+    });
+  };
+
+  backupFactory.deleteBackup = function(name) {
+    return post({
+      action: ACTION_DELETE,
       name: name
     });
   };

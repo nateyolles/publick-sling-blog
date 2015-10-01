@@ -16,7 +16,9 @@ app.controller('BackupModalController', function ($scope, $modalInstance, Backup
         $modalInstance.close({success: true, package: $scope.package});
       });
     } else if ($scope.deleteMode) {
-      // TODO
+      BackupService.deleteBackup($scope.package.name).success(function(data){
+        $modalInstance.close({success: true});
+      });
     } else if ($scope.installMode) {
       BackupService.installBackup($scope.package.name).success(function(data){
         $modalInstance.close({success: true});

@@ -16,7 +16,11 @@ app.controller('BackupController', function($scope, $modal, BackupService) {
   };
 
   $scope.delete = function(index) {
-    alert('TODO: delete');
+    openModal('delete', index, function(data) {
+      if (data.success) {
+        $scope.packages.splice(index, 1);
+      }
+    });
   };
 
   $scope.$watch('files', function() {
@@ -46,7 +50,7 @@ app.controller('BackupController', function($scope, $modal, BackupService) {
           return action;
         },
         package: function() {
-          if (index) {
+          if (index != null) {
             return $scope.packages[index];
           } else {
             return null;
