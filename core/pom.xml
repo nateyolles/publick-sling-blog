@@ -116,16 +116,23 @@
                                     <goal>copy-dependencies</goal>
                                 </goals>
                                 <configuration>
-                                    <artifactItems>
-                                        <includeArtifactIds>
-                                            org.apache.sling.i18n,
-                                            mail,
-                                            org.apache.sling.jcr.compiler,
-                                            org.apache.sling.xss,
-                                            org.apache.sling.scripting.sightly,
-                                            org.jsoup
-                                        </includeArtifactIds>
-                                    </artifactItems>
+                                    <includeArtifactIds>
+                                        org.apache.sling.i18n,
+                                        mail,
+                                        org.apache.sling.jcr.compiler,
+                                        org.apache.sling.xss,
+                                        org.apache.sling.scripting.sightly,
+                                        cocoon-serializers-charsets,
+                                        org.apache.sling.commons.html,
+                                        org.apache.sling.rewriter,
+                                        org.apache.servicemix.bundles.jsoup,
+                                        commons-logging,
+                                        httpcore-osgi,
+                                        httpclient-osgi,
+                                        org.apache.sling.distribution.core,
+                                        org.apache.sling.hc.core,
+                                        org.apache.jackrabbit.vault
+                                    </includeArtifactIds>
                                 </configuration>
                             </execution>
                         </executions>
