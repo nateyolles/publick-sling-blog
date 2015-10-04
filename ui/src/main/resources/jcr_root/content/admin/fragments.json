@@ -1,0 +1,7 @@
+{
+    "jcr:primaryType": "sling:Folder",
+    "previewHeader" : {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType" : "publick/components/admin/previewHeader",
+    }
+}
