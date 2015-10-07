@@ -125,3 +125,7 @@
 .package-upload.hover-error {
   background: indianred;
 }
+
+.gist::after {
+  content: ' Gist Embed (' attr(data-gist-id) ')';
+}

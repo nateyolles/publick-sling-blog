@@ -183,7 +183,7 @@
                                 </goals>
                                 <phase>install</phase>
                                 <configuration>
-                                    <bundleFileName>${project.build.directory}/dependency/org.apache.sling.xss-1.0.2.jar</bundleFileName>
+                                    <bundleFileName>${project.build.directory}/dependency/org.apache.sling.xss-1.0.4.jar</bundleFileName>
                                 </configuration>
                             </execution>
                             <execution>
@@ -193,7 +193,7 @@
                                 </goals>
                                 <phase>install</phase>
                                 <configuration>
-                                    <bundleFileName>${project.build.directory}/dependency/org.apache.sling.scripting.sightly-1.0.2.jar</bundleFileName>
+                                    <bundleFileName>${project.build.directory}/dependency/org.apache.sling.scripting.sightly-1.0.4.jar</bundleFileName>
                                 </configuration>
                             </execution>
                             <execution>
@@ -354,13 +354,13 @@
         <dependency>
             <groupId>org.apache.sling</groupId>
             <artifactId>org.apache.sling.xss</artifactId>
-            <version>1.0.2</version>
+            <version>1.0.4</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.sling</groupId>
             <artifactId>org.apache.sling.scripting.sightly</artifactId>
-            <version>1.0.2</version>
+            <version>1.0.4</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

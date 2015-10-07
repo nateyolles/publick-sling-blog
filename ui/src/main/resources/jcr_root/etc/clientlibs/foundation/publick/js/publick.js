@@ -37,4 +37,9 @@ $(function(){
     $listItem.append($commentForm);
     $commentPathField.val(commentPath);
   });
+
+  /**
+   * Embed GitHub Gist pages.
+   */
+  $('.gist').gist();
 });

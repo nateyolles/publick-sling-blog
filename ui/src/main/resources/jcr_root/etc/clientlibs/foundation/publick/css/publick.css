@@ -5,3 +5,8 @@
 .margin-top-80 {
   margin-top: 80px;
 }
+
+code.gist {
+  padding: 0;
+  background: 0;
+}
