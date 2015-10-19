@@ -21,6 +21,7 @@ module.exports = function(grunt) {
         src: [
           '<%=conf.dist%>/js/summernote-ext-slingasset.js',
           '<%=conf.dist%>/js/summernote-ext-gistembed.js',
+          '<%=conf.dist%>/js/summernote-ext-prismhighlight.js',
           '<%=conf.dist%>/js/logout.js',
           '<%=conf.dist%>/js/richtext.js',
           '<%=conf.dist%>/js/app.js',

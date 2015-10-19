@@ -12,7 +12,7 @@ $(function(){
       ['fontsize', ['fontsize']],
       ['color', ['color']],
       ['para', ['ul', 'ol', 'paragraph']],
-      ['insert', ['slingasset', 'gistembed', 'link', 'table', 'hr']],
+      ['insert', ['slingasset', 'gistembed', 'prismembed', 'link', 'table', 'hr']],
       ['misc', ['fullscreen', 'codeview']],
       ['group', ['help']]
     ]

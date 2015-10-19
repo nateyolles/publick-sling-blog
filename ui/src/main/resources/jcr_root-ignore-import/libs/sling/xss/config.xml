@@ -771,7 +771,14 @@ http://www.w3.org/TR/html401/struct/global.html
         <tag name="em" action="validate"/>
         <tag name="small" action="validate"/>
         <tag name="big" action="validate"/>
-        <tag name="pre" action="validate"/>
+        <tag name="pre" action="validate">
+            <!-- PrismJS -->
+            <attribute name="data-line">
+                <regexp-list>
+                    <regexp name="lineHightlighting"/>
+                </regexp-list>
+            </attribute>
+        </tag>
         <tag name="code" action="validate">
             <attribute name="data-gist-id">
                 <regexp-list>
