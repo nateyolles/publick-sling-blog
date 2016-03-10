@@ -10,3 +10,30 @@ code.gist {
   padding: 0;
   background: none;
 }
+
+.collapsible-blog-list {
+  box-shadow: none;
+}
+
+.collapsible-blog-list a {
+  border-radius: 4px;
+  color: #337ab7;
+  text-decoration: none;
+}
+
+.collapsible-blog-list a:hover {
+  color: #23527c;
+  text-decoration: underline;
+}
+
+.collapsible-blog-list .sub-menu {
+  margin-left: 25px;
+}
+
+.collapsible-blog-list .collapse-toggle > i:before {
+  content: "\e252";
+}
+
+.collapsible-blog-list .collapse-toggle.collapsed > i:before {
+  content: "\e250";
+}

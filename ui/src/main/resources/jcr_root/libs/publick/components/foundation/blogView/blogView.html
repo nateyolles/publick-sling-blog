@@ -1,7 +1,7 @@
 <div data-sly-use.blog="com.nateyolles.sling.publick.components.foundation.BlogView"
      class="container">
   <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-9">
       <div class="page-header">
         <a href="${resource.path}.html" data-sly-unwrap="${!blog.listView}">
           <h1>${blog.title} <small>${blog.month}/${blog.year}</small></h1>
@@ -9,24 +9,36 @@
       </div>
     </div>
   </div>
-  <div class="row" data-sly-test="${blog.imageRelativePath}">
-    <div class="col-md-12">
-      <a href="${resource.path}.html" data-sly-unwrap="${!blog.listView}">
-        <img src="${blog.imageRelativePath}" class="img-responsive center-block" alt="${blog.description}">
-      </a>
-    </div>
-  </div>
   <div class="row">
-    <div class="col-md-12">
-      ${blog.content @ context='html'}
+    <div class="col-md-9">
+      <div class="row" data-sly-test="${blog.imageRelativePath}">
+        <div class="col-md-12">
+          <a href="${resource.path}.html" data-sly-unwrap="${!blog.listView}">
+            <img src="${blog.imageRelativePath}" class="img-responsive center-block" alt="${blog.description}">
+          </a>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          ${blog.content @ context='html'}
+        </div>
+      </div>
+      <div class="row" data-sly-test="${blog.keywords}">
+        <div class="col-md-12">
+          <span class="glyphicon glyphicon-tags" aria-hidden="true"></span>&nbsp;
+          <span data-sly-list="${blog.keywords}" data-sly-unwrap>
+            <span class="label label-default" data-sly-text="${item}"></span>
+          </span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div data-sly-test="${!blog.listView}" data-sly-resource="${@ resourceType='publick/components/foundation/commentsView'}" data-sly-unwrap></div>
+        </div>
+      </div>
     </div>
-  </div>
-  <div class="row" data-sly-test="${blog.keywords}">
-    <div class="col-md-12">
-      <span class="glyphicon glyphicon-tags" aria-hidden="true"></span>&nbsp;
-      <span data-sly-list="${blog.keywords}" data-sly-unwrap>
-        <span class="label label-default" data-sly-text="${item}"></span>
-      </span>
+    <div class="col-md-3">
+      <sly data-sly-test="${!blog.listView}" data-sly-resource="${@ resourceType='publick/components/foundation/collapsibleBlogList'}"></sly>
     </div>
   </div>
 </div>

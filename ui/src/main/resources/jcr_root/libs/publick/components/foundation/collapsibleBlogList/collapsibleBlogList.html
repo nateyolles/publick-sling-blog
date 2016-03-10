@@ -1,0 +1,29 @@
+<h5>All Blog Posts</h5>
+<div data-sly-use.list="com.nateyolles.sling.publick.components.foundation.CollapsibleBlogList"
+     data-sly-list.year="${list.posts}"
+     class="collapsible-blog-list list-group panel">
+  <a href="#collapsible-data-list-${yearList.index}"
+     class="year list-group-item collapse-toggle collapsed"
+     data-toggle="collapse">
+    <i class="glyphicon"></i>
+    ${year.name}
+  </a>
+  <div class="collapse sub-menu"
+       id="collapsible-data-list-${yearList.index}"
+       data-sly-list.month="${year.listChildren}">
+      <a href="#collapsible-data-list-${yearList.index}-${monthList.index}"
+         class="month list-group-item collapse-toggle collapsed"
+         data-toggle="collapse"
+         data-parent="#collapsible-data-list-${yearList.index}">
+        <i class="glyphicon"></i>
+        ${month.name}
+      </a>
+      <div class="collapse sub-menu"
+           id="collapsible-data-list-${yearList.index}-${monthList.index}"
+           data-sly-list.post="${month.listChildren}">
+          <a class="post list-group-item"
+             data-sly-attribute.href="${post.path}.html"
+             data-sly-text="${post.name}"></a>
+      </div>
+  </div>
+</div>
