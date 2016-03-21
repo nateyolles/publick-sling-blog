@@ -135,24 +135,26 @@ public class Activator implements BundleActivator {
                     JackrabbitAccessControlManager accessControlManager = (JackrabbitAccessControlManager)session.getAccessControlManager();
 
                     Group user = (Group)session.getUserManager().getAuthorizable(PublickConstants.GROUP_ID_AUTHORS);
-                    Principal principal = user.getPrincipal();
-
-                    Privilege[] privileges = new Privilege[] {
-                        accessControlManager.privilegeFromName(Privilege.JCR_WRITE),
-                        accessControlManager.privilegeFromName(REP_WRITE)
-                    };
-                    JackrabbitAccessControlList acl;
-
-                    try {
-                        acl = (JackrabbitAccessControlList)accessControlManager.getApplicablePolicies(path).nextAccessControlPolicy();
-                    } catch (NoSuchElementException e) {
-                        acl = (JackrabbitAccessControlList) accessControlManager.getPolicies(path)[0];
+                    if (user != null){
+                        Principal principal = user.getPrincipal();
+    
+                        Privilege[] privileges = new Privilege[] {
+                            accessControlManager.privilegeFromName(Privilege.JCR_WRITE),
+                            accessControlManager.privilegeFromName(REP_WRITE)
+                        };
+                        JackrabbitAccessControlList acl;
+    
+                        try {
+                            acl = (JackrabbitAccessControlList)accessControlManager.getApplicablePolicies(path).nextAccessControlPolicy();
+                        } catch (NoSuchElementException e) {
+                            acl = (JackrabbitAccessControlList) accessControlManager.getPolicies(path)[0];
+                        }
+    
+                        acl.addEntry(principal, privileges, true);
+                        accessControlManager.setPolicy(path, acl);
+    
+                        session.save();
                     }
-
-                    acl.addEntry(principal, privileges, true);
-                    accessControlManager.setPolicy(path, acl);
-
-                    session.save();
                 }
             } catch (LoginException e) {
                 LOGGER.error("Could not login to repository", e);
